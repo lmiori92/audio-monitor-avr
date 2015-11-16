@@ -1,0 +1,20 @@
+20:37:16 **** Incremental Build of configuration Debug for project ManageAudio ****
+make all 
+Invoking: Print Size
+avr-size --format=avr --mcu=atmega8 ManageAudio.elf
+AVR Memory Usage
+----------------
+Device: atmega8
+
+Program:    6790 bytes (82.9% Full)
+(.text + .data + .bootloader)
+
+Data:        887 bytes (86.6% Full)
+(.data + .bss + .noinit)
+
+
+Finished building: sizedummy
+ 
+
+20:37:16 Build Finished (took 95ms)
+
