@@ -39,6 +39,6 @@ void display_load_bars_vert();
 void display_load_bars_horiz();
 void display_load_vumeter_bars_in_ram();
 void display_show_horizontal_bar(uint8_t level);
-void display_show_horiz_bars(uint8_t bar, uint8_t level);
+void display_show_vertical_bars(uint8_t bar, uint8_t level);
 
 #endif /* SRC_LC75710_GRAPHICS_H_ */

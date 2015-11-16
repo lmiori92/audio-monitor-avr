@@ -38,12 +38,12 @@
  */
 
 #ifndef LC75710_PORT
-#define LC75710_PORT            PORTD
+#define LC75710_PORT            PORTD   /**< LC75710 lines PORT */
 
 #endif
 
 #ifndef LC75710_DDR
-#define LC75710_DDR             DDRD
+#define LC75710_DDR             DDRD   /**< LC75710 lines DDR */
 
 #endif
 
@@ -64,14 +64,14 @@
 
 /* PIN toggle macros */
 
-#define LC75710_CE_LOW      LC75710_PORT &= ~(1 << LC75710_CE);asm("nop")  /* LOW */
-#define LC75710_CE_HIGH     LC75710_PORT |=  (1 << LC75710_CE);asm("nop")  /* HIGH */
+#define LC75710_CE_LOW      LC75710_PORT &= ~(1 << LC75710_CE);asm("nop")  /**< CE LOW */
+#define LC75710_CE_HIGH     LC75710_PORT |=  (1 << LC75710_CE);asm("nop")  /**< CE HIGH */
 
-#define LC75710_DI_LOW      LC75710_PORT &= ~(1 << LC75710_DI);asm("nop")  /* LOW */
-#define LC75710_DI_HIGH     LC75710_PORT |=  (1 << LC75710_DI);asm("nop")  /* HIGH */
+#define LC75710_DI_LOW      LC75710_PORT &= ~(1 << LC75710_DI);asm("nop")  /**< DI LOW */
+#define LC75710_DI_HIGH     LC75710_PORT |=  (1 << LC75710_DI);asm("nop")  /**< DI HIGH */
 
-#define LC75710_CL_LOW      LC75710_PORT &= ~(1 << LC75710_CL);asm("nop")  /* LOW */
-#define LC75710_CL_HIGH     LC75710_PORT |=  (1 << LC75710_CL);asm("nop")  /* HIGH */
+#define LC75710_CL_LOW      LC75710_PORT &= ~(1 << LC75710_CL);asm("nop")  /**< CL LOW */
+#define LC75710_CL_HIGH     LC75710_PORT |=  (1 << LC75710_CL);asm("nop")  /**< CL HIGH */
 
 /**
  * @brief

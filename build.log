@@ -1,20 +1,14 @@
-20:37:16 **** Incremental Build of configuration Debug for project ManageAudio ****
+21:02:21 **** Incremental Build of configuration Debug for project ManageAudio ****
 make all 
-Invoking: Print Size
-avr-size --format=avr --mcu=atmega8 ManageAudio.elf
-AVR Memory Usage
-----------------
-Device: atmega8
+Building file: ../src/manage_audio.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/manage_audio.d" -MT"src/manage_audio.d" -c -o "src/manage_audio.o" "../src/manage_audio.c"
+../src/manage_audio.c:105:29: error: initializer element is not constant
+                             { .label = string_table[0],           .cb = &ma_gui_menu_goto_previous },
+                             ^
+../src/manage_audio.c:105:29: error: (near initialization for ‘MENU_SETTINGS[5].label’)
+src/subdir.mk:59: recipe for target 'src/manage_audio.o' failed
+make: *** [src/manage_audio.o] Error 1
 
-Program:    6790 bytes (82.9% Full)
-(.text + .data + .bootloader)
-
-Data:        887 bytes (86.6% Full)
-(.data + .bss + .noinit)
-
-
-Finished building: sizedummy
- 
-
-20:37:16 Build Finished (took 95ms)
+21:02:21 Build Finished (took 91ms)
 

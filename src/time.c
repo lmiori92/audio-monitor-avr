@@ -33,9 +33,9 @@
 #include <avr/interrupt.h>
 #include <util/delay.h>
 
-#define TIMER_0_PRESCALER_8     (1 << CS01)
-#define TIMER_0_PRESCALER_64    ((1 << CS01) | (1 << CS00))
-#define TIMER_0_PRESCALER_256   (1 << CS02)
+#define TIMER_0_PRESCALER_8     (1 << CS01)                     /**< Prescaler 8 */
+#define TIMER_0_PRESCALER_64    ((1 << CS01) | (1 << CS00))     /**< Prescaler 64 */
+#define TIMER_0_PRESCALER_256   (1 << CS02)                     /**< Prescaler 256 */
 
 /*
  * Clock is 12MHz
@@ -50,12 +50,16 @@
  *
  * */
 
-uint32_t g_timestamp;
+uint32_t g_timestamp;           /**< Global time-keeping variable (resolution: 100us) */
 
-/* initialize timer, interrupt and variable.
- * Assumes that interrupts are disabled while intializing
+/**
+ * timer_init
+ *
+ * @brief Initialize timer, interrupt and variable.
+ *        Assumes that interrupts are disabled while intializing
+ *
  */
-void timer_init()
+void timer_init(void)
 {
 
     /* set up timer with prescaler */
@@ -68,7 +72,11 @@ void timer_init()
     TIMSK |= (1 << TOIE0);
 
 }
-/* Timer comparator interrupt routine */
+/**
+ * ISR(TIMER0_OVF_vect)
+ *
+ * @brief Timer comparator interrupt routine
+ * */
 ISR(TIMER0_OVF_vect)
 {
     g_timestamp += 100;   	/* 100us */

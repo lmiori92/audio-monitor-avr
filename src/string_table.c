@@ -28,7 +28,7 @@
 
 #include "string_table.h"
 
-char* string_table[] = {
+const char* const string_table[] = {
         "BACK",
         "AUX",
         "CD",

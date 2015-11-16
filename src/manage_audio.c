@@ -44,6 +44,7 @@
 #include "uart.h"
 #include "ma_audio.h"
 #include "system.h"
+#include "string_table.h"
 
 /* Globals */
 t_operational operational;          /**< Global operational state */
@@ -101,7 +102,7 @@ t_menu_entry MENU_SETTINGS[] = {
                             { .label = "FFT",            .cb = NULL    },
                             { .label = "VU-Meter",       .cb = NULL     },
                             { .label = "Tools",          .cb = &ma_gui_menu_goto_tools     },
-                            { .label = "BACK",           .cb = &ma_gui_menu_goto_previous },
+                            { .label = string_table[0],           .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS = {
@@ -311,16 +312,16 @@ void ma_gui_refresh()
 
             case 4:
 #define FACTOR  6
-                display_show_horiz_bars(0, (spektrum[0] + spektrum[1]) / FACTOR);
-            	display_show_horiz_bars(1, (spektrum[2] + spektrum[3]) / FACTOR);
-            	display_show_horiz_bars(2, (spektrum[4] + spektrum[5]) / FACTOR);
-            	display_show_horiz_bars(3, (spektrum[6] + spektrum[7]) / FACTOR);
-            	display_show_horiz_bars(4, (spektrum[8] + spektrum[9]) / FACTOR);
-            	display_show_horiz_bars(5, (spektrum[10] + spektrum[11]) / FACTOR);
-            	display_show_horiz_bars(6, (spektrum[12] + spektrum[13]) / FACTOR);
-            	display_show_horiz_bars(7, (spektrum[14] + spektrum[15]) / FACTOR);
-            	display_show_horiz_bars(8, (spektrum[16] + spektrum[17]) / FACTOR);
-            	display_show_horiz_bars(9, (spektrum[18] + spektrum[19]) / FACTOR);
+                display_show_vertical_bars(0, (spektrum[0] + spektrum[1]) / FACTOR);
+            	display_show_vertical_bars(1, (spektrum[2] + spektrum[3]) / FACTOR);
+            	display_show_vertical_bars(2, (spektrum[4] + spektrum[5]) / FACTOR);
+            	display_show_vertical_bars(3, (spektrum[6] + spektrum[7]) / FACTOR);
+            	display_show_vertical_bars(4, (spektrum[8] + spektrum[9]) / FACTOR);
+            	display_show_vertical_bars(5, (spektrum[10] + spektrum[11]) / FACTOR);
+            	display_show_vertical_bars(6, (spektrum[12] + spektrum[13]) / FACTOR);
+            	display_show_vertical_bars(7, (spektrum[14] + spektrum[15]) / FACTOR);
+            	display_show_vertical_bars(8, (spektrum[16] + spektrum[17]) / FACTOR);
+            	display_show_vertical_bars(9, (spektrum[18] + spektrum[19]) / FACTOR);
             	break;
 
             case 5:

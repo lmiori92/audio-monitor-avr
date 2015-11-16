@@ -32,6 +32,15 @@
 
 #include "lc75710.h"
 
+/**
+ *
+ * display_string_len
+ *
+ * @brief Display a string having a specified length
+ *
+ * @param string    string to display
+ * @param len       length of the string
+ */
 void display_string_len(char* string, uint8_t len)
 {
 
@@ -46,6 +55,14 @@ void display_string_len(char* string, uint8_t len)
 
 }
 
+/**
+ *
+ * display_string
+ *
+ * @brief Display a string
+ *
+ * @param string zero-terminated string to display
+ */
 void display_string(char* string)
 {
     uint8_t len = 0;
@@ -57,6 +74,14 @@ void display_string(char* string)
     display_string_len(string, len);
 }
 
+/**
+ *
+ * display_string_center
+ *
+ * @brief Display a string, center justified
+ *
+ * @param string zero-terminated string to display
+ */
 void display_string_center(char* string)
 {
 
@@ -70,6 +95,13 @@ void display_string_center(char* string)
 
 }
 
+/**
+ *
+ * display_clear
+ *
+ * @brief Clear display
+ *
+ */
 void display_clear(void)
 {
 
@@ -85,8 +117,14 @@ void display_clear(void)
 
 }
 
-/* Load vertical bars in the CGRAM of the chip */
-void display_load_bars_vert()
+/**
+ *
+ * display_load_bars_vert
+ *
+ * @brief Load vertical bars in the CGRAM of the chip
+ *
+ */
+void display_load_bars_vert(void)
 {
 
     uint8_t i = 0;
@@ -100,7 +138,13 @@ void display_load_bars_vert()
 
 }
 
-/* Load horizontal bars in the CGRAM of the chip */
+/**
+ *
+ * display_load_bars_horiz
+ *
+ * @brief Load horizontal bars in the CGRAM of the chip
+ *
+ */
 void display_load_bars_horiz()
 {
 
@@ -121,7 +165,14 @@ void display_load_bars_horiz()
 
 }
 
-void display_load_vumeter_bars_in_ram()
+/**
+ *
+ * display_load_vumeter_bars_in_ram
+ *
+ * @brief Load VU-meter bars in the CGRAM of the chip
+ *
+ */
+void display_load_vumeter_bars_in_ram(void)
 {
 
     uint8_t i = 0;
@@ -135,6 +186,15 @@ void display_load_vumeter_bars_in_ram()
 
 }
 
+/**
+ *
+ * display_show_horizontal_bar
+ *
+ * @brief Show a horizontal bar accross the whole display
+ *
+ * @param   level   bar length
+ *
+ */
 void display_show_horizontal_bar(uint8_t level)
 {
 
@@ -153,8 +213,17 @@ void display_show_horizontal_bar(uint8_t level)
 
 }
 
-
-void display_show_horiz_bars(uint8_t bar, uint8_t level)
+/**
+ *
+ * display_show_vertical_bars
+ *
+ * @brief Show a vertical bar specifying its height and its position
+ *
+ * @param   bar     character position in the screen
+ * @param   level   bar level (intensity)
+ *
+ */
+void display_show_vertical_bars(uint8_t bar, uint8_t level)
 {
     // TODO we want to saturate here and not % ;=)
     if (bar > 9) bar = 9;   /* Saturate */

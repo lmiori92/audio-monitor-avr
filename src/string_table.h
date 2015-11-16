@@ -29,6 +29,6 @@
 #ifndef SRC_STRING_TABLE_H_
 #define SRC_STRING_TABLE_H_
 
-extern char* string_table[];
+extern const char* const string_table[];
 
 #endif /* SRC_STRING_TABLE_H_ */
