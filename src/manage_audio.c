@@ -102,7 +102,7 @@ t_menu_entry MENU_SETTINGS[] = {
                             { .label = "FFT",            .cb = NULL    },
                             { .label = "VU-Meter",       .cb = NULL     },
                             { .label = "Tools",          .cb = &ma_gui_menu_goto_tools     },
-                            { .label = string_table[0],           .cb = &ma_gui_menu_goto_previous },
+                            { .label = "BACK",           .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS = {

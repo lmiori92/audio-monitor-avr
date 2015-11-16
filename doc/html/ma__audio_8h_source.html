@@ -112,15 +112,18 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#ifndef SRC_MA_AUDIO_H_</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define SRC_MA_AUDIO_H_</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> ma_audio_init(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> ma_audio_process(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;uint16_t* ma_audio_spectrum(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;uint16_t* <a class="code" href="ma__audio_8h.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a>(<span class="keywordtype">void</span>);</div>
 <div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
 <div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* SRC_MA_AUDIO_H_ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="ma__audio_8h_html_af6380e2bf3f1f915be44a8f46d37247a"><div class="ttname"><a href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a></div><div class="ttdeci">void ma_audio_init(void)</div><div class="ttdoc">ADC initialization, assuming the interrupts are disabled. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:96</div></div>
+<div class="ttc" id="ma__audio_8h_html_a87c311bd601605d41add90bf38abd503"><div class="ttname"><a href="ma__audio_8h.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a></div><div class="ttdeci">uint16_t * ma_audio_spectrum(void)</div><div class="ttdoc">Getter function for the audio spectrum. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:148</div></div>
+<div class="ttc" id="ma__audio_8h_html_ab13c06d7298a93e60d606f8d348a6d14"><div class="ttname"><a href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a></div><div class="ttdeci">void ma_audio_process(void)</div><div class="ttdoc">This function shall be periodically called on the audio buffer to compute FFT / VU-meter. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:133</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 20:59:53 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Nov 16 2015 21:30:50 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

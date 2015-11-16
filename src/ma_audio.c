@@ -31,21 +31,30 @@
 
 #include "ffft.h"
 
-#define ADCH0   0
-#define ADCH1   1
+//#define ADCH0   0
+//#define ADCH1   1
 
 #include "avr/delay.h"
 #include "time.h"
 #include "ma_util.h"
 #include "system.h"
 
-static uint16_t last_capture;
-static int8_t capture_index;
-static int16_t capture[FFT_N];          /* Wave capturing buffer */
+static uint16_t last_capture;           /**< Last reading */
+static int8_t capture_index;            /**< Buffer index */
+static int16_t capture[FFT_N];          /**< Wave capturing buffer */
 
-static complex_t bfly_buff[FFT_N];      /* FFT buffer */
-static uint16_t spektrum[FFT_N/2];      /* Spectrum output buffer */
+static complex_t bfly_buff[FFT_N];      /**< FFT buffer */
+static uint16_t spektrum[FFT_N/2];      /**< Spectrum output buffer */
 
+/**
+ * ISR(ADC_vect)
+ *
+ * @brief ADC interrupt routine.
+ *        Keep it as small as possible to avoid jitter and delays.
+ *
+ * The strategy
+ *
+ */
 ISR(ADC_vect)
 {
 
@@ -61,7 +70,7 @@ ISR(ADC_vect)
     /* Increment buffer index */
     capture_index++;
 
-  /* Toggle the other channel */
+    /* Toggle the other channel */
 //  ADMUX &= ~((1 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0));
 //  ADMUX |= (adcChan == ADCH0) ? ADCH1 : ADCH0;
 
@@ -77,6 +86,13 @@ ISR(ADC_vect)
 
 }
 
+/**
+ *
+ * ma_audio_init
+ *
+ * @brief ADC initialization, assuming the interrupts are disabled.
+ *
+ */
 void ma_audio_init(void)
 {
 
@@ -106,6 +122,14 @@ void ma_audio_init(void)
 
 }
 
+/**
+ *
+ * ma_audio_process
+ *
+ * @brief This function shall be periodically called
+ * on the audio buffer to compute FFT / VU-meter
+ *
+ */
 void ma_audio_process(void)
 {
     fft_input(capture, bfly_buff);
@@ -113,11 +137,28 @@ void ma_audio_process(void)
     fft_output(bfly_buff, spektrum);
 }
 
+/**
+ *
+ * ma_audio_spectrum
+ *
+ * @brief Getter function for the audio spectrum
+ *
+ * @return  the audio spectrum (FFT output)
+ */
 uint16_t* ma_audio_spectrum(void)
 {
     return spektrum;
 }
 
+/**
+ *
+ * ma_audio_last_capture
+ *
+ * @brief Getter function for the last ADC capture
+ *
+ * @return the value for the last capture
+ *
+ */
 uint16_t ma_audio_last_capture(void)
 {
     return last_capture;

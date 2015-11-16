@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['set_5fdisplay_5fbrightness',['set_display_brightness',['../manage__audio_8c.html#ae06a5139ca1a54c6778728144fda9250',1,'manage_audio.c']]]
+  ['read_5ffrom_5fpersistent',['read_from_persistent',['../ma__util_8c.html#ab0a1806cf1c546d6162af311d40a80a4',1,'read_from_persistent(t_persistent *persistent):&#160;ma_util.c'],['../ma__util_8h.html#ab0a1806cf1c546d6162af311d40a80a4',1,'read_from_persistent(t_persistent *persistent):&#160;ma_util.c']]]
 ];

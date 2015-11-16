@@ -109,6 +109,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;uart.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="ma__audio_8h_source.html">ma_audio.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="system_8h_source.html">system.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="string__table_8h_source.html">string_table.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for manage_audio.c:</div>
 <div class="dyncontent">
@@ -322,7 +323,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 <div class="line">                            { .label = <span class="stringliteral">&quot;FFT&quot;</span>,            .cb = NULL    },</div>
 <div class="line">                            { .label = <span class="stringliteral">&quot;VU-Meter&quot;</span>,       .cb = NULL     },</div>
 <div class="line">                            { .label = <span class="stringliteral">&quot;Tools&quot;</span>,          .cb = &amp;ma_gui_menu_goto_tools     },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;BACK&quot;</span>,           .cb = &amp;ma_gui_menu_goto_previous },</div>
+<div class="line">                            { .label = string_table[0],           .cb = &amp;ma_gui_menu_goto_previous },</div>
 <div class="line">}</div>
 </div><!-- fragment -->
 </div>
@@ -541,7 +542,7 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 20:59:53 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Nov 16 2015 21:30:50 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

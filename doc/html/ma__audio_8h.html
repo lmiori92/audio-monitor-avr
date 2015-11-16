@@ -105,24 +105,83 @@ This graph shows which files directly or indirectly include this file:</div>
 <table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
-<tr class="memitem:af6380e2bf3f1f915be44a8f46d37247a"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="af6380e2bf3f1f915be44a8f46d37247a"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_audio_init</b> (void)</td></tr>
+<tr class="memitem:af6380e2bf3f1f915be44a8f46d37247a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a> (void)</td></tr>
+<tr class="memdesc:af6380e2bf3f1f915be44a8f46d37247a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC initialization, assuming the interrupts are disabled.  <a href="#af6380e2bf3f1f915be44a8f46d37247a">More...</a><br /></td></tr>
 <tr class="separator:af6380e2bf3f1f915be44a8f46d37247a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ab13c06d7298a93e60d606f8d348a6d14"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ab13c06d7298a93e60d606f8d348a6d14"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_audio_process</b> (void)</td></tr>
+<tr class="memitem:ab13c06d7298a93e60d606f8d348a6d14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a> (void)</td></tr>
+<tr class="memdesc:ab13c06d7298a93e60d606f8d348a6d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function shall be periodically called on the audio buffer to compute FFT / VU-meter.  <a href="#ab13c06d7298a93e60d606f8d348a6d14">More...</a><br /></td></tr>
 <tr class="separator:ab13c06d7298a93e60d606f8d348a6d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87c311bd601605d41add90bf38abd503"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a87c311bd601605d41add90bf38abd503"></a>
-uint16_t *&#160;</td><td class="memItemRight" valign="bottom"><b>ma_audio_spectrum</b> (void)</td></tr>
+<tr class="memitem:a87c311bd601605d41add90bf38abd503"><td class="memItemLeft" align="right" valign="top">uint16_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8h.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a> (void)</td></tr>
+<tr class="memdesc:a87c311bd601605d41add90bf38abd503"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the audio spectrum.  <a href="#a87c311bd601605d41add90bf38abd503">More...</a><br /></td></tr>
 <tr class="separator:a87c311bd601605d41add90bf38abd503"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Header file for the audio routines. </p>
 <dl class="section author"><dt>Author</dt><dd>Lorenzo Miori </dd></dl>
 <dl class="section date"><dt>Date</dt><dd>Oct 2015 </dd></dl>
-</div></div><!-- contents -->
+</div><h2 class="groupheader">Function Documentation</h2>
+<a class="anchor" id="af6380e2bf3f1f915be44a8f46d37247a"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ma_audio_init </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>ADC initialization, assuming the interrupts are disabled. </p>
+<p>ma_audio_init </p>
+
+</div>
+</div>
+<a class="anchor" id="ab13c06d7298a93e60d606f8d348a6d14"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">void ma_audio_process </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>This function shall be periodically called on the audio buffer to compute FFT / VU-meter. </p>
+<p>ma_audio_process </p>
+
+</div>
+</div>
+<a class="anchor" id="a87c311bd601605d41add90bf38abd503"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint16_t* ma_audio_spectrum </td>
+          <td>(</td>
+          <td class="paramtype">void&#160;</td>
+          <td class="paramname"></td><td>)</td>
+          <td></td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+
+<p>Getter function for the audio spectrum. </p>
+<p>ma_audio_spectrum</p>
+<dl class="section return"><dt>Returns</dt><dd>the audio spectrum (FFT output) </dd></dl>
+
+</div>
+</div>
+</div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 20:59:53 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Mon Nov 16 2015 21:30:50 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

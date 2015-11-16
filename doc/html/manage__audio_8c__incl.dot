@@ -39,4 +39,6 @@ digraph "src/manage_audio.c"
   Node16 [label="ma_audio.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ma__audio_8h.html",tooltip="Header file for the audio routines. "];
   Node1 -> Node17 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node17 [label="system.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$system_8h.html",tooltip="System level utilities: ISR debugging / MCU power state. "];
+  Node1 -> Node18 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node18 [label="string_table.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$string__table_8h.html",tooltip="Entry point for the string array. "];
 }
