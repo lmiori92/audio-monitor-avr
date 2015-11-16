@@ -29,6 +29,7 @@
 #ifndef SRC_SYSTEM_H_
 #define SRC_SYSTEM_H_
 
+/** Output values */
 typedef struct
 {
 
@@ -36,20 +37,21 @@ typedef struct
 
 } t_output;
 
+/** Operational variables */
 typedef struct
 {
 
-    uint32_t cycle_time;
-    uint32_t cycle_time_max;
-    uint32_t adc_samples;
-    uint32_t adc_isr_time;
-    t_output output;
-    uint8_t reset_reason;
+    uint32_t cycle_time;        /**< Time it takes the logic to execute */
+    uint32_t cycle_time_max;    /**< Maximum time it took the logic to execute */
+    uint32_t adc_samples;       /**< Number of ADC samples */
+    uint32_t adc_isr_time;      /**< ADC ISR exec time */
+    t_output output;            /**< State of the outputs */
+    uint8_t reset_reason;       /**< Reset reason (see datasheet) */
 
 } t_operational;
 
-/* Constants */
-extern t_operational operational;
+/* Globals */
+extern t_operational operational;   /**< Global operational variable */
 
 /* Functions */
 void system_init(void);

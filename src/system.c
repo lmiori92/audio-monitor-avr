@@ -32,9 +32,12 @@
 #include "lc75710_graphics.h"
 #include "system.h"
 
-/* This interrupt handler is executed whenever an ISR is fired
+/**
+ * ISR(BADISR_vect)
+ *
+ * @brief This interrupt handler is executed whenever an ISR is fired
  * without a defined ISR routine.
- * It tries to write a string on the display and then blocks
+ * It tries to write a string on the display and then blocks.
  */
 ISR(BADISR_vect)
 {
@@ -42,6 +45,13 @@ ISR(BADISR_vect)
     for(;;);
 }
 
+/**
+ *
+ * system_init
+ *
+ * @brief System init
+ *
+ */
 void system_init(void)
 {
 //    if(MCUCSR & (1<<PORF )) (PSTR("Power-on reset.\n"));

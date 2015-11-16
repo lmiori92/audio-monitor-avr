@@ -1,6 +1,5 @@
 var searchData=
 [
-  ['page_5fprevious',['page_previous',['../structmenu__page__.html#ada7cea878e30875b9718771514fb9b18',1,'menu_page_']]],
-  ['post',['post',['../structmenu__page__.html#ac51b2e2067a3bb629cd7b790fbdd62b3',1,'menu_page_']]],
-  ['pre',['pre',['../structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a',1,'menu_page_']]]
+  ['operational',['operational',['../manage__audio_8c.html#ae1ec53756bc9ea29a3cbe35dcefa9a40',1,'operational():&#160;manage_audio.c'],['../system_8h.html#ae1ec53756bc9ea29a3cbe35dcefa9a40',1,'operational():&#160;manage_audio.c']]],
+  ['output',['output',['../structt__operational.html#a2c8c0c0cffccc977e36bd72d905a0787',1,'t_operational']]]
 ];

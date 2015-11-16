@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['operational',['operational',['../manage__audio_8c.html#ae1ec53756bc9ea29a3cbe35dcefa9a40',1,'operational():&#160;manage_audio.c'],['../system_8h.html#ae1ec53756bc9ea29a3cbe35dcefa9a40',1,'operational():&#160;manage_audio.c']]]
+  ['no_5fmdata_5fnor_5fadata',['NO_MDATA_NOR_ADATA',['../lc75710_8h.html#add50f3be40f45f1bd4f91845f860e551',1,'lc75710.h']]]
 ];

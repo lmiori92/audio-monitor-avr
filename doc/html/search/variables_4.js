@@ -1,4 +1,4 @@
 var searchData=
 [
-  ['g_5ftimestamp',['g_timestamp',['../time_8c.html#a7d7c193c356ed4a296916ecb2803ee23',1,'g_timestamp():&#160;time.c'],['../time_8h.html#a7d7c193c356ed4a296916ecb2803ee23',1,'g_timestamp():&#160;time.c']]]
+  ['falling_5ftimeout',['falling_timeout',['../structt__debounce.html#a1f7c76199fa80c55c7365333c313a47a',1,'t_debounce']]]
 ];
