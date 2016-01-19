@@ -30,14 +30,13 @@
 #include <avr/interrupt.h>
 
 #include "ffft.h"
-
-//#define ADCH0   0
-//#define ADCH1   1
-
-#include "avr/delay.h"
 #include "time.h"
 #include "ma_util.h"
 #include "system.h"
+
+/* Quick and dirty noise debug - TODO remove me or clean the code afterwards */
+uint16_t adc_maxS;
+uint16_t adc_minS;
 
 static uint16_t last_capture;           /**< Last reading */
 static int8_t capture_index;            /**< Buffer index */
@@ -50,39 +49,34 @@ static uint16_t spektrum[FFT_N/2];      /**< Spectrum output buffer */
  * ISR(ADC_vect)
  *
  * @brief ADC interrupt routine.
- *        Keep it as small as possible to avoid jitter and delays.
- *
- * The strategy
+ *        Keep it as small as possible to avoid jitter and lower
+ *        sampling rate.
  *
  */
 ISR(ADC_vect)
 {
 
-//    uint8_t adcChan;
+    if (capture_index >= FFT_N)
+    {
+        /* Audio sampling complete.
+         * quit the ISR without trigger a new conversion */
+    }
+    else
+    {
+        /* Save capture in the buffer and apply digital bias */
+        capture[capture_index] = 32676U - (ADCL | (ADCH << 8U));
+/* HARDWARE NOISE DEBUG
+        if (last_capture > adc_maxS) adc_maxS = last_capture;
+        if (last_capture < adc_minS) adc_minS = last_capture;
+        */
 
-    /* ADC channel that has completed the reading */
-//    adcChan = ADMUX & 0xF;
-    last_capture = ADCL | (ADCH << 8);
+        /* Increment buffer index */
+        capture_index++;
 
-    /* Save capture in the buffer */
-    capture[capture_index] = last_capture - 32768;
-
-    /* Increment buffer index */
-    capture_index++;
-
-    /* Toggle the other channel */
-//  ADMUX &= ~((1 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0));
-//  ADMUX |= (adcChan == ADCH0) ? ADCH1 : ADCH0;
-
-    /* Set ADSC in ADCSRA (0x7A) to start another ADC conversion */
-    capture_index %= FFT_N;
-
-    /* Change channel every ~20ms to sample low priority stuff */
-
-    /* Kick-in another conversion */
-    ADCSRA |= (1 << ADSC);
-
-    operational.adc_samples++;
+        /* Kick-in another conversion */
+        /* Set ADSC in ADCSRA (0x7A) to start another ADC conversion */
+        ADCSRA |= (1 << ADSC);
+    }
 
 }
 
@@ -98,12 +92,19 @@ void ma_audio_init(void)
 
     capture_index = 0;
     operational.adc_samples = 0;
+    adc_maxS = 0;
+    adc_minS = 1024;
 
     /* clear ADLAR in ADMUX (0x7C) to right-adjust the result */
     /* ADCL will contain lower 8 bits, ADCH upper 2 (in last two bits) */
     /* Set REFS1..0 in ADMUX to change reference voltage */
     /* Clear MUX3..0 in ADMUX (0x7C) in preparation for setting the analog channel */
     ADMUX &= ~((1 << ADLAR) | (1 << REFS1) | (1 << REFS0) | (1 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0));
+
+    /* Set the internal 2.56V reference */
+    ADMUX |= ((1 << REFS1) | (1 << REFS0));
+
+    /* TODO Set default sampled channel if needed */
 
     /* Set ADEN in ADCSRA (0x7A) to enable the ADC.
        Note, this instruction takes 12 ADC clocks to execute
@@ -122,6 +123,14 @@ void ma_audio_init(void)
 
 }
 
+// TODO work the hann window later, maybe using a lookup table as well
+//void hann_window(uint16_t *stream, uint8_t len)
+//{
+//    for (uint8_t i = 1; i < len; i++) {
+//        stream[i] = 0.5f * (1.0f - cos(2.0f * 3.14f * i / (len - 1.0f))) * stream[i];
+//    }
+//}
+
 /**
  *
  * ma_audio_process
@@ -132,9 +141,30 @@ void ma_audio_init(void)
  */
 void ma_audio_process(void)
 {
-    fft_input(capture, bfly_buff);
-    fft_execute(bfly_buff);
-    fft_output(bfly_buff, spektrum);
+
+    if (((ADCSRA >> ADSC) & 0x1) == 0)
+    {
+        /* Sampling complete */
+/*        hann_window(capture, FFT_N);  */
+        fft_input(capture, bfly_buff);
+        fft_execute(bfly_buff);
+        fft_output(bfly_buff, spektrum);
+
+        /* Toggle channel */
+        /* TODO iterate through the needed channels:
+         * Audio (R+L) has higher priority */
+        //uint32_t old_mux = ADMUX;
+        //ADMUX &= ~((1 << MUX3) | (1 << MUX2) | (1 << MUX1) | (1 << MUX0));
+        //ADMUX |= ((old_mux & 0x7) + 1) % 2;
+
+        /* Unset completion flag
+         * NOTE: modifying shared variables is valid here,
+         * no ISR shall be executed now */
+        capture_index = 0;
+        ADCSRA |= (1 << ADSC);
+
+    }
+
 }
 
 /**

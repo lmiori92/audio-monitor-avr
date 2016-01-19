@@ -151,3 +151,15 @@ uint8_t source_select(uint8_t source)
     return outputs;
 
 }
+
+
+uint8_t lookupf(float val, float* table, uint8_t size)
+{
+    uint8_t i = 0;
+    for (i = 0; i < size; i++)
+    {
+        if ((table[i] >= val)) break;
+    }
+    return i;
+
+}

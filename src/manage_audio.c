@@ -33,6 +33,7 @@
 #include "stdint.h"
 #include "stdio.h"
 #include "string.h"
+#include "ffft.h"
 
 /* AVR libs */
 #include <avr/io.h>
@@ -267,13 +268,37 @@ t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page
 
 }
 
-char disp_str[25];
+static uint32_t sum = 0;
+static uint32_t filtered_value = 0;
+
+/* This is a complete work in progress :) */
+
+float table[] = {
+        -35.56f,
+        -15.56f,
+        -9.54f,
+        -6.02f,
+        -3.52f,
+        -1.58f,
+        0.0f,
+//        -18.62f,
+//        -17.28f
+};
+
+
+char disp_str[12];
+float x_dB = 0;
+float minref = 42.14f;
+float adc_max = 128.0f;
+uint8_t t;
 void ma_gui_refresh()
 {
+    uint8_t i,j;
     uint16_t *spektrum = ma_audio_spectrum();
     if (menu.page == &PAGE_DEBUG)
     {
-
+// TEST ONLY
+        menu.index = 4;
         switch (menu.index)
         {
 
@@ -311,24 +336,69 @@ void ma_gui_refresh()
                 break;
 
             case 4:
-#define FACTOR  6
-                display_show_vertical_bars(0, (spektrum[0] + spektrum[1]) / FACTOR);
-            	display_show_vertical_bars(1, (spektrum[2] + spektrum[3]) / FACTOR);
-            	display_show_vertical_bars(2, (spektrum[4] + spektrum[5]) / FACTOR);
-            	display_show_vertical_bars(3, (spektrum[6] + spektrum[7]) / FACTOR);
-            	display_show_vertical_bars(4, (spektrum[8] + spektrum[9]) / FACTOR);
-            	display_show_vertical_bars(5, (spektrum[10] + spektrum[11]) / FACTOR);
-            	display_show_vertical_bars(6, (spektrum[12] + spektrum[13]) / FACTOR);
-            	display_show_vertical_bars(7, (spektrum[14] + spektrum[15]) / FACTOR);
-            	display_show_vertical_bars(8, (spektrum[16] + spektrum[17]) / FACTOR);
-            	display_show_vertical_bars(9, (spektrum[18] + spektrum[19]) / FACTOR);
+
+                for (i = 0; i < (FFT_N/2/3); i++)
+                {
+
+                    //float v = log10f(spektrum[i] / 60.0f) * 20.0f;
+                    //display_show_vertical_bars(i, lookupf(v, table, sizeof(table) / sizeof(float)));
+                    uint16_t v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
+
+                    if (v > 10)
+                    {
+                        /* Provide a very crude but effective noise filter */
+                        x_dB = 20.0f * log10(v / adc_max);
+                        t = abs(minref - x_dB);
+                    }
+                    else
+                    {
+                        t = 0;
+                    }
+
+                    display_show_vertical_bars(i, (minref / t)*7);
+//                    display_show_vertical_bars(i, lookupf(x_dB, table, sizeof(table) / sizeof(float)));//spektrum[i] / 10);
+                }
+
+                /*
+                float v = log10f(spektrum[2] / 1024.0f) * 20.0f;
+                display_clear();
+                uint16_t vp = v;
+                snprintf(disp_str, 11, "%d ; %d", vp, lookupf(v, table, sizeof(table) / sizeof(float)));
+                display_string(disp_str);
+                */
+
+//                float v = abs(log10f(spektrum[2] / 1024.0f) * 20.0f);
+//                uint16_t c = ceil(v);
+//                display_clear();
+//                uint16_t v = (uint16_t)round(abs(20.0f * log10(spektrum[2] / 1024.0f)));
+//                snprintf_P(disp_str, 11, PSTR("%u-%u"), spektrum[2], c);
+//                display_string(disp_str);
+
+                /*
+                display_show_vertical_bars(0, ((spektrum[1] >> 2) + (spektrum[2] >> 2))  );
+            	display_show_vertical_bars(1, ((spektrum[3] >> 2) + (spektrum[4] >> 2))  );
+            	display_show_vertical_bars(2, ((spektrum[5] >> 2) + (spektrum[6] >> 2))  );
+            	display_show_vertical_bars(3, ((spektrum[7] >> 2) + (spektrum[8] >> 2))  );
+            	display_show_vertical_bars(4, ((spektrum[9] >> 2) + (spektrum[10] >> 2)) );
+            	display_show_vertical_bars(5, ((spektrum[11] >> 2) + (spektrum[12] >> 2)));
+            	display_show_vertical_bars(6, ((spektrum[13] >> 2) + (spektrum[14] >> 2)));
+            	display_show_vertical_bars(7, ((spektrum[15] >> 2) + (spektrum[16] >> 2)));
+            	display_show_vertical_bars(8, ((spektrum[17] >> 2) + (spektrum[18] >> 2)));
+            	display_show_vertical_bars(9, ((spektrum[19] >> 2) + (spektrum[20] >> 2)));
+            	*/
             	break;
 
             case 5:
 
+                #define filter_strength 4
+
+
+                sum = sum - filtered_value + ma_audio_last_capture();
+                filtered_value = (sum + (1<<(filter_strength - 1))) >> (filter_strength);
+
                 display_clear();
-//                snprintf(disp_str, 11, "ADC: %d", ma_audio_last_capture());
-                snprintf_P(disp_str, 11, PSTR("%lu"), g_timestamp / operational.adc_samples);
+                snprintf_P(disp_str, 11, PSTR("ADC: %d"), filtered_value);
+//                snprintf_P(disp_str, 11, PSTR("%lu"), g_timestamp / operational.adc_samples);
                 display_string(disp_str);
 
                 break;
@@ -341,6 +411,14 @@ void ma_gui_refresh()
 
                 break;
 
+            case 7:
+
+                display_clear();
+                snprintf_P(disp_str, 11, PSTR("%d;%d"), adc_maxS, adc_minS);
+                display_string(disp_str);
+
+
+                break;
 
             default:
                 break;
@@ -477,16 +555,16 @@ int main(void)
     /* Load CGRAM data */
     display_load_bars_vert();
 
-    if (!((PINB >> KEY_1) & 0x1))
-    {
+//    if (!((PINB >> KEY_1) & 0x1))
+//    {
         /* Directly go to the debug menu */
         ma_gui_page_change(&menu, &PAGE_DEBUG);
-    }
-    else
-    {
+//    }
+//    else
+//    {
         /* Start with the SOURCE menu */
-        ma_gui_page_change(&menu, &PAGE_SOURCE);
-    }
+//        ma_gui_page_change(&menu, &PAGE_SOURCE);
+//    }
 
     /* Start the main loop (and never return) */
     while (1)

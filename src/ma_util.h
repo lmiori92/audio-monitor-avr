@@ -59,5 +59,8 @@ bool debounce(t_debounce *debounce, bool input, uint32_t timestamp);
 /* Source selection */
 uint8_t source_select(uint8_t source);
 
+/* Algorithms */
+uint8_t lookupf(float val, float* table, uint8_t size);
+
 #endif
 

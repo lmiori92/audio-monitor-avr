@@ -1,0 +1,21 @@
+
+The configuration for the atmega8 microcontroller is presented in this document.
+In order to correctly run this project everything SHALL be configured as is.
+
+#####
+FUSES
+#####
+
+lorenzo@lorenzo-notebook:~$ avrdude -c usbasp -p atmega8
+
+avrdude: set SCK frequency to 93750 Hz
+avrdude: AVR device initialized and ready to accept instructions
+
+Reading | ################################################## | 100% 0.01s
+
+avrdude: Device signature = 0x1e9307
+
+avrdude: safemode: Fuses OK (E:FF, H:CA, L:FF)
+
+avrdude done.  Thank you.
+ 

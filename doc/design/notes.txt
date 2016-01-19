@@ -1,0 +1,63 @@
+############
+Latch-up (?)
+############
+
+From time to time the +12V rail started up with a voltage of about -0.6V.
+This has been solved placing an external diode in reverse configuration between
+the ground and the output of the +12V and -12V rails regulators.
+
+=> This fixed that.
+
+############
+Boot-up
+############
+
+The microcontroller randomly fails to boot.
+Sometimes, it also displays "no ISR!" which means an interrupt
+has fired but no associated ISR is programmed -> weird!
+This possibly indicates a fault in reading the flash of the MCU.
+
+Interesting is that I have never seen this problem to occur before
+adding the auxiliary analog +12V/-12V rails.
+
+=> Brown-out detector was NOT enabled in the fuse configuration.
+   This solves the problem (puts the MCU in reset below 4.0V which
+   is well withing the Safe Operation Area of the device)
+
+##############################
+Insane noise in the ADC input
+##############################
+
+The analog input is composed by an inverting op-amp stage, which is
+supplied by +12V and -12V rails.
+The +12V was simply connected to the SMPS' +12V rail, since it is
+supposed to be well filtered by a linear regulator.
+The -12V is derived from the -31V rail for the VFD display by using
+a negative -12V regulator; the latter was introduced locally on the
+processing board while the former, as antipated, is built into the
+SMPS. Well, one has to expect a linear regulator to be fairly stable
+and "silent". No, think again!
+Unfortunately the SMPS presents to the regulator a voltage that is
+barely enough to pass through !!! (~12.19V, well well well below 
+the minimum input supply). Clearly, something has failed or the desing
+presented a huge flaw that has been apparently left into the design
+and tackled by applying local filtering / regulation.
+
+=> Solution: positive +12V linear regulator locally on board, and the
+op-amp is silent as it is supposed to be.
+
+##########################
+ADC Noise
+##########################
+
+First tests have reported quite a huge noise fluctuations in the ADC
+readout: +/- ~55 -> absolute ~110 max variation over time which is
+rather unacceptable considering the S/N ratio of more than 10% over
+the entire range!
+
+=> the test input cable was acting as "antenna" capturing all sort of crap.
+Moreover, local filtering of Aref and Avcc considerably helps.
+To be tested: external Vref (TL431?) and possibly regulation for the Avcc,
+derived from +12V filtered rail.
+Also, I would consider a review of the ground star and possibly filter out
+digital signals going to the VFD display, which seems quite noisy.

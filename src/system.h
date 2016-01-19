@@ -55,5 +55,6 @@ extern t_operational operational;   /**< Global operational variable */
 
 /* Functions */
 void system_init(void);
+void system_fatal(char *str);
 
 #endif /* SRC_SYSTEM_H_ */

@@ -45,6 +45,12 @@ ISR(BADISR_vect)
     for(;;);
 }
 
+void system_fatal(char *str)
+{
+    display_string(str);
+    for(;;);
+}
+
 /**
  *
  * system_init

@@ -1,5 +1,8 @@
-21:31:27 **** Incremental Build of configuration Debug for project ManageAudio ****
-make all 
+Building file: ../src/ffft.S
+Invoking: AVR Assembler
+avr-gcc -x assembler-with-cpp -g2 -gstabs -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/ffft.d" -MT"src/ffft.d" -c -o "src/ffft.o" "../src/ffft.S"
+Finished building: ../src/ffft.S
+ 
 Building file: ../src/lc75710.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/lc75710.d" -MT"src/lc75710.d" -c -o "src/lc75710.o" "../src/lc75710.c"
@@ -13,14 +16,6 @@ Finished building: ../src/lc75710_graphics.c
 Building file: ../src/ma_audio.c
 Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/ma_audio.d" -MT"src/ma_audio.d" -c -o "src/ma_audio.o" "../src/ma_audio.c"
-In file included from ../src/ma_audio.c:32:0:
-../src/ffft.h:26:1: warning: ‘prog_int16_t’ is deprecated: prog_int16_t type is deprecated. [-Wdeprecated-declarations]
- extern const prog_int16_t tbl_window[];
- ^
-In file included from ../src/ma_audio.c:37:0:
-/usr/lib/avr/include/avr/delay.h:36:2: warning: #warning "This file has been moved to <util/delay.h>." [-Wcpp]
- #warning "This file has been moved to <util/delay.h>."
-  ^
 Finished building: ../src/ma_audio.c
  
 Building file: ../src/ma_gui.c
@@ -53,6 +48,11 @@ Invoking: AVR Compiler
 avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/time.d" -MT"src/time.d" -c -o "src/time.o" "../src/time.c"
 Finished building: ../src/time.c
  
+Building file: ../src/uart.c
+Invoking: AVR Compiler
+avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"src/uart.d" -MT"src/uart.d" -c -o "src/uart.o" "../src/uart.c"
+Finished building: ../src/uart.c
+ 
 Building target: ManageAudio.elf
 Invoking: AVR C++ Linker
 avr-g++ -Wl,-Map,ManageAudio.map,--cref -mrelax -Wl,--gc-sections -Wl,--gc-sections -mmcu=atmega8 -o "ManageAudio.elf"  ./src/ffft.o ./src/lc75710.o ./src/lc75710_graphics.o ./src/ma_audio.o ./src/ma_gui.o ./src/ma_util.o ./src/manage_audio.o ./src/string_table.o ./src/system.o ./src/time.o ./src/uart.o   
@@ -72,15 +72,12 @@ AVR Memory Usage
 ----------------
 Device: atmega8
 
-Program:    6790 bytes (82.9% Full)
+Program:    5942 bytes (72.5% Full)
 (.text + .data + .bootloader)
 
-Data:        887 bytes (86.6% Full)
+Data:        889 bytes (86.8% Full)
 (.data + .bss + .noinit)
 
 
 Finished building: sizedummy
  
-
-21:31:28 Build Finished (took 758ms)
-

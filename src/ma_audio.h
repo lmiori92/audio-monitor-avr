@@ -33,4 +33,7 @@ void ma_audio_init(void);
 void ma_audio_process(void);
 uint16_t* ma_audio_spectrum(void);
 
+extern uint16_t adc_maxS;
+extern uint16_t adc_minS;
+
 #endif /* SRC_MA_AUDIO_H_ */
