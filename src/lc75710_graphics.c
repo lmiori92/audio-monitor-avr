@@ -99,7 +99,7 @@ void display_string_center(char* string)
  *
  * display_clear
  *
- * @brief Clear display
+ * @brief Clear display (i.e. sets RAM to 0x20) AND reset RAM pointer
  *
  */
 void display_clear(void)
@@ -167,21 +167,60 @@ void display_load_bars_horiz()
 
 /**
  *
- * display_load_vumeter_bars_in_ram
+ * display_load_vumeter_harrows
  *
  * @brief Load VU-meter bars in the CGRAM of the chip
  *
  */
-void display_load_vumeter_bars_in_ram(void)
+void display_load_vumeter_harrows(void)
+{
+
+    /* Arrow-like symbol */
+
+    lc75710_cgram_write(0, (uint64_t) (0xCC3));         /* Right Channel (above) */
+    lc75710_cgram_write(1, (uint64_t) 0xCC3 << 20);   /* Left Channel (below)  */
+    lc75710_cgram_write(2, (uint64_t) 0xCC3 | (uint64_t) 0xCC3 << 20);   /* R+L Channel */
+
+}
+
+/**
+ *
+ * display_show_vumeter_harrows
+ *
+ * @brief Show VU-meter bars on the display
+ *
+ * \param   left       Left Level 0-10
+ * \param   right      Right Level 0-10
+ * \param   right_left true: left to right; false: right to left
+ *
+ */
+void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left)
 {
 
     uint8_t i = 0;
-    uint64_t c = 0;
+    uint8_t c = 0;
 
-    c = (uint64_t) 0xCC3;
-    for (i = 0; i < 7; i++)
+    /* Clear display */
+    display_clear();
+
+    /* Full bars */
+    if (left > LC75710_DIGITS) left = LC75710_DIGITS;
+    if (right > LC75710_DIGITS) right = LC75710_DIGITS;
+    for (i = 1; i <= (left > right ? left : right); i++)
     {
-        lc75710_cgram_write(i, c);//(uint64_t)0x7FFFFFFFFL << (64-35)) << (i * 5));
+        if (left >= i && right >= i)
+        {
+            c = 2;
+        }
+        else if (right >= i)
+        {
+            c = 0;
+        }
+        else if (left >= i)
+        {
+            c = 1;
+        }
+        lc75710_dcram_write(right_left ? (LC75710_DIGITS - i) : i, c);
     }
 
 }
@@ -225,7 +264,6 @@ void display_show_horizontal_bar(uint8_t level)
  */
 void display_show_vertical_bars(uint8_t bar, uint8_t level)
 {
-    // TODO we want to saturate here and not % ;=)
     if (bar > 9) bar = 9;   /* Saturate */
     if (level > 6) level = 6;
     lc75710_dcram_write(9 - bar, level);

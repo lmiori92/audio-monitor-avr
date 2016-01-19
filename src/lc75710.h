@@ -29,9 +29,12 @@
 #include <stdint.h>
 #include <stdbool.h>
 
-#define ADDRESS      230   /**< Chip address (B11100110) */
-#define LC75710_DIGITS  10  /**< Number of digits for a given implementation */
-#define LC75710_DRAM_SIZE   64  /**< Size of the internal DCRAM */
+#ifndef __LC75710_H__
+#define __LC75710_H__
+
+#define ADDRESS             230U   /**< Chip address (B11100110) */
+#define LC75710_DIGITS      10U    /**< Number of digits for a given implementation */
+#define LC75710_DRAM_SIZE   64U    /**< Size of the internal DCRAM */
 
 /* Modes of operation */
 #define NO_MDATA_NOR_ADATA      0x0     /**< Command does not affect MDATA nor ADATA */
@@ -51,3 +54,6 @@ void lc75710_dcram_write(uint8_t addr, uint8_t data);
 void lc75710_adram_write(uint8_t addr, uint8_t data);
 void lc75710_cgram_write(uint8_t addr, uint64_t data);
 void lc75710_init(void);
+
+#endif
+

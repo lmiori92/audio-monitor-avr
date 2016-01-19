@@ -30,14 +30,21 @@
 #define SRC_LC75710_GRAPHICS_H_
 
 #include "stdint.h"
+#include "stdbool.h"
+
+#define VUMETER_HARROWS_R   00U
+#define VUMETER_HARROWS_L   20U
 
 void display_string_len(char* string, uint8_t len);
 void display_string(char* string);
 void display_string_center(char* string);
 void display_clear(void);
-void display_load_bars_vert();
-void display_load_bars_horiz();
-void display_load_vumeter_bars_in_ram();
+void display_load_bars_vert(void);
+void display_load_bars_horiz(void);
+
+void display_load_vumeter_harrows(void);
+void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left);
+
 void display_show_horizontal_bar(uint8_t level);
 void display_show_vertical_bars(uint8_t bar, uint8_t level);
 
