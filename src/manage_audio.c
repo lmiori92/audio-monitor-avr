@@ -27,6 +27,7 @@
  */
 
 #include "lc75710.h"
+#include "lc75710_graphics.h"
 #include "time.h"
 #include "ma_gui.h"
 #include "ma_util.h"
@@ -288,8 +289,8 @@ float table[] = {
 
 char disp_str[12];
 float x_dB = 0;
-float minref = 42.14f;
-float adc_max = 128.0f;
+float minref = 36.12f;
+float adc_max = 64.0f;
 uint8_t t;
 void ma_gui_refresh()
 {
@@ -297,8 +298,7 @@ void ma_gui_refresh()
     uint16_t *spektrum = ma_audio_spectrum();
     if (menu.page == &PAGE_DEBUG)
     {
-// TEST ONLY
-        menu.index = 4;
+menu.index = 4;
         switch (menu.index)
         {
 
@@ -342,20 +342,21 @@ void ma_gui_refresh()
 
                     //float v = log10f(spektrum[i] / 60.0f) * 20.0f;
                     //display_show_vertical_bars(i, lookupf(v, table, sizeof(table) / sizeof(float)));
-                    uint16_t v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
+                    uint16_t v = 0;
+                    v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
 
-                    if (v > 10)
+                    if (v > 0)
                     {
-                        /* Provide a very crude but effective noise filter */
                         x_dB = 20.0f * log10(v / adc_max);
-                        t = abs(minref - x_dB);
+                        t = minref - fabs(x_dB);
+
                     }
                     else
                     {
                         t = 0;
                     }
 
-                    display_show_vertical_bars(i, (minref / t)*7);
+                    display_show_vertical_bars(i, (t / minref) * 6.0f);
 //                    display_show_vertical_bars(i, lookupf(x_dB, table, sizeof(table) / sizeof(float)));//spektrum[i] / 10);
                 }
 
@@ -414,9 +415,8 @@ void ma_gui_refresh()
             case 7:
 
                 display_clear();
-                snprintf_P(disp_str, 11, PSTR("%d;%d"), adc_maxS, adc_minS);
+                snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, adc_maxS, adc_minS);
                 display_string(disp_str);
-
 
                 break;
 
@@ -493,6 +493,9 @@ void setup()
     /* ADC */
     ma_audio_init();
 
+    /* Wait Aref stabilization (0.47uF capacitance) */
+    _delay_ms(500);
+
     /* Initialize the serial port */
     uart_init();
     stdout = &uart_output;
@@ -554,18 +557,33 @@ int main(void)
 
     /* Load CGRAM data */
     display_load_bars_vert();
+    uint8_t i, j = 0;
+//    display_load_bars_horiz();
+    //while (1) {
+        /* vu-meter left to right test*/
+        /*
+        display_load_vumeter_harrows();
+        display_show_vumeter_harrows(i, j, true);
+        */
+//        display_show_horizontal_bar(i);
+//        i++;
+//        i  %= 100;
+//        j++;
+//        j  %= 10;
+//        _delay_us(25);
+    //}
 
-//    if (!((PINB >> KEY_1) & 0x1))
-//    {
+    if (!((PINB >> KEY_1) & 0x1))
+    {
         /* Directly go to the debug menu */
         ma_gui_page_change(&menu, &PAGE_DEBUG);
-//    }
-//    else
-//    {
+    }
+    else
+    {
         /* Start with the SOURCE menu */
-//        ma_gui_page_change(&menu, &PAGE_SOURCE);
-//    }
-
+        ma_gui_page_change(&menu, &PAGE_SOURCE);
+    }
+    ma_gui_page_change(&menu, &PAGE_DEBUG);
     /* Start the main loop (and never return) */
     while (1)
     {
@@ -595,6 +613,14 @@ int main(void)
         if (operational.cycle_time > operational.cycle_time_max)
         {
             operational.cycle_time_max = operational.cycle_time;
+        }
+
+        /* Check stack sanity */
+        if (StackCount() == 0U)
+        {
+            display_clear();
+            display_string(PSTR("StackOver!"));
+            for(;;);
         }
 
     }

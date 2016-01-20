@@ -34,11 +34,15 @@
 #include "ma_util.h"
 #include "system.h"
 
+/* #define ADC_NOISE_DEBUG */
+
 /* Quick and dirty noise debug - TODO remove me or clean the code afterwards */
+//#ifdef ADC_NOISE_DEBUG
 uint16_t adc_maxS;
 uint16_t adc_minS;
+uint16_t last_capture;           /**< Last reading */
+//#endif
 
-static uint16_t last_capture;           /**< Last reading */
 static int8_t capture_index;            /**< Buffer index */
 static int16_t capture[FFT_N];          /**< Wave capturing buffer */
 
@@ -64,11 +68,15 @@ ISR(ADC_vect)
     else
     {
         /* Save capture in the buffer and apply digital bias */
-        capture[capture_index] = 32676U - (ADCL | (ADCH << 8U));
-/* HARDWARE NOISE DEBUG
+#ifdef ADC_NOISE_DEBUG
+        last_capture = (ADCL | (ADCH << 8U));
+        capture[capture_index] = 32767U - last_capture;
+        /* HARDWARE NOISE DEBUG */
         if (last_capture > adc_maxS) adc_maxS = last_capture;
         if (last_capture < adc_minS) adc_minS = last_capture;
-        */
+#else
+        capture[capture_index] = (ADCL | (ADCH << 8U));
+#endif
 
         /* Increment buffer index */
         capture_index++;
@@ -123,13 +131,16 @@ void ma_audio_init(void)
 
 }
 
-// TODO work the hann window later, maybe using a lookup table as well
-//void hann_window(uint16_t *stream, uint8_t len)
-//{
-//    for (uint8_t i = 1; i < len; i++) {
-//        stream[i] = 0.5f * (1.0f - cos(2.0f * 3.14f * i / (len - 1.0f))) * stream[i];
-//    }
-//}
+/* Quick and dirty Hann Window for post-process the FFT spectrum
+ * - optimize
+ * - clean
+ * - ? ;=)*/
+void hann_window(uint16_t *stream, uint8_t len)
+{
+    for (uint8_t i = 1; i < len; i++) {
+        stream[i] = 0.5f * (1.0f - cos(2.0f * 3.14f * i / (len - 1.0f))) * stream[i];
+    }
+}
 
 /**
  *
@@ -145,10 +156,10 @@ void ma_audio_process(void)
     if (((ADCSRA >> ADSC) & 0x1) == 0)
     {
         /* Sampling complete */
-/*        hann_window(capture, FFT_N);  */
         fft_input(capture, bfly_buff);
         fft_execute(bfly_buff);
         fft_output(bfly_buff, spektrum);
+        hann_window(spektrum, FFT_N/2);
 
         /* Toggle channel */
         /* TODO iterate through the needed channels:

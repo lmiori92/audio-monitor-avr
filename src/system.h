@@ -52,9 +52,13 @@ typedef struct
 
 /* Globals */
 extern t_operational operational;   /**< Global operational variable */
+extern uint8_t _end;
+extern uint8_t __stack;
 
 /* Functions */
 void system_init(void);
 void system_fatal(char *str);
+
+void StackPaint(void) __attribute__ ((naked)) __attribute__ ((section (".init1")));
 
 #endif /* SRC_SYSTEM_H_ */

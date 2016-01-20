@@ -35,5 +35,6 @@ uint16_t* ma_audio_spectrum(void);
 
 extern uint16_t adc_maxS;
 extern uint16_t adc_minS;
+extern uint16_t last_capture;
 
 #endif /* SRC_MA_AUDIO_H_ */

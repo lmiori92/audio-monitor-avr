@@ -61,3 +61,9 @@ To be tested: external Vref (TL431?) and possibly regulation for the Avcc,
 derived from +12V filtered rail.
 Also, I would consider a review of the ground star and possibly filter out
 digital signals going to the VFD display, which seems quite noisy.
+
+=> Additional filtering of the AVcc using a CRC filter (10uF - 150 ohm - 10uF),
+added capacitance near the bias adjusting potentiometer (0.47uF non-polarized),
+has finally contributed to fix the noise problems which are now gone.
+Absolute ADC value is really stable now and I can also tune the bias to be exactly
+at half-ADC range (512) without derating much - if at all ;=)
