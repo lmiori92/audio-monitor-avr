@@ -36,14 +36,16 @@
 
 #include "lc75710_graphics.h"
 
+#include "ma_strings.h"     /* String table */
+
 void ma_gui_menu_display_entry(t_menu* menu)
 {
 
     display_clear();
 
-    if (menu != NULL && menu->page->entries[menu->index].label != NULL)
+    if (menu != NULL && menu->page->entries[menu->index].label < STRING_NUM_IDS)
     {
-        display_string_center(menu->page->entries[menu->index].label);
+        display_string_center(g_string_table[menu->page->entries[menu->index].label]);
     }
 
 }
@@ -131,8 +133,8 @@ void ma_gui_page_change(t_menu *menu, t_menu_page *page_next)
         menu->refresh = true;
 
         /* call the pre function */
-        if (menu->page->pre != NULL)
-            menu->page->pre();
+        if (menu->page->pre_post != NULL)
+            menu->page->pre_post(REASON_PRE);
 
     }
 }
@@ -173,10 +175,6 @@ void ma_gui_periodic(t_menu* menu, t_keypad* keypad)
         if (menu->page->entries[menu->index].cb != NULL)
             menu->page->entries[menu->index].cb(REASON_HOOVER, menu->index, menu->page);
     }
-
-    /* Periodic function for e.g. menus that continuously refresh */
-    if (menu->refresh_menu != NULL)
-        menu->refresh_menu();
 
 }
 

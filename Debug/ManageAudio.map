@@ -5,7 +5,7 @@ Archive member included because of file (symbol)
 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
                               /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/crtm8.o (exit)
 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_copy_data.o)
-                              ./src/ma_util.o (__do_copy_data)
+                              ./src/ma_strings.o (__do_copy_data)
 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_clear_bss.o)
                               ./src/ma_audio.o (__do_clear_bss)
 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_ashldi3.o)
@@ -74,13 +74,11 @@ Archive member included because of file (symbol)
 Allocating common symbols
 Common symbol       size              file
 
-t                   0x1               ./src/manage_audio.o
 g_timestamp         0x4               ./src/time.o
 last_capture        0x2               ./src/ma_audio.o
 adc_maxS            0x2               ./src/ma_audio.o
 operational         0x12              ./src/manage_audio.o
 adc_minS            0x2               ./src/ma_audio.o
-disp_str            0xc               ./src/manage_audio.o
 __iob               0x6               /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(iob.o)
 
 Discarded input sections
@@ -121,6 +119,9 @@ Discarded input sections
  .text          0x0000000000000000        0x0 ./src/ma_gui.o
  .data          0x0000000000000000        0x0 ./src/ma_gui.o
  .bss           0x0000000000000000        0x0 ./src/ma_gui.o
+ .text          0x0000000000000000        0x0 ./src/ma_strings.o
+ .data          0x0000000000000000        0x0 ./src/ma_strings.o
+ .bss           0x0000000000000000        0x0 ./src/ma_strings.o
  .text          0x0000000000000000        0x0 ./src/ma_util.o
  .data          0x0000000000000000        0x0 ./src/ma_util.o
  .bss           0x0000000000000000        0x0 ./src/ma_util.o
@@ -132,19 +133,6 @@ Discarded input sections
  .bss           0x0000000000000000        0x0 ./src/manage_audio.o
  .text.persistent_defaults
                 0x0000000000000000        0x8 ./src/manage_audio.o
- .text.shutdown
-                0x0000000000000000        0x2 ./src/manage_audio.o
- .data.table    0x0000000000000000       0x1c ./src/manage_audio.o
- .text          0x0000000000000000        0x0 ./src/string_table.o
- .data          0x0000000000000000        0x0 ./src/string_table.o
- .bss           0x0000000000000000        0x0 ./src/string_table.o
- .stab          0x0000000000000000      0x264 ./src/string_table.o
-                                        0x270 (size before relaxing)
- .rodata.str1.1
-                0x0000000000000000       0x17 ./src/string_table.o
- .rodata.string_table
-                0x0000000000000000        0xa ./src/string_table.o
- .comment       0x0000000000000000       0x12 ./src/string_table.o
  .text          0x0000000000000000        0x0 ./src/system.o
  .data          0x0000000000000000        0x0 ./src/system.o
  .bss           0x0000000000000000        0x0 ./src/system.o
@@ -372,9 +360,9 @@ LOAD ./src/lc75710.o
 LOAD ./src/lc75710_graphics.o
 LOAD ./src/ma_audio.o
 LOAD ./src/ma_gui.o
+LOAD ./src/ma_strings.o
 LOAD ./src/ma_util.o
 LOAD ./src/manage_audio.o
-LOAD ./src/string_table.o
 LOAD ./src/system.o
 LOAD ./src/time.o
 LOAD ./src/uart.o
@@ -476,7 +464,7 @@ END GROUP
 .rela.plt
  *(.rela.plt)
 
-.text           0x0000000000000000     0x179e
+.text           0x0000000000000000     0x175a
  *(.vectors)
  .vectors       0x0000000000000000       0x26 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/crtm8.o
                 0x0000000000000000                __vectors
@@ -493,7 +481,7 @@ END GROUP
  *(.trampolines*)
                 0x000000000000009e                __trampolines_end = .
  *(.progmem*)
- .progmem.data.__c.2425
+ .progmem.data.__c.2444
                 0x000000000000009e        0xb ./src/manage_audio.o
                 0x00000000000000aa                . = ALIGN (0x2)
  *fill*         0x00000000000000a9        0x1 
@@ -621,194 +609,194 @@ END GROUP
                 0x0000000000000ad2        0x6 ./src/ma_audio.o
                 0x0000000000000ad2                ma_audio_spectrum
  .text.ma_gui_menu_display_entry
-                0x0000000000000ad8       0x36 ./src/ma_gui.o
+                0x0000000000000ad8       0x42 ./src/ma_gui.o
                 0x0000000000000ad8                ma_gui_menu_display_entry
  .text.ma_gui_menu_goto_previous
-                0x0000000000000b0e       0x12 ./src/ma_gui.o
-                0x0000000000000b0e                ma_gui_menu_goto_previous
+                0x0000000000000b1a       0x12 ./src/ma_gui.o
+                0x0000000000000b1a                ma_gui_menu_goto_previous
  .text.ma_gui_init
-                0x0000000000000b20       0x32 ./src/ma_gui.o
-                0x0000000000000b20                ma_gui_init
+                0x0000000000000b2c       0x32 ./src/ma_gui.o
+                0x0000000000000b2c                ma_gui_init
  .text.keypad_periodic
-                0x0000000000000b52       0xc8 ./src/ma_gui.o
-                0x0000000000000b52                keypad_periodic
+                0x0000000000000b5e       0xc8 ./src/ma_gui.o
+                0x0000000000000b5e                keypad_periodic
  .text.ma_gui_page_change
-                0x0000000000000c1a       0x24 ./src/ma_gui.o
-                0x0000000000000c1a                ma_gui_page_change
+                0x0000000000000c26       0x26 ./src/ma_gui.o
+                0x0000000000000c26                ma_gui_page_change
  .text.ma_gui_periodic
-                0x0000000000000c3e       0xc8 ./src/ma_gui.o
-                0x0000000000000c3e                ma_gui_periodic
+                0x0000000000000c4c       0xac ./src/ma_gui.o
+                0x0000000000000c4c                ma_gui_periodic
  .text.read_from_persistent
-                0x0000000000000d06       0x1c ./src/ma_util.o
-                0x0000000000000d06                read_from_persistent
+                0x0000000000000cf8       0x1c ./src/ma_util.o
+                0x0000000000000cf8                read_from_persistent
  .text.write_to_persistent
-                0x0000000000000d22       0x1a ./src/ma_util.o
-                0x0000000000000d22                write_to_persistent
+                0x0000000000000d14       0x1a ./src/ma_util.o
+                0x0000000000000d14                write_to_persistent
  .text.source_select
-                0x0000000000000d3c       0x16 ./src/ma_util.o
-                0x0000000000000d3c                source_select
- .text.ma_gui_settings_brightness_pre
-                0x0000000000000d52       0x12 ./src/manage_audio.o
-                0x0000000000000d52                ma_gui_settings_brightness_pre
- .text.ma_gui_source_select_pre
-                0x0000000000000d64       0x12 ./src/manage_audio.o
-                0x0000000000000d64                ma_gui_source_select_pre
+                0x0000000000000d2e       0x16 ./src/ma_util.o
+                0x0000000000000d2e                source_select
  .text.ma_gui_menu_goto_sett_display
-                0x0000000000000d76       0x10 ./src/manage_audio.o
-                0x0000000000000d76                ma_gui_menu_goto_sett_display
+                0x0000000000000d44       0x10 ./src/manage_audio.o
+                0x0000000000000d44                ma_gui_menu_goto_sett_display
  .text.ma_gui_menu_goto_sett_brightness
-                0x0000000000000d86       0x10 ./src/manage_audio.o
-                0x0000000000000d86                ma_gui_menu_goto_sett_brightness
+                0x0000000000000d54       0x10 ./src/manage_audio.o
+                0x0000000000000d54                ma_gui_menu_goto_sett_brightness
  .text.ma_gui_menu_goto_tools
-                0x0000000000000d96       0x10 ./src/manage_audio.o
-                0x0000000000000d96                ma_gui_menu_goto_tools
- .text.ma_gui_refresh
-                0x0000000000000da6       0xd4 ./src/manage_audio.o
-                0x0000000000000da6                ma_gui_refresh
+                0x0000000000000d64       0x10 ./src/manage_audio.o
+                0x0000000000000d64                ma_gui_menu_goto_tools
+ .text.ma_gui_settings_brightness_pre
+                0x0000000000000d74       0x16 ./src/manage_audio.o
+                0x0000000000000d74                ma_gui_settings_brightness_pre
+ .text.ma_gui_source_select_pre
+                0x0000000000000d8a       0x16 ./src/manage_audio.o
+                0x0000000000000d8a                ma_gui_source_select_pre
  .text.ma_gui_menu_tools_selection
-                0x0000000000000e7a       0x20 ./src/manage_audio.o
-                0x0000000000000e7a                ma_gui_menu_tools_selection
+                0x0000000000000da0       0x20 ./src/manage_audio.o
+                0x0000000000000da0                ma_gui_menu_tools_selection
  .text.ma_gui_source_select
-                0x0000000000000e9a       0x28 ./src/manage_audio.o
-                0x0000000000000e9a                ma_gui_source_select
+                0x0000000000000dc0       0x28 ./src/manage_audio.o
+                0x0000000000000dc0                ma_gui_source_select
+ .text.ma_gui_refresh
+                0x0000000000000de8       0xa0 ./src/manage_audio.o
+                0x0000000000000de8                ma_gui_refresh
  .text.set_display_brightness
-                0x0000000000000ec2       0x64 ./src/manage_audio.o
-                0x0000000000000ec2                set_display_brightness
+                0x0000000000000e88       0x64 ./src/manage_audio.o
+                0x0000000000000e88                set_display_brightness
  .text.ma_gui_menu_set_brightness
-                0x0000000000000f26        0xe ./src/manage_audio.o
-                0x0000000000000f26                ma_gui_menu_set_brightness
- .text.io_init  0x0000000000000f34       0x14 ./src/manage_audio.o
-                0x0000000000000f34                io_init
- .text.setup    0x0000000000000f48       0x4e ./src/manage_audio.o
-                0x0000000000000f48                setup
- .text.input    0x0000000000000f96       0x24 ./src/manage_audio.o
-                0x0000000000000f96                input
- .text.output   0x0000000000000fba       0x24 ./src/manage_audio.o
-                0x0000000000000fba                output
+                0x0000000000000eec        0xe ./src/manage_audio.o
+                0x0000000000000eec                ma_gui_menu_set_brightness
+ .text.io_init  0x0000000000000efa       0x14 ./src/manage_audio.o
+                0x0000000000000efa                io_init
+ .text.setup    0x0000000000000f0e       0x4e ./src/manage_audio.o
+                0x0000000000000f0e                setup
+ .text.input    0x0000000000000f5c       0x24 ./src/manage_audio.o
+                0x0000000000000f5c                input
+ .text.output   0x0000000000000f80       0x24 ./src/manage_audio.o
+                0x0000000000000f80                output
  .text.startup.main
-                0x0000000000000fde       0xd4 ./src/manage_audio.o
-                0x0000000000000fde                main
+                0x0000000000000fa4       0xca ./src/manage_audio.o
+                0x0000000000000fa4                main
  .text.StackCount
-                0x00000000000010b2       0x20 ./src/system.o
-                0x00000000000010b2                StackCount
+                0x000000000000106e       0x20 ./src/system.o
+                0x000000000000106e                StackCount
  .text.__vector_default
-                0x00000000000010d2       0x12 ./src/system.o
-                0x00000000000010d2                __vector_default
+                0x000000000000108e       0x12 ./src/system.o
+                0x000000000000108e                __vector_default
  .text.system_init
-                0x00000000000010e4        0xa ./src/system.o
-                0x00000000000010e4                system_init
+                0x00000000000010a0        0xa ./src/system.o
+                0x00000000000010a0                system_init
  .text.timer_init
-                0x00000000000010ee       0x10 ./src/time.o
-                0x00000000000010ee                timer_init
+                0x00000000000010aa       0x10 ./src/time.o
+                0x00000000000010aa                timer_init
  .text.__vector_9
-                0x00000000000010fe       0x52 ./src/time.o
-                0x00000000000010fe                __vector_9
+                0x00000000000010ba       0x52 ./src/time.o
+                0x00000000000010ba                __vector_9
  .text.uart_init
-                0x0000000000001150       0x12 ./src/uart.o
-                0x0000000000001150                uart_init
+                0x000000000000110c       0x12 ./src/uart.o
+                0x000000000000110c                uart_init
  .text.uart_putchar
-                0x0000000000001162       0x16 ./src/uart.o
-                0x0000000000001162                uart_putchar
+                0x000000000000111e       0x16 ./src/uart.o
+                0x000000000000111e                uart_putchar
  .text.uart_getchar
-                0x0000000000001178        0x8 ./src/uart.o
-                0x0000000000001178                uart_getchar
+                0x0000000000001134        0x8 ./src/uart.o
+                0x0000000000001134                uart_getchar
  .text.libgcc.builtins
-                0x0000000000001180       0x32 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_ashldi3.o)
-                0x0000000000001180                __ashldi3
+                0x000000000000113c       0x32 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_ashldi3.o)
+                0x000000000000113c                __ashldi3
  .text.libgcc.builtins
-                0x00000000000011b2       0x3c /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_ashrdi3.o)
-                0x00000000000011b2                __ashrdi3
-                0x00000000000011b6                __lshrdi3
- .text.libgcc   0x00000000000011ee       0x18 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_cmpdi2_s8.o)
-                0x00000000000011ee                __cmpdi2_s8
+                0x000000000000116e       0x3c /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_ashrdi3.o)
+                0x000000000000116e                __ashrdi3
+                0x0000000000001172                __lshrdi3
+ .text.libgcc   0x00000000000011aa       0x18 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_cmpdi2_s8.o)
+                0x00000000000011aa                __cmpdi2_s8
  .text.avr-libc.fplib
-                0x0000000000001206        0xa /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(addsf3.o)
-                0x0000000000001206                __subsf3
-                0x0000000000001208                __addsf3
+                0x00000000000011c2        0xa /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(addsf3.o)
+                0x00000000000011c2                __subsf3
+                0x00000000000011c4                __addsf3
  .text.avr-libc.fplib
-                0x0000000000001210       0xc0 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(addsf3x.o)
-                0x000000000000122a                __addsf3x
+                0x00000000000011cc       0xc0 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(addsf3x.o)
+                0x00000000000011e6                __addsf3x
  .text.avr-libc.fplib
-                0x00000000000012d0        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(cos.o)
-                0x00000000000012d0                cos
+                0x000000000000128c        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(cos.o)
+                0x000000000000128c                cos
  .text.avr-libc.fplib
-                0x00000000000012d6        0x4 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(divsf3.o)
-                0x00000000000012d6                __divsf3
+                0x0000000000001292        0x4 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(divsf3.o)
+                0x0000000000001292                __divsf3
  .text.avr-libc.fplib
-                0x00000000000012da       0xcc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(divsf3x.o)
-                0x00000000000012f0                __divsf3x
-                0x00000000000012f4                __divsf3_pse
+                0x0000000000001296       0xcc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(divsf3x.o)
+                0x00000000000012ac                __divsf3x
+                0x00000000000012b0                __divsf3_pse
  .text.avr-libc.fplib
-                0x00000000000013a6       0x58 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fixunssfsi.o)
-                0x00000000000013a6                __fixunssfsi
+                0x0000000000001362       0x58 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fixunssfsi.o)
+                0x0000000000001362                __fixunssfsi
  .text.avr-libc.fplib
-                0x00000000000013fe       0x7a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(floatsisf.o)
-                0x00000000000013fe                __floatunsisf
-                0x0000000000001402                __floatsisf
+                0x00000000000013ba       0x7a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(floatsisf.o)
+                0x00000000000013ba                __floatunsisf
+                0x00000000000013be                __floatsisf
  .text.avr-libc.fplib
-                0x0000000000001478        0xc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_inf.o)
-                0x0000000000001478                __fp_inf
+                0x0000000000001434        0xc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_inf.o)
+                0x0000000000001434                __fp_inf
  .text.avr-libc.fplib
-                0x0000000000001484        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_nan.o)
-                0x0000000000001484                __fp_nan
+                0x0000000000001440        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_nan.o)
+                0x0000000000001440                __fp_nan
  .text.avr-libc.fplib
-                0x000000000000148a        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_pscA.o)
-                0x000000000000148a                __fp_pscA
+                0x0000000000001446        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_pscA.o)
+                0x0000000000001446                __fp_pscA
  .text.avr-libc.fplib
-                0x0000000000001498        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_pscB.o)
-                0x0000000000001498                __fp_pscB
+                0x0000000000001454        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_pscB.o)
+                0x0000000000001454                __fp_pscB
  .text.avr-libc.fplib
-                0x00000000000014a6       0x50 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_rempio2.o)
-                0x00000000000014a8                __fp_rempio2
+                0x0000000000001462       0x50 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_rempio2.o)
+                0x0000000000001464                __fp_rempio2
  .text.avr-libc.fplib
-                0x00000000000014f6       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_round.o)
-                0x00000000000014f6                __fp_round
+                0x00000000000014b2       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_round.o)
+                0x00000000000014b2                __fp_round
  .text.avr-libc.fplib
-                0x0000000000001518       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_sinus.o)
-                0x0000000000001518                __fp_sinus
+                0x00000000000014d4       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_sinus.o)
+                0x00000000000014d4                __fp_sinus
  .text.avr-libc.fplib
-                0x000000000000153a       0x44 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_split3.o)
-                0x000000000000153a                __fp_split3
-                0x000000000000154a                __fp_splitA
+                0x00000000000014f6       0x44 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_split3.o)
+                0x00000000000014f6                __fp_split3
+                0x0000000000001506                __fp_splitA
  .text.avr-libc.fplib
-                0x000000000000157e        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_zero.o)
-                0x000000000000157e                __fp_zero
-                0x0000000000001580                __fp_szero
+                0x000000000000153a        0xe /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_zero.o)
+                0x000000000000153a                __fp_zero
+                0x000000000000153c                __fp_szero
  .text.avr-libc.fplib
-                0x000000000000158c        0xc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(log10.o)
-                0x000000000000158c                log10
+                0x0000000000001548        0xc /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(log10.o)
+                0x0000000000001548                log10
  .text.avr-libc.fplib
-                0x0000000000001598       0x8a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(log.o)
-                0x00000000000015a2                log
+                0x0000000000001554       0x8a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(log.o)
+                0x000000000000155e                log
  .text.avr-libc.fplib
-                0x0000000000001622        0x4 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(mulsf3.o)
-                0x0000000000001622                __mulsf3
+                0x00000000000015de        0x4 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(mulsf3.o)
+                0x00000000000015de                __mulsf3
  .text.avr-libc.fplib
-                0x0000000000001626       0xc2 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(mulsf3x.o)
-                0x000000000000163a                __mulsf3x
-                0x000000000000163e                __mulsf3_pse
+                0x00000000000015e2       0xc2 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(mulsf3x.o)
+                0x00000000000015f6                __mulsf3x
+                0x00000000000015fa                __mulsf3_pse
  .text.avr-libc.fplib
-                0x00000000000016e8       0x1c /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_mpack.o)
-                0x00000000000016e8                __fp_mpack
-                0x00000000000016ec                __fp_mpack_finite
+                0x00000000000016a4       0x1c /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_mpack.o)
+                0x00000000000016a4                __fp_mpack
+                0x00000000000016a8                __fp_mpack_finite
  .text.avr-libc.fplib
-                0x0000000000001704       0x4a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_powser.o)
-                0x0000000000001704                __fp_powser
+                0x00000000000016c0       0x4a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_powser.o)
+                0x00000000000016c0                __fp_powser
  .text.avr-libc.fplib
-                0x000000000000174e       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_powsodd.o)
-                0x000000000000174e                __fp_powsodd
+                0x000000000000170a       0x22 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(fp_powsodd.o)
+                0x000000000000170a                __fp_powsodd
  .text.avr-libc
-                0x0000000000001770       0x10 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eerd_byte_atmega8.o)
-                0x0000000000001770                __eerd_byte_m8
+                0x000000000000172c       0x10 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eerd_byte_atmega8.o)
+                0x000000000000172c                __eerd_byte_m8
  .text.avr-libc
-                0x0000000000001780       0x1a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eewr_byte_atmega8.o)
-                0x0000000000001780                __eewr_byte_m8
-                0x0000000000001782                __eewr_r18_m8
-                0x000000000000179a                . = ALIGN (0x2)
+                0x000000000000173c       0x1a /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eewr_byte_atmega8.o)
+                0x000000000000173c                __eewr_byte_m8
+                0x000000000000173e                __eewr_r18_m8
+                0x0000000000001756                . = ALIGN (0x2)
  *(.fini9)
- .fini9         0x000000000000179a        0x0 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
-                0x000000000000179a                exit
-                0x000000000000179a                _exit
+ .fini9         0x0000000000001756        0x0 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
+                0x0000000000001756                exit
+                0x0000000000001756                _exit
  *(.fini9)
  *(.fini8)
  *(.fini8)
@@ -827,114 +815,108 @@ END GROUP
  *(.fini1)
  *(.fini1)
  *(.fini0)
- .fini0         0x000000000000179a        0x4 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
+ .fini0         0x0000000000001756        0x4 /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
  *(.fini0)
-                0x000000000000179e                _etext = .
+                0x000000000000175a                _etext = .
 
-.data           0x0000000000800060      0x16a load address 0x000000000000179e
+.data           0x0000000000800060      0x12a load address 0x000000000000175a
                 0x0000000000800060                PROVIDE (__data_start, .)
  *(.data)
  *(.data*)
- .data.adc_max  0x0000000000800060        0x4 ./src/manage_audio.o
-                0x0000000000800060                adc_max
- .data.minref   0x0000000000800064        0x4 ./src/manage_audio.o
-                0x0000000000800064                minref
+ .data.g_string_table
+                0x0000000000800060       0x1e ./src/ma_strings.o
+                0x0000000000800060                g_string_table
  .data.PAGE_DEBUG
-                0x0000000000800068        0x9 ./src/manage_audio.o
-                0x0000000000800068                PAGE_DEBUG
+                0x000000000080007e        0x7 ./src/manage_audio.o
+                0x000000000080007e                PAGE_DEBUG
  .data.MENU_DEBUG
-                0x0000000000800071       0x1c ./src/manage_audio.o
-                0x0000000000800071                MENU_DEBUG
+                0x0000000000800085       0x15 ./src/manage_audio.o
+                0x0000000000800085                MENU_DEBUG
  .data.PAGE_SETTINGS_TOOLS
-                0x000000000080008d        0x9 ./src/manage_audio.o
-                0x000000000080008d                PAGE_SETTINGS_TOOLS
+                0x000000000080009a        0x7 ./src/manage_audio.o
+                0x000000000080009a                PAGE_SETTINGS_TOOLS
  .data.MENU_SETTINGS_TOOLS
-                0x0000000000800096        0xc ./src/manage_audio.o
-                0x0000000000800096                MENU_SETTINGS_TOOLS
+                0x00000000008000a1        0x9 ./src/manage_audio.o
+                0x00000000008000a1                MENU_SETTINGS_TOOLS
  .data.PAGE_SETTINGS_BRIGHTNESS
-                0x00000000008000a2        0x9 ./src/manage_audio.o
-                0x00000000008000a2                PAGE_SETTINGS_BRIGHTNESS
+                0x00000000008000aa        0x7 ./src/manage_audio.o
+                0x00000000008000aa                PAGE_SETTINGS_BRIGHTNESS
  .data.MENU_SETTINGS_BRIGHTNESS
-                0x00000000008000ab       0x14 ./src/manage_audio.o
-                0x00000000008000ab                MENU_SETTINGS_BRIGHTNESS
+                0x00000000008000b1        0xf ./src/manage_audio.o
+                0x00000000008000b1                MENU_SETTINGS_BRIGHTNESS
  .data.PAGE_SETTINGS_DISPLAY
-                0x00000000008000bf        0x9 ./src/manage_audio.o
-                0x00000000008000bf                PAGE_SETTINGS_DISPLAY
+                0x00000000008000c0        0x7 ./src/manage_audio.o
+                0x00000000008000c0                PAGE_SETTINGS_DISPLAY
  .data.MENU_SETTINGS_DISPLAY
-                0x00000000008000c8        0xc ./src/manage_audio.o
-                0x00000000008000c8                MENU_SETTINGS_DISPLAY
+                0x00000000008000c7        0x9 ./src/manage_audio.o
+                0x00000000008000c7                MENU_SETTINGS_DISPLAY
  .data.PAGE_SETTINGS
-                0x00000000008000d4        0x9 ./src/manage_audio.o
-                0x00000000008000d4                PAGE_SETTINGS
+                0x00000000008000d0        0x7 ./src/manage_audio.o
+                0x00000000008000d0                PAGE_SETTINGS
  .data.MENU_SETTINGS
-                0x00000000008000dd       0x18 ./src/manage_audio.o
-                0x00000000008000dd                MENU_SETTINGS
+                0x00000000008000d7       0x12 ./src/manage_audio.o
+                0x00000000008000d7                MENU_SETTINGS
  .data.PAGE_SOURCE
-                0x00000000008000f5        0x9 ./src/manage_audio.o
-                0x00000000008000f5                PAGE_SOURCE
+                0x00000000008000e9        0x7 ./src/manage_audio.o
+                0x00000000008000e9                PAGE_SOURCE
  .data.MENU_SOURCE
-                0x00000000008000fe       0x10 ./src/manage_audio.o
-                0x00000000008000fe                MENU_SOURCE
+                0x00000000008000f0        0xc ./src/manage_audio.o
+                0x00000000008000f0                MENU_SOURCE
  .data.uart_input
-                0x000000000080010e        0xe ./src/manage_audio.o
-                0x000000000080010e                uart_input
+                0x00000000008000fc        0xe ./src/manage_audio.o
+                0x00000000008000fc                uart_input
  .data.uart_output
-                0x000000000080011c        0xe ./src/manage_audio.o
-                0x000000000080011c                uart_output
+                0x000000000080010a        0xe ./src/manage_audio.o
+                0x000000000080010a                uart_output
  *(.rodata)
- .rodata        0x000000000080012a        0x5 ./src/manage_audio.o
+ .rodata        0x0000000000800118        0x5 ./src/manage_audio.o
  *(.rodata*)
+ .rodata.str1.1
+                0x000000000080011d       0x62 ./src/ma_strings.o
  .rodata.CSWTCH.5
-                0x000000000080012f        0x3 ./src/ma_util.o
+                0x000000000080017f        0x3 ./src/ma_util.o
  .rodata.str1.1
-                0x0000000000800132       0x8f ./src/manage_audio.o
- .rodata.str1.1
-                0x00000000008001c1        0x8 ./src/system.o
+                0x0000000000800182        0x8 ./src/system.o
  *(.gnu.linkonce.d*)
-                0x00000000008001ca                . = ALIGN (0x2)
- *fill*         0x00000000008001c9        0x1 
-                0x00000000008001ca                _edata = .
-                0x00000000008001ca                PROVIDE (__data_end, .)
+                0x000000000080018a                . = ALIGN (0x2)
+                0x000000000080018a                _edata = .
+                0x000000000080018a                PROVIDE (__data_end, .)
 
-.bss            0x00000000008001ca      0x211
-                0x00000000008001ca                PROVIDE (__bss_start, .)
+.bss            0x000000000080018a      0x1fe
+                0x000000000080018a                PROVIDE (__bss_start, .)
  *(.bss)
  *(.bss*)
- .bss.spektrum  0x00000000008001ca       0x40 ./src/ma_audio.o
+ .bss.spektrum  0x000000000080018a       0x40 ./src/ma_audio.o
  .bss.bfly_buff
-                0x000000000080020a      0x100 ./src/ma_audio.o
- .bss.capture   0x000000000080030a       0x80 ./src/ma_audio.o
+                0x00000000008001ca      0x100 ./src/ma_audio.o
+ .bss.capture   0x00000000008002ca       0x80 ./src/ma_audio.o
  .bss.capture_index
-                0x000000000080038a        0x1 ./src/ma_audio.o
- .bss.x_dB      0x000000000080038b        0x4 ./src/manage_audio.o
-                0x000000000080038b                x_dB
+                0x000000000080034a        0x1 ./src/ma_audio.o
  .bss.persistent
-                0x000000000080038f        0x2 ./src/manage_audio.o
- .bss.keypad    0x0000000000800391       0x15 ./src/manage_audio.o
- .bss.menu      0x00000000008003a6        0x6 ./src/manage_audio.o
+                0x000000000080034b        0x2 ./src/manage_audio.o
+ .bss.keypad    0x000000000080034d       0x15 ./src/manage_audio.o
+ .bss.menu      0x0000000000800362        0x4 ./src/manage_audio.o
  *(COMMON)
- COMMON         0x00000000008003ac        0x6 ./src/ma_audio.o
-                0x00000000008003ac                last_capture
-                0x00000000008003ae                adc_maxS
-                0x00000000008003b0                adc_minS
- COMMON         0x00000000008003b2       0x1f ./src/manage_audio.o
-                0x00000000008003b2                t
-                0x00000000008003b3                operational
-                0x00000000008003c5                disp_str
- COMMON         0x00000000008003d1        0x4 ./src/time.o
-                0x00000000008003d1                g_timestamp
- COMMON         0x00000000008003d5        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(iob.o)
-                0x00000000008003d5                __iob
-                0x00000000008003db                PROVIDE (__bss_end, .)
-                0x000000000000179e                __data_load_start = LOADADDR (.data)
-                0x0000000000001908                __data_load_end = (__data_load_start + SIZEOF (.data))
+ COMMON         0x0000000000800366        0x6 ./src/ma_audio.o
+                0x0000000000800366                last_capture
+                0x0000000000800368                adc_maxS
+                0x000000000080036a                adc_minS
+ COMMON         0x000000000080036c       0x12 ./src/manage_audio.o
+                0x000000000080036c                operational
+ COMMON         0x000000000080037e        0x4 ./src/time.o
+                0x000000000080037e                g_timestamp
+ COMMON         0x0000000000800382        0x6 /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(iob.o)
+                0x0000000000800382                __iob
+                0x0000000000800388                PROVIDE (__bss_end, .)
+                0x000000000000175a                __data_load_start = LOADADDR (.data)
+                0x0000000000001884                __data_load_end = (__data_load_start + SIZEOF (.data))
 
-.noinit         0x00000000008003db        0x0
-                0x00000000008003db                PROVIDE (__noinit_start, .)
+.noinit         0x0000000000800388        0x0
+                0x0000000000800388                PROVIDE (__noinit_start, .)
  *(.noinit*)
-                0x00000000008003db                PROVIDE (__noinit_end, .)
-                0x00000000008003db                _end = .
-                0x00000000008003db                PROVIDE (__heap_start, .)
+                0x0000000000800388                PROVIDE (__noinit_end, .)
+                0x0000000000800388                _end = .
+                0x0000000000800388                PROVIDE (__heap_start, .)
 
 .eeprom         0x0000000000810000        0x0
  *(.eeprom*)
@@ -955,7 +937,7 @@ END GROUP
 .user_signatures
  *(.user_signatures*)
 
-.stab           0x0000000000000000     0x3e64
+.stab           0x0000000000000000     0x4218
  *(.stab)
  .stab          0x0000000000000000      0x750 ./src/ffft.o
  .stab          0x0000000000000750      0xaf8 ./src/lc75710.o
@@ -964,22 +946,24 @@ END GROUP
                                         0x990 (size before relaxing)
  .stab          0x000000000000174c      0x5a0 ./src/ma_audio.o
                                         0x804 (size before relaxing)
- .stab          0x0000000000001cec      0x75c ./src/ma_gui.o
-                                        0x8d0 (size before relaxing)
- .stab          0x0000000000002448      0x3c0 ./src/ma_util.o
+ .stab          0x0000000000001cec      0x78c ./src/ma_gui.o
+                                        0x900 (size before relaxing)
+ .stab          0x0000000000002478      0x270 ./src/ma_strings.o
+                                        0x294 (size before relaxing)
+ .stab          0x00000000000026e8      0x3c0 ./src/ma_util.o
                                         0x750 (size before relaxing)
- .stab          0x0000000000002808      0xb88 ./src/manage_audio.o
-                                       0x1044 (size before relaxing)
- .stab          0x0000000000003390      0x3cc ./src/system.o
+ .stab          0x0000000000002aa8      0xcb4 ./src/manage_audio.o
+                                       0x1050 (size before relaxing)
+ .stab          0x000000000000375c      0x3cc ./src/system.o
                                         0x5e8 (size before relaxing)
- .stab          0x000000000000375c      0x324 ./src/time.o
+ .stab          0x0000000000003b28      0x324 ./src/time.o
                                         0x4ec (size before relaxing)
- .stab          0x0000000000003a80      0x3e4 ./src/uart.o
+ .stab          0x0000000000003e4c      0x3cc ./src/uart.o
                                         0x5e8 (size before relaxing)
 
-.stabstr        0x0000000000000000     0x2419
+.stabstr        0x0000000000000000     0x2433
  *(.stabstr)
- .stabstr       0x0000000000000000     0x2419 ./src/ffft.o
+ .stabstr       0x0000000000000000     0x2433 ./src/ffft.o
 
 .stab.excl
  *(.stab.excl)
@@ -1000,6 +984,7 @@ END GROUP
  .comment       0x0000000000000000       0x12 ./src/lc75710_graphics.o
  .comment       0x0000000000000000       0x12 ./src/ma_audio.o
  .comment       0x0000000000000000       0x12 ./src/ma_gui.o
+ .comment       0x0000000000000000       0x12 ./src/ma_strings.o
  .comment       0x0000000000000000       0x12 ./src/ma_util.o
  .comment       0x0000000000000000       0x12 ./src/manage_audio.o
  .comment       0x0000000000000000       0x12 ./src/system.o
@@ -1122,9 +1107,9 @@ __do_clear_bss                                    /usr/lib/gcc/avr/4.8.1/avr4/li
                                                   ./src/ma_audio.o
 __do_copy_data                                    /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_copy_data.o)
                                                   ./src/system.o
-                                                  ./src/string_table.o
                                                   ./src/manage_audio.o
                                                   ./src/ma_util.o
+                                                  ./src/ma_strings.o
 __eerd_byte_m8                                    /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eerd_byte_atmega8.o)
                                                   ./src/ma_util.o
 __eewr_byte_m8                                    /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libc.a(eewr_byte_atmega8.o)
@@ -1245,13 +1230,11 @@ __vector_default                                  ./src/system.o
 __vectors                                         /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/crtm8.o
 _end                                              ./src/system.o
 _exit                                             /usr/lib/gcc/avr/4.8.1/avr4/libgcc.a(_exit.o)
-adc_max                                           ./src/manage_audio.o
 adc_maxS                                          ./src/ma_audio.o
 adc_minS                                          ./src/ma_audio.o
 cos                                               /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/libm.a(cos.o)
                                                   ./src/ma_audio.o
 debounce                                          ./src/ma_util.o
-disp_str                                          ./src/manage_audio.o
 display_clear                                     ./src/lc75710_graphics.o
                                                   ./src/manage_audio.o
                                                   ./src/ma_gui.o
@@ -1278,6 +1261,8 @@ fft_input                                         ./src/ffft.o
 fft_output                                        ./src/ffft.o
                                                   ./src/ma_audio.o
 fmuls_f                                           ./src/ffft.o
+g_string_table                                    ./src/ma_strings.o
+                                                  ./src/ma_gui.o
 g_timestamp                                       ./src/time.o
                                                   ./src/manage_audio.o
                                                   ./src/ma_gui.o
@@ -1336,7 +1321,6 @@ ma_gui_source_select                              ./src/manage_audio.o
 ma_gui_source_select_pre                          ./src/manage_audio.o
 main                                              ./src/manage_audio.o
                                                   /usr/lib/gcc/avr/4.8.1/../../../avr/lib/avr4/crtm8.o
-minref                                            ./src/manage_audio.o
 operational                                       ./src/manage_audio.o
                                                   ./src/system.o
                                                   ./src/ma_audio.o
@@ -1346,15 +1330,11 @@ read_from_persistent                              ./src/ma_util.o
                                                   ./src/manage_audio.o
 set_display_brightness                            ./src/manage_audio.o
 setup                                             ./src/manage_audio.o
-shutdown                                          ./src/manage_audio.o
 source_select                                     ./src/ma_util.o
                                                   ./src/manage_audio.o
-string_table                                      ./src/string_table.o
 system_fatal                                      ./src/system.o
 system_init                                       ./src/system.o
                                                   ./src/manage_audio.o
-t                                                 ./src/manage_audio.o
-table                                             ./src/manage_audio.o
 tbl_window                                        ./src/ffft.o
 timer_init                                        ./src/time.o
                                                   ./src/manage_audio.o
@@ -1368,4 +1348,3 @@ uart_putchar                                      ./src/uart.o
                                                   ./src/manage_audio.o
 write_to_persistent                               ./src/ma_util.o
                                                   ./src/manage_audio.o
-x_dB                                              ./src/manage_audio.o

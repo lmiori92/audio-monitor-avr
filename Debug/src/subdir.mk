@@ -8,9 +8,9 @@ C_SRCS += \
 ../src/lc75710_graphics.c \
 ../src/ma_audio.c \
 ../src/ma_gui.c \
+../src/ma_strings.c \
 ../src/ma_util.c \
 ../src/manage_audio.c \
-../src/string_table.c \
 ../src/system.c \
 ../src/time.c \
 ../src/uart.c 
@@ -24,9 +24,9 @@ OBJS += \
 ./src/lc75710_graphics.o \
 ./src/ma_audio.o \
 ./src/ma_gui.o \
+./src/ma_strings.o \
 ./src/ma_util.o \
 ./src/manage_audio.o \
-./src/string_table.o \
 ./src/system.o \
 ./src/time.o \
 ./src/uart.o 
@@ -36,9 +36,9 @@ C_DEPS += \
 ./src/lc75710_graphics.d \
 ./src/ma_audio.d \
 ./src/ma_gui.d \
+./src/ma_strings.d \
 ./src/ma_util.d \
 ./src/manage_audio.d \
-./src/string_table.d \
 ./src/system.d \
 ./src/time.d \
 ./src/uart.d 

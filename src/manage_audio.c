@@ -46,7 +46,7 @@
 #include "uart.h"
 #include "ma_audio.h"
 #include "system.h"
-#include "string_table.h"
+#include "ma_strings.h"
 
 /* Globals */
 t_operational operational;          /**< Global operational state */
@@ -77,54 +77,51 @@ t_menu_page* ma_gui_menu_set_brightness(uint8_t reason, uint8_t id, t_menu_page*
 t_menu_page* ma_gui_menu_goto_tools(uint8_t reason, uint8_t id, t_menu_page* page);
 t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page* page);
 
-void ma_gui_settings_brightness_pre();
-void ma_gui_source_select_pre();
+void ma_gui_settings_brightness_pre(uint8_t reason);
+void ma_gui_source_select_pre(uint8_t reason);
 void set_display_brightness(uint8_t level);
 
 /* Source menu entries */
 t_menu_entry  MENU_SOURCE[] = {
-                            { .label = "AUX",            .cb = &ma_gui_source_select },
-                            { .label = "CD",             .cb = &ma_gui_source_select },
-                            { .label = "RADIO",          .cb = &ma_gui_source_select },
-                            { .label = "TAPE",           .cb = &ma_gui_source_select },
+                            { .label = STRING_AUX,   .cb = &ma_gui_source_select },
+                            { .label = STRING_CD,    .cb = &ma_gui_source_select },
+                            { .label = STRING_RADIO, .cb = &ma_gui_source_select },
+                            { .label = STRING_TAPE,  .cb = &ma_gui_source_select },
 };
 
 /* Source menu page */
 t_menu_page PAGE_SOURCE = {
     .page_previous = NULL,
-    .pre     = &ma_gui_source_select_pre,
-    .post    = NULL,
+    .pre_post     = &ma_gui_source_select_pre,
     .entries = MENU_SOURCE,
     .elements = sizeof(MENU_SOURCE) / sizeof(t_menu_entry)
 };
 
 t_menu_entry MENU_SETTINGS[] = {
-                            { .label = "Sources",        .cb = NULL },
-                            { .label = "Display",        .cb = &ma_gui_menu_goto_sett_display },
-                            { .label = "FFT",            .cb = NULL    },
-                            { .label = "VU-Meter",       .cb = NULL     },
-                            { .label = "Tools",          .cb = &ma_gui_menu_goto_tools     },
-                            { .label = "BACK",           .cb = &ma_gui_menu_goto_previous },
+                            { .label = STRING_SOURCES,        .cb = NULL },
+                            { .label = STRING_DISPLAY,        .cb = &ma_gui_menu_goto_sett_display },
+                            { .label = STRING_FFT,            .cb = NULL    },
+                            { .label = STRING_VU_METER,       .cb = NULL     },
+                            { .label = STRING_TOOLS,          .cb = &ma_gui_menu_goto_tools     },
+                            { .label = STRING_BACK,           .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS = {
     .page_previous = &PAGE_SOURCE,
-    .pre     = NULL,
-    .post    = NULL,
+    .pre_post     = NULL,
     .entries = MENU_SETTINGS,
     .elements = sizeof(MENU_SETTINGS) / sizeof(t_menu_entry)
 };
 
 t_menu_entry  MENU_SETTINGS_DISPLAY[] = {
-                            { .label = "Brightness",    .cb = &ma_gui_menu_goto_sett_brightness  },
-                            { .label = "Menu Style",    .cb = NULL  },
-                            { .label = "BACK",          .cb = &ma_gui_menu_goto_previous },
+                            { .label = STRING_BRIGHTNESS,    .cb = &ma_gui_menu_goto_sett_brightness  },
+                            { .label = STRING_MENU_STYLE,    .cb = NULL  },
+                            { .label = STRING_BACK,          .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS_DISPLAY = {
     .page_previous = &PAGE_SETTINGS,
-    .pre     = NULL,
-    .post    = NULL,
+    .pre_post     = NULL,
     .entries = MENU_SETTINGS_DISPLAY,
     .elements = sizeof(MENU_SETTINGS_DISPLAY) / sizeof(t_menu_entry)
 
@@ -132,31 +129,29 @@ t_menu_page PAGE_SETTINGS_DISPLAY = {
                            
 t_menu_entry  MENU_SETTINGS_BRIGHTNESS[] =
 {
-		{ .label = "1: TeSt!*",        .cb = &ma_gui_menu_set_brightness  },
-        { .label = "2: TeSt!*",        .cb = &ma_gui_menu_set_brightness  },
-        { .label = "3: TeSt!*",        .cb = &ma_gui_menu_set_brightness  },
-        { .label = "4: TeSt!*",        .cb = &ma_gui_menu_set_brightness  },
-        { .label = "5: TeSt!*",        .cb = &ma_gui_menu_set_brightness  },
+		{ .label = STRING_TEST,        .cb = &ma_gui_menu_set_brightness  },
+        { .label = STRING_TEST,        .cb = &ma_gui_menu_set_brightness  },
+        { .label = STRING_TEST,        .cb = &ma_gui_menu_set_brightness  },
+        { .label = STRING_TEST,        .cb = &ma_gui_menu_set_brightness  },
+        { .label = STRING_TEST,        .cb = &ma_gui_menu_set_brightness  },
 };
 
 t_menu_page PAGE_SETTINGS_BRIGHTNESS = {
         .page_previous = &PAGE_SETTINGS_DISPLAY,
-    .pre     = ma_gui_settings_brightness_pre,
-    .post    = NULL,
+    .pre_post     = &ma_gui_settings_brightness_pre,
     .entries = MENU_SETTINGS_BRIGHTNESS,
     .elements = sizeof(MENU_SETTINGS_BRIGHTNESS) / sizeof(t_menu_entry)
 };
 
 t_menu_entry  MENU_SETTINGS_TOOLS[] = {
-        { .label = "Debug",         .cb = &ma_gui_menu_tools_selection  },
-                            { .label = "Reboot",        .cb = &ma_gui_menu_tools_selection  },
-                            { .label = "BACK", .cb = &ma_gui_menu_goto_previous },
+        { .label = STRING_DEBUG,  .cb = &ma_gui_menu_tools_selection  },
+        { .label = STRING_REBOOT, .cb = &ma_gui_menu_tools_selection  },
+        { .label = STRING_BACK,   .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS_TOOLS = {
     .page_previous = &PAGE_SETTINGS,
-    .pre     = NULL,
-    .post    = NULL,
+    .pre_post     = NULL,
     .entries = MENU_SETTINGS_TOOLS,
     .elements = sizeof(MENU_SETTINGS_TOOLS) / sizeof(t_menu_entry)
 };
@@ -168,28 +163,33 @@ t_menu_entry MENU_DEBUG[] = {
                 {.label = NULL, .cb = NULL},
                 {.label = NULL, .cb = NULL},
                 {.label = NULL, .cb = NULL},
-                { .label = "BACK", .cb = &ma_gui_menu_goto_previous },
+                { .label = STRING_BACK, .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_DEBUG = {
         .page_previous = &PAGE_SETTINGS_TOOLS,
-        .post    = NULL,
-        .pre     = NULL,
+        .pre_post     = NULL,
         .entries = MENU_DEBUG,
         .elements = sizeof(MENU_DEBUG) / sizeof(t_menu_entry)
 };
 
-void ma_gui_settings_brightness_pre()
+void ma_gui_settings_brightness_pre(uint8_t reason)
 {
-    if (persistent.brightness < PAGE_SETTINGS_BRIGHTNESS.elements)
-        menu.index = persistent.brightness;
+    if (reason == REASON_PRE)
+    {
+        if (persistent.brightness < PAGE_SETTINGS_BRIGHTNESS.elements)
+            menu.index = persistent.brightness;
+    }
 }
 
-void ma_gui_source_select_pre()
+void ma_gui_source_select_pre(uint8_t reason)
 {
-    if (persistent.audio_source < PAGE_SOURCE.elements)
+    if (reason == REASON_PRE)
     {
-        menu.index = persistent.audio_source;
+        if (persistent.audio_source < PAGE_SOURCE.elements)
+        {
+            menu.index = persistent.audio_source;
+        }
     }
 }
 
@@ -274,28 +274,15 @@ static uint32_t filtered_value = 0;
 
 /* This is a complete work in progress :) */
 
-float table[] = {
-        -35.56f,
-        -15.56f,
-        -9.54f,
-        -6.02f,
-        -3.52f,
-        -1.58f,
-        0.0f,
-//        -18.62f,
-//        -17.28f
-};
-
-
-char disp_str[12];
-float x_dB = 0;
-float minref = 36.12f;
-float adc_max = 64.0f;
-uint8_t t;
 void ma_gui_refresh()
 {
     uint8_t i,j;
     uint16_t *spektrum = ma_audio_spectrum();
+    char disp_str[12];
+    float x_dB = 0;
+    float minref = 36.12f;
+    float adc_max = 64.0f;
+    uint8_t t;
     if (menu.page == &PAGE_DEBUG)
     {
 menu.index = 4;
@@ -326,12 +313,14 @@ menu.index = 4;
                 break;
 
             case 3:
+                /*
                 snprintf_P(disp_str, 11, PSTR("RELAY: %d%d%d"),
                                   ((operational.output.relays >> 0) & 1),
                                   ((operational.output.relays >> 1) & 1),
                                   ((operational.output.relays >> 2) & 1));
                 display_clear();
                 display_string(disp_str);
+                */
 
                 break;
 
@@ -494,7 +483,7 @@ void setup()
     ma_audio_init();
 
     /* Wait Aref stabilization (0.47uF capacitance) */
-    _delay_ms(500);
+    _delay_ms(750);
 
     /* Initialize the serial port */
     uart_init();
@@ -552,9 +541,6 @@ int main(void)
     /* Start the application: re-enable interrupts */
     sei();
 
-    /* Set periodic menu handler */
-    menu.refresh_menu = ma_gui_refresh;
-
     /* Load CGRAM data */
     display_load_bars_vert();
     uint8_t i, j = 0;
@@ -603,6 +589,9 @@ int main(void)
         /* Run the periodic GUI logic */
         ma_gui_periodic(&menu, &keypad);
 
+        /* Run the periodic menu refresh handler */
+        ma_gui_refresh();
+
         /* Set outputs */
         output();
 
@@ -627,7 +616,3 @@ int main(void)
 
 }
 
-void shutdown()
-{
-    /* Save to EEPROM */
-}

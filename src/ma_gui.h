@@ -37,13 +37,18 @@
 
 #define DEBOUNCE_BUTTONS   50000   /**< keypad debounce in us */
 
-#define REASON_HOOVER   0
-#define REASON_SELECT   1
+enum cb_reason
+{
+    REASON_HOOVER,
+    REASON_SELECT,
+    REASON_PRE,
+    REASON_POST
+};
 
 struct menu_entry_
 {
 
-    char*                label;
+    uint8_t label;
     struct menu_page_* (*cb)(uint8_t reason, uint8_t id, struct menu_page_* page);
 
 };
@@ -55,10 +60,9 @@ struct menu_page_
 {
 
     struct menu_page_* page_previous;  /**< Pointer to the previous page */
-    void (*pre)(void);          /**< Pointer to a function that is called when the menu page is first shown */
-    void (*post)(void);         /**< Pointer to a function that is called when the menu page is quit (back to another menu / shutdown) */
-    t_menu_entry* const entries;      /**< Menu entries */
-    uint8_t elements;
+    void (*pre_post)(uint8_t reason);  /**< Pointer to a function that is called when the menu page is first shown or quit (back to another menu / shutdown) */
+    t_menu_entry* const entries;       /**< Menu entries */
+    uint8_t elements;                  /**< Elements count */
 
 };
 
@@ -70,7 +74,6 @@ typedef struct
     uint8_t      index;
     t_menu_page* page;
     bool         refresh;
-    void         (*refresh_menu)(void);
 
 } t_menu;
 
