@@ -1,0 +1,15 @@
+AUX
+CD
+RADIO
+TAPE
+Sources
+Display
+FFT
+VU-Meter
+Tools
+BACK
+Brightness
+Menu Style
+Reboot
+Debug
+TeSt!*
