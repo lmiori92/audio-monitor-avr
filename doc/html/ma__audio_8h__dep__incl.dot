@@ -4,5 +4,7 @@ digraph "src/ma_audio.h"
   node [fontname="Helvetica",fontsize="10",shape=record];
   Node1 [label="src/ma_audio.h",height=0.2,width=0.4,color="black", fillcolor="grey75", style="filled", fontcolor="black"];
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node2 [label="src/manage_audio.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$manage__audio_8c.html",tooltip="The main routines calling the logic functions. "];
+  Node2 [label="src/ma_audio.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ma__audio_8c.html",tooltip="The audio input processing section. It includes ADC handling and related computation. "];
+  Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node3 [label="src/manage_audio.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$manage__audio_8c.html",tooltip="The main routines calling the logic functions. "];
 }

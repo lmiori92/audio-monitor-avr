@@ -43,10 +43,10 @@ typedef struct
 
     uint32_t cycle_time;        /**< Time it takes the logic to execute */
     uint32_t cycle_time_max;    /**< Maximum time it took the logic to execute */
-    uint32_t adc_samples;       /**< Number of ADC samples */
-    uint32_t adc_isr_time;      /**< ADC ISR exec time */
     t_output output;            /**< State of the outputs */
-    uint8_t reset_reason;       /**< Reset reason (see datasheet) */
+    uint8_t  reset_reason;      /**< Reset reason (see datasheet) */
+    float    adc_min_ref;       /**< Minimum ADC attenuation (dB) */
+    float    adc_max;           /**< Maximum ADC value (0dB) */
 
 } t_operational;
 

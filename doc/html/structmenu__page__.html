@@ -101,19 +101,29 @@ Collaboration diagram for menu_page_:</div>
 Data Fields</h2></td></tr>
 <tr class="memitem:ada7cea878e30875b9718771514fb9b18"><td class="memItemLeft" align="right" valign="top">struct <a class="el" href="structmenu__page__.html">menu_page_</a> *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#ada7cea878e30875b9718771514fb9b18">page_previous</a></td></tr>
 <tr class="separator:ada7cea878e30875b9718771514fb9b18"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9b7c34fab0b75f5bc1ad522462aa3f2a"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">pre</a> )(void)</td></tr>
-<tr class="separator:a9b7c34fab0b75f5bc1ad522462aa3f2a"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ac51b2e2067a3bb629cd7b790fbdd62b3"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#ac51b2e2067a3bb629cd7b790fbdd62b3">post</a> )(void)</td></tr>
-<tr class="separator:ac51b2e2067a3bb629cd7b790fbdd62b3"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:aede5c742a599739d66b63502b76e8404"><td class="memItemLeft" align="right" valign="top">void(*&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a> )(uint8_t reason)</td></tr>
+<tr class="separator:aede5c742a599739d66b63502b76e8404"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ac8c8e004754b9f3b3fc2cbcd312b4ecc"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmenu__entry__.html">t_menu_entry</a> *const&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#ac8c8e004754b9f3b3fc2cbcd312b4ecc">entries</a></td></tr>
 <tr class="separator:ac8c8e004754b9f3b3fc2cbcd312b4ecc"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a8eca2f3e8026c68f94b8ae8047f585c2"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a8eca2f3e8026c68f94b8ae8047f585c2"></a>
-uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>elements</b></td></tr>
+<tr class="memitem:a8eca2f3e8026c68f94b8ae8047f585c2"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structmenu__page__.html#a8eca2f3e8026c68f94b8ae8047f585c2">elements</a></td></tr>
 <tr class="separator:a8eca2f3e8026c68f94b8ae8047f585c2"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Structure that holds information about a menu page </p>
 </div><h2 class="groupheader">Field Documentation</h2>
+<a class="anchor" id="a8eca2f3e8026c68f94b8ae8047f585c2"></a>
+<div class="memitem">
+<div class="memproto">
+      <table class="memname">
+        <tr>
+          <td class="memname">uint8_t menu_page_::elements</td>
+        </tr>
+      </table>
+</div><div class="memdoc">
+<p>Elements count </p>
+
+</div>
+</div>
 <a class="anchor" id="ac8c8e004754b9f3b3fc2cbcd312b4ecc"></a>
 <div class="memitem">
 <div class="memproto">
@@ -140,29 +150,16 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>elements</b></td><
 
 </div>
 </div>
-<a class="anchor" id="ac51b2e2067a3bb629cd7b790fbdd62b3"></a>
+<a class="anchor" id="aede5c742a599739d66b63502b76e8404"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">void(* menu_page_::post) (void)</td>
+          <td class="memname">void(* menu_page_::pre_post) (uint8_t reason)</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Pointer to a function that is called when the menu page is quit (back to another menu / shutdown) </p>
-
-</div>
-</div>
-<a class="anchor" id="a9b7c34fab0b75f5bc1ad522462aa3f2a"></a>
-<div class="memitem">
-<div class="memproto">
-      <table class="memname">
-        <tr>
-          <td class="memname">void(* menu_page_::pre) (void)</td>
-        </tr>
-      </table>
-</div><div class="memdoc">
-<p>Pointer to a function that is called when the menu page is first shown </p>
+<p>Pointer to a function that is called when the menu page is first shown or quit (back to another menu / shutdown) </p>
 
 </div>
 </div>
@@ -172,7 +169,7 @@ uint8_t&#160;</td><td class="memItemRight" valign="bottom"><b>elements</b></td><
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

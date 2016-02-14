@@ -4,7 +4,7 @@
 <meta http-equiv="Content-Type" content="text/xhtml;charset=UTF-8"/>
 <meta http-equiv="X-UA-Compatible" content="IE=9"/>
 <meta name="generator" content="Doxygen 1.8.9.1"/>
-<title>audio-monitor-avr: src/string_table.c File Reference</title>
+<title>audio-monitor-avr: src/ma_strings.c File Reference</title>
 <link href="tabs.css" rel="stylesheet" type="text/css"/>
 <script type="text/javascript" src="jquery.js"></script>
 <script type="text/javascript" src="dynsections.js"></script>
@@ -87,54 +87,67 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
   <div class="summary">
 <a href="#var-members">Variables</a>  </div>
   <div class="headertitle">
-<div class="title">string_table.c File Reference</div>  </div>
+<div class="title">ma_strings.c File Reference</div>  </div>
 </div><!--header-->
 <div class="contents">
 
-<p>Application strings are stored here.  
+<p>Source file for the string table.  
 <a href="#details">More...</a></p>
-<div class="textblock"><code>#include &quot;<a class="el" href="string__table_8h_source.html">string_table.h</a>&quot;</code><br />
+<div class="textblock"><code>#include &quot;<a class="el" href="ma__strings_8h_source.html">ma_strings.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
-Include dependency graph for string_table.c:</div>
+Include dependency graph for ma_strings.c:</div>
 <div class="dyncontent">
-<div class="center"><img src="string__table_8c__incl.png" border="0" usemap="#src_2string__table_8c" alt=""/></div>
-<map name="src_2string__table_8c" id="src_2string__table_8c">
+<div class="center"><img src="ma__strings_8c__incl.png" border="0" usemap="#src_2ma__strings_8c" alt=""/></div>
+<map name="src_2ma__strings_8c" id="src_2ma__strings_8c">
 </map>
 </div>
 </div><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
-<tr class="memitem:a965989878fbc7b7db665b29fd87a744a"><td class="memItemLeft" align="right" valign="top">const char *const&#160;</td><td class="memItemRight" valign="bottom"><b>string_table</b> []</td></tr>
-<tr class="separator:a965989878fbc7b7db665b29fd87a744a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ad413367badbf0c3cd2ec8b473b1aca0f"><td class="memItemLeft" align="right" valign="top">const char *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__strings_8c.html#ad413367badbf0c3cd2ec8b473b1aca0f">g_string_table</a> []</td></tr>
+<tr class="separator:ad413367badbf0c3cd2ec8b473b1aca0f"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
-<div class="textblock"><p>Application strings are stored here. </p>
+<div class="textblock"><p>Source file for the string table. </p>
 <dl class="section author"><dt>Author</dt><dd>Lorenzo Miori </dd></dl>
-<dl class="section date"><dt>Date</dt><dd>Oct 2015 </dd></dl>
+<dl class="section date"><dt>Date</dt><dd>Jan 2016 </dd></dl>
 </div><h2 class="groupheader">Variable Documentation</h2>
-<a class="anchor" id="a965989878fbc7b7db665b29fd87a744a"></a>
+<a class="anchor" id="ad413367badbf0c3cd2ec8b473b1aca0f"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">const char* const string_table[]</td>
+          <td class="memname">const char* g_string_table[]</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">        <span class="stringliteral">&quot;BACK&quot;</span>,</div>
-<div class="line">        <span class="stringliteral">&quot;AUX&quot;</span>,</div>
-<div class="line">        <span class="stringliteral">&quot;CD&quot;</span>,</div>
-<div class="line">        <span class="stringliteral">&quot;RADIO&quot;</span>,</div>
-<div class="line">        <span class="stringliteral">&quot;TAPE&quot;</span></div>
+<b>Initial value:</b><div class="fragment"><div class="line">= </div>
+<div class="line">{</div>
+<div class="line">    <span class="stringliteral">&quot;AUX&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;CD&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;RADIO&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;TAPE&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Sources&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Display&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;FFT&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;VU-Meter&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Tools&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;BACK&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Brightness&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Menu Style&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Reboot&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;Debug&quot;</span>,</div>
+<div class="line">    <span class="stringliteral">&quot;TeSt!*&quot;</span>,</div>
+<div class="line"></div>
 <div class="line">}</div>
-</div><!-- fragment -->
+</div><!-- fragment --><p>Global string table </p>
+
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

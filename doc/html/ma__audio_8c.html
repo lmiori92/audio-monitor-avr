@@ -96,10 +96,10 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="textblock"><code>#include &lt;avr/io.h&gt;</code><br />
 <code>#include &lt;avr/interrupt.h&gt;</code><br />
 <code>#include &quot;ffft.h&quot;</code><br />
-<code>#include &quot;avr/delay.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="time_8h_source.html">time.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ma__util_8h_source.html">ma_util.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="system_8h_source.html">system.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ma__audio_8h_source.html">ma_audio.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for ma_audio.c:</div>
 <div class="dyncontent">
@@ -111,20 +111,29 @@ Include dependency graph for ma_audio.c:</div>
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
 <tr class="memitem:a05c2e5b588ced1cd7312f5b0edc5b295"><td class="memItemLeft" align="right" valign="top">&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#a05c2e5b588ced1cd7312f5b0edc5b295">ISR</a> (ADC_vect)</td></tr>
-<tr class="memdesc:a05c2e5b588ced1cd7312f5b0edc5b295"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC interrupt routine. Keep it as small as possible to avoid jitter and delays.  <a href="#a05c2e5b588ced1cd7312f5b0edc5b295">More...</a><br /></td></tr>
+<tr class="memdesc:a05c2e5b588ced1cd7312f5b0edc5b295"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC interrupt routine. Keep it as small as possible to avoid jitter and lower sampling rate.  <a href="#a05c2e5b588ced1cd7312f5b0edc5b295">More...</a><br /></td></tr>
 <tr class="separator:a05c2e5b588ced1cd7312f5b0edc5b295"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:af6380e2bf3f1f915be44a8f46d37247a"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a> (void)</td></tr>
 <tr class="memdesc:af6380e2bf3f1f915be44a8f46d37247a"><td class="mdescLeft">&#160;</td><td class="mdescRight">ADC initialization, assuming the interrupts are disabled.  <a href="#af6380e2bf3f1f915be44a8f46d37247a">More...</a><br /></td></tr>
 <tr class="separator:af6380e2bf3f1f915be44a8f46d37247a"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a0c32af10a47f5ae757c77f0518c1d90d"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a0c32af10a47f5ae757c77f0518c1d90d"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>hann_window</b> (uint16_t *stream, uint8_t len)</td></tr>
+<tr class="separator:a0c32af10a47f5ae757c77f0518c1d90d"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ab13c06d7298a93e60d606f8d348a6d14"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a> (void)</td></tr>
 <tr class="memdesc:ab13c06d7298a93e60d606f8d348a6d14"><td class="mdescLeft">&#160;</td><td class="mdescRight">This function shall be periodically called on the audio buffer to compute FFT / VU-meter.  <a href="#ab13c06d7298a93e60d606f8d348a6d14">More...</a><br /></td></tr>
 <tr class="separator:ab13c06d7298a93e60d606f8d348a6d14"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a87c311bd601605d41add90bf38abd503"><td class="memItemLeft" align="right" valign="top">uint16_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a> (void)</td></tr>
-<tr class="memdesc:a87c311bd601605d41add90bf38abd503"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the audio spectrum.  <a href="#a87c311bd601605d41add90bf38abd503">More...</a><br /></td></tr>
-<tr class="separator:a87c311bd601605d41add90bf38abd503"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a9f1e05e6a820eb20333d2e3c76c3af73"><td class="memItemLeft" align="right" valign="top">uint16_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#a9f1e05e6a820eb20333d2e3c76c3af73">ma_audio_last_capture</a> (void)</td></tr>
-<tr class="memdesc:a9f1e05e6a820eb20333d2e3c76c3af73"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the last ADC capture.  <a href="#a9f1e05e6a820eb20333d2e3c76c3af73">More...</a><br /></td></tr>
-<tr class="separator:a9f1e05e6a820eb20333d2e3c76c3af73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3eb737eeebbab8c6b2850444bdb847c6"><td class="memItemLeft" align="right" valign="top">uint16_t *&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#a3eb737eeebbab8c6b2850444bdb847c6">ma_audio_spectrum</a> (uint8_t *buckets)</td></tr>
+<tr class="memdesc:a3eb737eeebbab8c6b2850444bdb847c6"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the audio spectrum.  <a href="#a3eb737eeebbab8c6b2850444bdb847c6">More...</a><br /></td></tr>
+<tr class="separator:a3eb737eeebbab8c6b2850444bdb847c6"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6c2d1f051ae6db27010e78a676a62842"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="ma__audio_8c.html#a6c2d1f051ae6db27010e78a676a62842">ma_audio_last_capture</a> (uint16_t *last_capture, uint16_t *adc_min, uint16_t *adc_max)</td></tr>
+<tr class="memdesc:a6c2d1f051ae6db27010e78a676a62842"><td class="mdescLeft">&#160;</td><td class="mdescRight">Getter function for the last ADC capture.  <a href="#a6c2d1f051ae6db27010e78a676a62842">More...</a><br /></td></tr>
+<tr class="separator:a6c2d1f051ae6db27010e78a676a62842"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a6109df34dba5bd95807e5ec26ad94a73"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a6109df34dba5bd95807e5ec26ad94a73"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_audio_last_reset</b> (void)</td></tr>
+<tr class="separator:a6109df34dba5bd95807e5ec26ad94a73"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a53c48a3a995be6addb9a1f4e957ad238"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a53c48a3a995be6addb9a1f4e957ad238"></a>
+<a class="el" href="struct__audio__voltage.html">t_audio_voltage</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ma_audio_last_levels</b> (void)</td></tr>
+<tr class="separator:a53c48a3a995be6addb9a1f4e957ad238"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The audio input processing section. It includes ADC handling and related computation. </p>
@@ -145,9 +154,8 @@ Functions</h2></td></tr>
       </table>
 </div><div class="memdoc">
 
-<p>ADC interrupt routine. Keep it as small as possible to avoid jitter and delays. </p>
-<p><a class="el" href="ma__audio_8c.html#a05c2e5b588ced1cd7312f5b0edc5b295" title="ADC interrupt routine. Keep it as small as possible to avoid jitter and delays. ">ISR(ADC_vect)</a></p>
-<p>The strategy </p>
+<p>ADC interrupt routine. Keep it as small as possible to avoid jitter and lower sampling rate. </p>
+<p><a class="el" href="ma__audio_8c.html#a05c2e5b588ced1cd7312f5b0edc5b295" title="ADC interrupt routine. Keep it as small as possible to avoid jitter and lower sampling rate...">ISR(ADC_vect)</a> </p>
 
 </div>
 </div>
@@ -170,22 +178,46 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a9f1e05e6a820eb20333d2e3c76c3af73"></a>
+<a class="anchor" id="a6c2d1f051ae6db27010e78a676a62842"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint16_t ma_audio_last_capture </td>
+          <td class="memname">void ma_audio_last_capture </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>last_capture</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
           <td></td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>adc_min</em>, </td>
+        </tr>
+        <tr>
+          <td class="paramkey"></td>
+          <td></td>
+          <td class="paramtype">uint16_t *&#160;</td>
+          <td class="paramname"><em>adc_max</em>&#160;</td>
+        </tr>
+        <tr>
+          <td></td>
+          <td>)</td>
+          <td></td><td></td>
         </tr>
       </table>
 </div><div class="memdoc">
 
 <p>Getter function for the last ADC capture. </p>
 <p>ma_audio_last_capture</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">last_capture</td><td>pointer to the variable to store the last capture value </td></tr>
+    <tr><td class="paramname">adc_min</td><td>pointer to the variable to store the minimum value </td></tr>
+    <tr><td class="paramname">adc_max</td><td>pointer to the variable to store the maximum value </td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>the value for the last capture </dd></dl>
 
 </div>
@@ -209,15 +241,15 @@ Functions</h2></td></tr>
 
 </div>
 </div>
-<a class="anchor" id="a87c311bd601605d41add90bf38abd503"></a>
+<a class="anchor" id="a3eb737eeebbab8c6b2850444bdb847c6"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
           <td class="memname">uint16_t* ma_audio_spectrum </td>
           <td>(</td>
-          <td class="paramtype">void&#160;</td>
-          <td class="paramname"></td><td>)</td>
+          <td class="paramtype">uint8_t *&#160;</td>
+          <td class="paramname"><em>buckets</em></td><td>)</td>
           <td></td>
         </tr>
       </table>
@@ -225,6 +257,12 @@ Functions</h2></td></tr>
 
 <p>Getter function for the audio spectrum. </p>
 <p>ma_audio_spectrum</p>
+<dl class="params"><dt>Parameters</dt><dd>
+  <table class="params">
+    <tr><td class="paramname">buckets</td><td>the pointer to the variable holding FFT size</td></tr>
+  </table>
+  </dd>
+</dl>
 <dl class="section return"><dt>Returns</dt><dd>the audio spectrum (FFT output) </dd></dl>
 
 </div>
@@ -232,7 +270,7 @@ Functions</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

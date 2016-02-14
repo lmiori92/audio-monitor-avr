@@ -11,6 +11,8 @@ digraph "src/system.c"
   Node4 [label="lc75710_graphics.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$lc75710__graphics_8h.html",tooltip="Header of LC75710 graphics routines. "];
   Node4 -> Node5 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node5 [label="stdint.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
-  Node1 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node6 [label="system.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$system_8h.html",tooltip="System level utilities: ISR debugging / MCU power state. "];
+  Node4 -> Node6 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node6 [label="stdbool.h",height=0.2,width=0.4,color="grey75", fillcolor="white", style="filled"];
+  Node1 -> Node7 [color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node7 [label="system.h",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$system_8h.html",tooltip="System level utilities: ISR debugging / MCU power state. "];
 }

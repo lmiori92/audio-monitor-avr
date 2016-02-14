@@ -6,5 +6,7 @@ digraph "src/lc75710_graphics.h"
   Node1 -> Node2 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
   Node2 [label="src/ma_gui.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$ma__gui_8c.html",tooltip="Graphical User Interface routines. "];
   Node1 -> Node3 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
-  Node3 [label="src/system.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$system_8c.html",tooltip="System level utilities: ISR debugging / MCU power state. "];
+  Node3 [label="src/manage_audio.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$manage__audio_8c.html",tooltip="The main routines calling the logic functions. "];
+  Node1 -> Node4 [dir="back",color="midnightblue",fontsize="10",style="solid",fontname="Helvetica"];
+  Node4 [label="src/system.c",height=0.2,width=0.4,color="black", fillcolor="white", style="filled",URL="$system_8c.html",tooltip="System level utilities: ISR debugging / MCU power state. "];
 }

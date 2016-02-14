@@ -476,6 +476,6 @@ void lc75710_init()
     lc75710_intensity(128);
 
     /* Turn the display ON */
-    lc75710_on_off(MDATA_AND_ADATA, true, 0xFFFF);
+    /*lc75710_on_off(MDATA_AND_ADATA, true, 0xFFFF);*/
 
 }

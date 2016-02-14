@@ -112,18 +112,31 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <div class="line"><a name="l00029"></a><span class="lineno">   29</span>&#160;<span class="preprocessor">#ifndef SRC_MA_AUDIO_H_</span></div>
 <div class="line"><a name="l00030"></a><span class="lineno">   30</span>&#160;<span class="preprocessor">#define SRC_MA_AUDIO_H_</span></div>
 <div class="line"><a name="l00031"></a><span class="lineno">   31</span>&#160;</div>
-<div class="line"><a name="l00032"></a><span class="lineno">   32</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;uint16_t* <a class="code" href="ma__audio_8h.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a>(<span class="keywordtype">void</span>);</div>
-<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;</div>
-<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* SRC_MA_AUDIO_H_ */</span><span class="preprocessor"></span></div>
-<div class="ttc" id="ma__audio_8h_html_af6380e2bf3f1f915be44a8f46d37247a"><div class="ttname"><a href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a></div><div class="ttdeci">void ma_audio_init(void)</div><div class="ttdoc">ADC initialization, assuming the interrupts are disabled. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:96</div></div>
-<div class="ttc" id="ma__audio_8h_html_a87c311bd601605d41add90bf38abd503"><div class="ttname"><a href="ma__audio_8h.html#a87c311bd601605d41add90bf38abd503">ma_audio_spectrum</a></div><div class="ttdeci">uint16_t * ma_audio_spectrum(void)</div><div class="ttdoc">Getter function for the audio spectrum. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:148</div></div>
-<div class="ttc" id="ma__audio_8h_html_ab13c06d7298a93e60d606f8d348a6d14"><div class="ttname"><a href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a></div><div class="ttdeci">void ma_audio_process(void)</div><div class="ttdoc">This function shall be periodically called on the audio buffer to compute FFT / VU-meter. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:133</div></div>
+<div class="line"><a name="l00032"></a><span class="lineno"><a class="line" href="struct__audio__voltage.html">   32</a></span>&#160;<span class="keyword">typedef</span> <span class="keyword">struct </span><a class="code" href="struct__audio__voltage.html">_audio_voltage</a></div>
+<div class="line"><a name="l00033"></a><span class="lineno">   33</span>&#160;{</div>
+<div class="line"><a name="l00034"></a><span class="lineno">   34</span>&#160;    uint16_t left;</div>
+<div class="line"><a name="l00035"></a><span class="lineno">   35</span>&#160;    uint16_t right;</div>
+<div class="line"><a name="l00036"></a><span class="lineno">   36</span>&#160;} <a class="code" href="struct__audio__voltage.html">t_audio_voltage</a>;</div>
+<div class="line"><a name="l00037"></a><span class="lineno">   37</span>&#160;</div>
+<div class="line"><a name="l00038"></a><span class="lineno">   38</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00039"></a><span class="lineno">   39</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a>(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00040"></a><span class="lineno">   40</span>&#160;uint16_t* <a class="code" href="ma__audio_8h.html#a3eb737eeebbab8c6b2850444bdb847c6">ma_audio_spectrum</a>(uint8_t *buckets);</div>
+<div class="line"><a name="l00041"></a><span class="lineno">   41</span>&#160;<a class="code" href="struct__audio__voltage.html">t_audio_voltage</a>* ma_audio_last_levels(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00042"></a><span class="lineno">   42</span>&#160;</div>
+<div class="line"><a name="l00043"></a><span class="lineno">   43</span>&#160;<span class="keywordtype">void</span> <a class="code" href="ma__audio_8h.html#a6c2d1f051ae6db27010e78a676a62842">ma_audio_last_capture</a>(uint16_t *last_capture, uint16_t *adc_min, uint16_t *adc_max);</div>
+<div class="line"><a name="l00044"></a><span class="lineno">   44</span>&#160;</div>
+<div class="line"><a name="l00045"></a><span class="lineno">   45</span>&#160;<span class="keywordtype">void</span> ma_audio_last_reset(<span class="keywordtype">void</span>);</div>
+<div class="line"><a name="l00046"></a><span class="lineno">   46</span>&#160;</div>
+<div class="line"><a name="l00047"></a><span class="lineno">   47</span>&#160;<span class="preprocessor">#endif </span><span class="comment">/* SRC_MA_AUDIO_H_ */</span><span class="preprocessor"></span></div>
+<div class="ttc" id="struct__audio__voltage_html"><div class="ttname"><a href="struct__audio__voltage.html">_audio_voltage</a></div><div class="ttdef"><b>Definition:</b> ma_audio.h:32</div></div>
+<div class="ttc" id="ma__audio_8h_html_a6c2d1f051ae6db27010e78a676a62842"><div class="ttname"><a href="ma__audio_8h.html#a6c2d1f051ae6db27010e78a676a62842">ma_audio_last_capture</a></div><div class="ttdeci">void ma_audio_last_capture(uint16_t *last_capture, uint16_t *adc_min, uint16_t *adc_max)</div><div class="ttdoc">Getter function for the last ADC capture. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:241</div></div>
+<div class="ttc" id="ma__audio_8h_html_af6380e2bf3f1f915be44a8f46d37247a"><div class="ttname"><a href="ma__audio_8h.html#af6380e2bf3f1f915be44a8f46d37247a">ma_audio_init</a></div><div class="ttdeci">void ma_audio_init(void)</div><div class="ttdoc">ADC initialization, assuming the interrupts are disabled. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:101</div></div>
+<div class="ttc" id="ma__audio_8h_html_a3eb737eeebbab8c6b2850444bdb847c6"><div class="ttname"><a href="ma__audio_8h.html#a3eb737eeebbab8c6b2850444bdb847c6">ma_audio_spectrum</a></div><div class="ttdeci">uint16_t * ma_audio_spectrum(uint8_t *buckets)</div><div class="ttdoc">Getter function for the audio spectrum. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:223</div></div>
+<div class="ttc" id="ma__audio_8h_html_ab13c06d7298a93e60d606f8d348a6d14"><div class="ttname"><a href="ma__audio_8h.html#ab13c06d7298a93e60d606f8d348a6d14">ma_audio_process</a></div><div class="ttdeci">void ma_audio_process(void)</div><div class="ttdoc">This function shall be periodically called on the audio buffer to compute FFT / VU-meter. </div><div class="ttdef"><b>Definition:</b> ma_audio.c:150</div></div>
 </div><!-- fragment --></div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

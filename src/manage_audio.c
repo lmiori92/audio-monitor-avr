@@ -269,23 +269,24 @@ t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page
 
 }
 
-static uint32_t sum = 0;
-static uint32_t filtered_value = 0;
-
-/* This is a complete work in progress :) */
-
 void ma_gui_refresh()
 {
     uint8_t i,j;
-    uint16_t *spektrum = ma_audio_spectrum();
+    uint16_t *spektrum;
+    uint8_t fft_n;
     char disp_str[12];
     float x_dB = 0;
-    float minref = 36.12f;
-    float adc_max = 64.0f;
+    uint16_t last_capture = 0;
+    uint16_t max_capture = 0;
+    uint16_t min_capture = 0;
     uint8_t t;
+    uint16_t v = 0;
+
+    spektrum = ma_audio_spectrum(&fft_n);
+
     if (menu.page == &PAGE_DEBUG)
     {
-menu.index = 4;
+menu.index = 5;
         switch (menu.index)
         {
 
@@ -313,31 +314,33 @@ menu.index = 4;
                 break;
 
             case 3:
-                /*
                 snprintf_P(disp_str, 11, PSTR("RELAY: %d%d%d"),
                                   ((operational.output.relays >> 0) & 1),
                                   ((operational.output.relays >> 1) & 1),
                                   ((operational.output.relays >> 2) & 1));
                 display_clear();
                 display_string(disp_str);
-                */
 
                 break;
 
             case 4:
 
+                lc75710_set_ac_address(0, 0);
+
+                /* remove the DC component */
+                spektrum[0] = 0;
                 for (i = 0; i < (FFT_N/2/3); i++)
                 {
 
                     //float v = log10f(spektrum[i] / 60.0f) * 20.0f;
                     //display_show_vertical_bars(i, lookupf(v, table, sizeof(table) / sizeof(float)));
-                    uint16_t v = 0;
+
                     v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
 
                     if (v > 0)
                     {
-                        x_dB = 20.0f * log10(v / adc_max);
-                        t = minref - fabs(x_dB);
+                        x_dB = 20.0f * log10(v / operational.adc_max);
+                        t = operational.adc_min_ref - fabs(x_dB);
 
                     }
                     else
@@ -345,10 +348,9 @@ menu.index = 4;
                         t = 0;
                     }
 
-                    display_show_vertical_bars(i, (t / minref) * 6.0f);
+                    display_show_vertical_bars(i, (t / operational.adc_min_ref) * 6.0f);
 //                    display_show_vertical_bars(i, lookupf(x_dB, table, sizeof(table) / sizeof(float)));//spektrum[i] / 10);
                 }
-
                 /*
                 float v = log10f(spektrum[2] / 1024.0f) * 20.0f;
                 display_clear();
@@ -380,6 +382,38 @@ menu.index = 4;
 
             case 5:
 
+                display_load_vumeter_harrows();
+
+                t_audio_voltage* levels = ma_audio_last_levels();
+                uint8_t disp_left = 0;
+                uint8_t disp_right = 0;
+
+                if (levels->left > 0)
+                {
+                    x_dB = 20.0f * log10(levels->left / operational.adc_max);
+                    t = operational.adc_min_ref - fabs(x_dB);
+                }
+                else
+                {
+                    t = 0;
+                }
+                disp_left = (t / operational.adc_min_ref) * 9.0f;
+
+                if (levels->right > 0)
+                {
+                    x_dB = 20.0f * log10(levels->right / operational.adc_max);
+                    t = operational.adc_min_ref - fabs(x_dB);
+
+                }
+                else
+                {
+                    t = 0;
+                }
+                disp_right = (t / operational.adc_min_ref) * 9.0f;
+
+                display_show_vumeter_harrows(disp_left,disp_right,true);
+//                display_show_vumeter_harrows((t / minref) * 9.0f,levels->left, false);
+                /*
                 #define filter_strength 4
 
 
@@ -388,8 +422,9 @@ menu.index = 4;
 
                 display_clear();
                 snprintf_P(disp_str, 11, PSTR("ADC: %d"), filtered_value);
-//                snprintf_P(disp_str, 11, PSTR("%lu"), g_timestamp / operational.adc_samples);
                 display_string(disp_str);
+
+                */
 
                 break;
 
@@ -404,7 +439,8 @@ menu.index = 4;
             case 7:
 
                 display_clear();
-                snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, adc_maxS, adc_minS);
+                ma_audio_last_capture(&last_capture, &min_capture, &max_capture);
+                snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, min_capture, max_capture);
                 display_string(disp_str);
 
                 break;
@@ -525,6 +561,7 @@ int main(void)
 {
 
     uint32_t start = 0;
+    bool init_done = false;
 
     /* Disable interrupts for the whole init period */
     cli();
@@ -533,7 +570,7 @@ int main(void)
     system_init();
 
     /* Wait for power and LC75710 stabilization */
-    _delay_ms(500);
+    _delay_ms(250);
 
     /* Setup the peripherals */
     setup();
@@ -543,7 +580,7 @@ int main(void)
 
     /* Load CGRAM data */
     display_load_bars_vert();
-    uint8_t i, j = 0;
+//    uint8_t i, j = 0;
 //    display_load_bars_horiz();
     //while (1) {
         /* vu-meter left to right test*/
@@ -570,6 +607,11 @@ int main(void)
         ma_gui_page_change(&menu, &PAGE_SOURCE);
     }
     ma_gui_page_change(&menu, &PAGE_DEBUG);
+
+    /* Set operational data */
+    operational.adc_max = 85.0f;
+    operational.adc_min_ref  = 38.59f;
+
     /* Start the main loop (and never return) */
     while (1)
     {
@@ -608,8 +650,22 @@ int main(void)
         if (StackCount() == 0U)
         {
             display_clear();
-            display_string(PSTR("StackOver!"));
+            display_string("StackOver!");
             for(;;);
+        }
+
+        if ((init_done == false) && (g_timestamp > (1000U * 500)))
+        {
+            /* do after - init operations once */
+
+            /* turn on the display */
+            lc75710_on_off(MDATA_AND_ADATA, true, 0xFFFF);
+
+            /* ADC stats reset */
+            ma_audio_last_reset();
+
+            /* set the flag */
+            init_done = true;
         }
 
     }

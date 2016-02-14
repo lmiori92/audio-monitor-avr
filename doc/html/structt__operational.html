@@ -103,41 +103,41 @@ Data Fields</h2></td></tr>
 <tr class="separator:ae92cdd6afc43d7455f1cf79f967d72a3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ad2fa4c75b0e24f9c13ac8f4fc1e29df0"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#ad2fa4c75b0e24f9c13ac8f4fc1e29df0">cycle_time_max</a></td></tr>
 <tr class="separator:ad2fa4c75b0e24f9c13ac8f4fc1e29df0"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a822e0564e66a98449182df0460d29410"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#a822e0564e66a98449182df0460d29410">adc_samples</a></td></tr>
-<tr class="separator:a822e0564e66a98449182df0460d29410"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:af44831cc0108e6f9f4fd10fa627d02ad"><td class="memItemLeft" align="right" valign="top">uint32_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#af44831cc0108e6f9f4fd10fa627d02ad">adc_isr_time</a></td></tr>
-<tr class="separator:af44831cc0108e6f9f4fd10fa627d02ad"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a2c8c0c0cffccc977e36bd72d905a0787"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structt__output.html">t_output</a>&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#a2c8c0c0cffccc977e36bd72d905a0787">output</a></td></tr>
 <tr class="separator:a2c8c0c0cffccc977e36bd72d905a0787"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:a3eb2ffe64ba22f086f5bab7d91000d3b"><td class="memItemLeft" align="right" valign="top">uint8_t&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#a3eb2ffe64ba22f086f5bab7d91000d3b">reset_reason</a></td></tr>
 <tr class="separator:a3eb2ffe64ba22f086f5bab7d91000d3b"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:ac3692624984022c81d4f0d5522749c52"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#ac3692624984022c81d4f0d5522749c52">adc_min_ref</a></td></tr>
+<tr class="separator:ac3692624984022c81d4f0d5522749c52"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a3c2dcfc8cec0832e049a8072ad43b11c"><td class="memItemLeft" align="right" valign="top">float&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="structt__operational.html#a3c2dcfc8cec0832e049a8072ad43b11c">adc_max</a></td></tr>
+<tr class="separator:a3c2dcfc8cec0832e049a8072ad43b11c"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>Operational variables </p>
 </div><h2 class="groupheader">Field Documentation</h2>
-<a class="anchor" id="af44831cc0108e6f9f4fd10fa627d02ad"></a>
+<a class="anchor" id="a3c2dcfc8cec0832e049a8072ad43b11c"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t t_operational::adc_isr_time</td>
+          <td class="memname">float t_operational::adc_max</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>ADC ISR exec time </p>
+<p>Maximum ADC value (0dB) </p>
 
 </div>
 </div>
-<a class="anchor" id="a822e0564e66a98449182df0460d29410"></a>
+<a class="anchor" id="ac3692624984022c81d4f0d5522749c52"></a>
 <div class="memitem">
 <div class="memproto">
       <table class="memname">
         <tr>
-          <td class="memname">uint32_t t_operational::adc_samples</td>
+          <td class="memname">float t_operational::adc_min_ref</td>
         </tr>
       </table>
 </div><div class="memdoc">
-<p>Number of ADC samples </p>
+<p>Minimum ADC attenuation (dB) </p>
 
 </div>
 </div>
@@ -199,7 +199,7 @@ Data Fields</h2></td></tr>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

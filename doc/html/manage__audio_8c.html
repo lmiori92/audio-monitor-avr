@@ -96,12 +96,14 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <p>The main routines calling the logic functions.  
 <a href="#details">More...</a></p>
 <div class="textblock"><code>#include &quot;<a class="el" href="lc75710_8h_source.html">lc75710.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="lc75710__graphics_8h_source.html">lc75710_graphics.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="time_8h_source.html">time.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ma__gui_8h_source.html">ma_gui.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="ma__util_8h_source.html">ma_util.h</a>&quot;</code><br />
 <code>#include &quot;stdint.h&quot;</code><br />
 <code>#include &quot;stdio.h&quot;</code><br />
 <code>#include &quot;string.h&quot;</code><br />
+<code>#include &quot;ffft.h&quot;</code><br />
 <code>#include &lt;avr/io.h&gt;</code><br />
 <code>#include &lt;avr/interrupt.h&gt;</code><br />
 <code>#include &lt;util/delay.h&gt;</code><br />
@@ -109,7 +111,7 @@ var searchBox = new SearchBox("searchBox", "search",false,'Search');
 <code>#include &quot;uart.h&quot;</code><br />
 <code>#include &quot;<a class="el" href="ma__audio_8h_source.html">ma_audio.h</a>&quot;</code><br />
 <code>#include &quot;<a class="el" href="system_8h_source.html">system.h</a>&quot;</code><br />
-<code>#include &quot;<a class="el" href="string__table_8h_source.html">string_table.h</a>&quot;</code><br />
+<code>#include &quot;<a class="el" href="ma__strings_8h_source.html">ma_strings.h</a>&quot;</code><br />
 </div><div class="textblock"><div class="dynheader">
 Include dependency graph for manage_audio.c:</div>
 <div class="dyncontent">
@@ -147,9 +149,6 @@ Macros</h2></td></tr>
 <tr class="memitem:a701a135e841c3cfb69d9c5bb1444e198"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a701a135e841c3cfb69d9c5bb1444e198"></a>
 #define&#160;</td><td class="memItemRight" valign="bottom"><b>KEY_3</b>&#160;&#160;&#160;PB2</td></tr>
 <tr class="separator:a701a135e841c3cfb69d9c5bb1444e198"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a63c7acef5369ac4e5fd5f852ee1720e0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a63c7acef5369ac4e5fd5f852ee1720e0"></a>
-#define&#160;</td><td class="memItemRight" valign="bottom"><b>FACTOR</b>&#160;&#160;&#160;6</td></tr>
-<tr class="separator:a63c7acef5369ac4e5fd5f852ee1720e0"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="func-members"></a>
 Functions</h2></td></tr>
@@ -171,12 +170,12 @@ Functions</h2></td></tr>
 <tr class="memitem:a9381c339c7e4b9135318cc4dfc628667"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a9381c339c7e4b9135318cc4dfc628667"></a>
 <a class="el" href="structmenu__page__.html">t_menu_page</a> *&#160;</td><td class="memItemRight" valign="bottom"><b>ma_gui_menu_tools_selection</b> (uint8_t reason, uint8_t id, <a class="el" href="structmenu__page__.html">t_menu_page</a> *page)</td></tr>
 <tr class="separator:a9381c339c7e4b9135318cc4dfc628667"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:ae231ffb6ef32bfd7d0a6cd1e296aad4b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="ae231ffb6ef32bfd7d0a6cd1e296aad4b"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_gui_settings_brightness_pre</b> ()</td></tr>
-<tr class="separator:ae231ffb6ef32bfd7d0a6cd1e296aad4b"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aaf533ae9991e2e1e81d2ea3392a491f0"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aaf533ae9991e2e1e81d2ea3392a491f0"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_gui_source_select_pre</b> ()</td></tr>
-<tr class="separator:aaf533ae9991e2e1e81d2ea3392a491f0"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:a971e352d46b7fe027cacd0523797ca8c"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a971e352d46b7fe027cacd0523797ca8c"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_gui_settings_brightness_pre</b> (uint8_t reason)</td></tr>
+<tr class="separator:a971e352d46b7fe027cacd0523797ca8c"><td class="memSeparator" colspan="2">&#160;</td></tr>
+<tr class="memitem:abdd2da3de2ce97ec7dec58066625aa45"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="abdd2da3de2ce97ec7dec58066625aa45"></a>
+void&#160;</td><td class="memItemRight" valign="bottom"><b>ma_gui_source_select_pre</b> (uint8_t reason)</td></tr>
+<tr class="separator:abdd2da3de2ce97ec7dec58066625aa45"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:ae06a5139ca1a54c6778728144fda9250"><td class="memItemLeft" align="right" valign="top">void&#160;</td><td class="memItemRight" valign="bottom"><a class="el" href="manage__audio_8c.html#ae06a5139ca1a54c6778728144fda9250">set_display_brightness</a> (uint8_t level)</td></tr>
 <tr class="memdesc:ae06a5139ca1a54c6778728144fda9250"><td class="mdescLeft">&#160;</td><td class="mdescRight">Set application display brightness.  <a href="#ae06a5139ca1a54c6778728144fda9250">More...</a><br /></td></tr>
 <tr class="separator:ae06a5139ca1a54c6778728144fda9250"><td class="memSeparator" colspan="2">&#160;</td></tr>
@@ -201,9 +200,6 @@ void&#160;</td><td class="memItemRight" valign="bottom"><b>output</b> ()</td></t
 <tr class="memitem:a840291bc02cba5474a4cb46a9b9566fe"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a840291bc02cba5474a4cb46a9b9566fe"></a>
 int&#160;</td><td class="memItemRight" valign="bottom"><b>main</b> (void)</td></tr>
 <tr class="separator:a840291bc02cba5474a4cb46a9b9566fe"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:a7861ee1569802186a619778efc85af13"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="a7861ee1569802186a619778efc85af13"></a>
-void&#160;</td><td class="memItemRight" valign="bottom"><b>shutdown</b> ()</td></tr>
-<tr class="separator:a7861ee1569802186a619778efc85af13"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table><table class="memberdecls">
 <tr class="heading"><td colspan="2"><h2 class="groupheader"><a name="var-members"></a>
 Variables</h2></td></tr>
@@ -233,9 +229,6 @@ Variables</h2></td></tr>
 <tr class="separator:ab48c0f0f2675157df57cc63bafe55de3"><td class="memSeparator" colspan="2">&#160;</td></tr>
 <tr class="memitem:aba72912b68ebf1ae27fd9a5458f895bd"><td class="memItemLeft" align="right" valign="top"><a class="el" href="structmenu__page__.html">t_menu_page</a>&#160;</td><td class="memItemRight" valign="bottom"><b>PAGE_DEBUG</b></td></tr>
 <tr class="separator:aba72912b68ebf1ae27fd9a5458f895bd"><td class="memSeparator" colspan="2">&#160;</td></tr>
-<tr class="memitem:aeaeff1790989ef6ad079f28974e3c62b"><td class="memItemLeft" align="right" valign="top"><a class="anchor" id="aeaeff1790989ef6ad079f28974e3c62b"></a>
-char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td></tr>
-<tr class="separator:aeaeff1790989ef6ad079f28974e3c62b"><td class="memSeparator" colspan="2">&#160;</td></tr>
 </table>
 <a name="details" id="details"></a><h2 class="groupheader">Detailed Description</h2>
 <div class="textblock"><p>The main routines calling the logic functions. </p>
@@ -303,8 +296,9 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 <div class="line">                {.label = NULL, .cb = NULL},</div>
 <div class="line">                {.label = NULL, .cb = NULL},</div>
 <div class="line">                {.label = NULL, .cb = NULL},</div>
-<div class="line">                { .label = <span class="stringliteral">&quot;BACK&quot;</span>, .cb = &amp;ma_gui_menu_goto_previous },</div>
+<div class="line">                { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a>, .cb = &amp;ma_gui_menu_goto_previous },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -318,13 +312,19 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Sources&quot;</span>,        .cb = NULL },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Display&quot;</span>,        .cb = &amp;ma_gui_menu_goto_sett_display },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;FFT&quot;</span>,            .cb = NULL    },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;VU-Meter&quot;</span>,       .cb = NULL     },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Tools&quot;</span>,          .cb = &amp;ma_gui_menu_goto_tools     },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;BACK&quot;</span>,           .cb = &amp;ma_gui_menu_goto_previous },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a0395a1a3562a8e1863f705d962acea69">STRING_SOURCES</a>,        .cb = NULL },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488abc45802555377010562c92cc705f02df">STRING_DISPLAY</a>,        .cb = &amp;ma_gui_menu_goto_sett_display },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a0beb4be3bca3c023f0987c677776a8df">STRING_FFT</a>,            .cb = NULL    },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ab872314666d453052d6d9572153bc539">STRING_VU_METER</a>,       .cb = NULL     },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a265c5bf400f1f743f438862ee0c9ab2c">STRING_TOOLS</a>,          .cb = &amp;ma_gui_menu_goto_tools     },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a>,           .cb = &amp;ma_gui_menu_goto_previous },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a265c5bf400f1f743f438862ee0c9ab2c"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a265c5bf400f1f743f438862ee0c9ab2c">STRING_TOOLS</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:48</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a0395a1a3562a8e1863f705d962acea69"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a0395a1a3562a8e1863f705d962acea69">STRING_SOURCES</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:44</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488abc45802555377010562c92cc705f02df"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488abc45802555377010562c92cc705f02df">STRING_DISPLAY</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:45</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488ab872314666d453052d6d9572153bc539"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ab872314666d453052d6d9572153bc539">STRING_VU_METER</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:47</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a0beb4be3bca3c023f0987c677776a8df"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a0beb4be3bca3c023f0987c677776a8df">STRING_FFT</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:46</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -339,12 +339,13 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">=</div>
 <div class="line">{</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;1: TeSt!*&quot;</span>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;2: TeSt!*&quot;</span>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;3: TeSt!*&quot;</span>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;4: TeSt!*&quot;</span>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;5: TeSt!*&quot;</span>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a>,        .cb = &amp;ma_gui_menu_set_brightness  },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a3bbb8df1e56171bff0ddef2170ddb8e3">STRING_TEST</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:54</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -358,10 +359,13 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Brightness&quot;</span>,    .cb = &amp;ma_gui_menu_goto_sett_brightness  },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Menu Style&quot;</span>,    .cb = NULL  },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;BACK&quot;</span>,          .cb = &amp;ma_gui_menu_goto_previous },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a274e2a23697379367debb2932740cf9c">STRING_BRIGHTNESS</a>,    .cb = &amp;ma_gui_menu_goto_sett_brightness  },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ae4e6e6190c58f7280cad4d7234591b3f">STRING_MENU_STYLE</a>,    .cb = NULL  },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a>,          .cb = &amp;ma_gui_menu_goto_previous },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a274e2a23697379367debb2932740cf9c"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a274e2a23697379367debb2932740cf9c">STRING_BRIGHTNESS</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:50</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488ae4e6e6190c58f7280cad4d7234591b3f"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ae4e6e6190c58f7280cad4d7234591b3f">STRING_MENU_STYLE</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:51</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -375,10 +379,13 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">        { .label = <span class="stringliteral">&quot;Debug&quot;</span>,         .cb = &amp;ma_gui_menu_tools_selection  },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;Reboot&quot;</span>,        .cb = &amp;ma_gui_menu_tools_selection  },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;BACK&quot;</span>, .cb = &amp;ma_gui_menu_goto_previous },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a59aff18beee7c7aea8558c90241eb2a2">STRING_DEBUG</a>,  .cb = &amp;ma_gui_menu_tools_selection  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488acdf46eda777b2a89fec0101ac704b13b">STRING_REBOOT</a>, .cb = &amp;ma_gui_menu_tools_selection  },</div>
+<div class="line">        { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a>,   .cb = &amp;ma_gui_menu_goto_previous },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488acdf46eda777b2a89fec0101ac704b13b"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488acdf46eda777b2a89fec0101ac704b13b">STRING_REBOOT</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:52</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a59aff18beee7c7aea8558c90241eb2a2"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a59aff18beee7c7aea8558c90241eb2a2">STRING_DEBUG</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:53</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a761f9a9558efbd74d2e00df87722b587">STRING_BACK</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:49</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -392,11 +399,15 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
       </table>
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;AUX&quot;</span>,            .cb = &amp;ma_gui_source_select },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;CD&quot;</span>,             .cb = &amp;ma_gui_source_select },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;RADIO&quot;</span>,          .cb = &amp;ma_gui_source_select },</div>
-<div class="line">                            { .label = <span class="stringliteral">&quot;TAPE&quot;</span>,           .cb = &amp;ma_gui_source_select },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488aac7b74577a196bfc0652709daeff9232">STRING_AUX</a>,   .cb = &amp;ma_gui_source_select },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ac550b4d166fc351ae182884f360d009d">STRING_CD</a>,    .cb = &amp;ma_gui_source_select },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488af4e6e74e9210bf64fd4b16fdbb3ab1c9">STRING_RADIO</a>, .cb = &amp;ma_gui_source_select },</div>
+<div class="line">                            { .label = <a class="code" href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a87828f14f729a55cd92d1920f0a319e0">STRING_TAPE</a>,  .cb = &amp;ma_gui_source_select },</div>
 <div class="line">}</div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488af4e6e74e9210bf64fd4b16fdbb3ab1c9"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488af4e6e74e9210bf64fd4b16fdbb3ab1c9">STRING_RADIO</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:42</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488a87828f14f729a55cd92d1920f0a319e0"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488a87828f14f729a55cd92d1920f0a319e0">STRING_TAPE</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:43</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488ac550b4d166fc351ae182884f360d009d"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488ac550b4d166fc351ae182884f360d009d">STRING_CD</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:41</div></div>
+<div class="ttc" id="ma__strings_8h_html_a5f7206dcc65ad6f97e34fc6e9410e488aac7b74577a196bfc0652709daeff9232"><div class="ttname"><a href="ma__strings_8h.html#a5f7206dcc65ad6f97e34fc6e9410e488aac7b74577a196bfc0652709daeff9232">STRING_AUX</a></div><div class="ttdef"><b>Definition:</b> ma_strings.h:40</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -424,13 +435,12 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">        .page_previous = &amp;PAGE_SETTINGS_TOOLS,</div>
-<div class="line">        .<a class="code" href="structmenu__page__.html#ac51b2e2067a3bb629cd7b790fbdd62b3">post</a>    = NULL,</div>
-<div class="line">        .pre     = NULL,</div>
+<div class="line">        .<a class="code" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a>     = NULL,</div>
 <div class="line">        .entries = MENU_DEBUG,</div>
 <div class="line">        .elements = <span class="keyword">sizeof</span>(MENU_DEBUG) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
-<div class="ttc" id="structmenu__page___html_ac51b2e2067a3bb629cd7b790fbdd62b3"><div class="ttname"><a href="structmenu__page__.html#ac51b2e2067a3bb629cd7b790fbdd62b3">menu_page_::post</a></div><div class="ttdeci">void(* post)(void)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:59</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
+<div class="ttc" id="structmenu__page___html_aede5c742a599739d66b63502b76e8404"><div class="ttname"><a href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">menu_page_::pre_post</a></div><div class="ttdeci">void(* pre_post)(uint8_t reason)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -445,13 +455,12 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    .page_previous = &amp;PAGE_SOURCE,</div>
-<div class="line">    .<a class="code" href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">pre</a>     = NULL,</div>
-<div class="line">    .post    = NULL,</div>
+<div class="line">    .<a class="code" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a>     = NULL,</div>
 <div class="line">    .entries = MENU_SETTINGS,</div>
 <div class="line">    .elements = <span class="keyword">sizeof</span>(MENU_SETTINGS) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
-<div class="ttc" id="structmenu__page___html_a9b7c34fab0b75f5bc1ad522462aa3f2a"><div class="ttname"><a href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">menu_page_::pre</a></div><div class="ttdeci">void(* pre)(void)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:58</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
+<div class="ttc" id="structmenu__page___html_aede5c742a599739d66b63502b76e8404"><div class="ttname"><a href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">menu_page_::pre_post</a></div><div class="ttdeci">void(* pre_post)(uint8_t reason)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -466,13 +475,12 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">        .page_previous = &amp;PAGE_SETTINGS_DISPLAY,</div>
-<div class="line">    .<a class="code" href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">pre</a>     = ma_gui_settings_brightness_pre,</div>
-<div class="line">    .post    = NULL,</div>
+<div class="line">    .<a class="code" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a>     = &amp;ma_gui_settings_brightness_pre,</div>
 <div class="line">    .entries = MENU_SETTINGS_BRIGHTNESS,</div>
 <div class="line">    .elements = <span class="keyword">sizeof</span>(MENU_SETTINGS_BRIGHTNESS) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
-<div class="ttc" id="structmenu__page___html_a9b7c34fab0b75f5bc1ad522462aa3f2a"><div class="ttname"><a href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">menu_page_::pre</a></div><div class="ttdeci">void(* pre)(void)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:58</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
+<div class="ttc" id="structmenu__page___html_aede5c742a599739d66b63502b76e8404"><div class="ttname"><a href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">menu_page_::pre_post</a></div><div class="ttdeci">void(* pre_post)(uint8_t reason)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -487,14 +495,13 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    .page_previous = &amp;PAGE_SETTINGS,</div>
-<div class="line">    .<a class="code" href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">pre</a>     = NULL,</div>
-<div class="line">    .post    = NULL,</div>
+<div class="line">    .<a class="code" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a>     = NULL,</div>
 <div class="line">    .entries = MENU_SETTINGS_DISPLAY,</div>
 <div class="line">    .elements = <span class="keyword">sizeof</span>(MENU_SETTINGS_DISPLAY) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line"></div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
-<div class="ttc" id="structmenu__page___html_a9b7c34fab0b75f5bc1ad522462aa3f2a"><div class="ttname"><a href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">menu_page_::pre</a></div><div class="ttdeci">void(* pre)(void)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:58</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
+<div class="ttc" id="structmenu__page___html_aede5c742a599739d66b63502b76e8404"><div class="ttname"><a href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">menu_page_::pre_post</a></div><div class="ttdeci">void(* pre_post)(uint8_t reason)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -509,13 +516,12 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    .page_previous = &amp;PAGE_SETTINGS,</div>
-<div class="line">    .<a class="code" href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">pre</a>     = NULL,</div>
-<div class="line">    .post    = NULL,</div>
+<div class="line">    .<a class="code" href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">pre_post</a>     = NULL,</div>
 <div class="line">    .entries = MENU_SETTINGS_TOOLS,</div>
 <div class="line">    .elements = <span class="keyword">sizeof</span>(MENU_SETTINGS_TOOLS) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
-<div class="ttc" id="structmenu__page___html_a9b7c34fab0b75f5bc1ad522462aa3f2a"><div class="ttname"><a href="structmenu__page__.html#a9b7c34fab0b75f5bc1ad522462aa3f2a">menu_page_::pre</a></div><div class="ttdeci">void(* pre)(void)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:58</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
+<div class="ttc" id="structmenu__page___html_aede5c742a599739d66b63502b76e8404"><div class="ttname"><a href="structmenu__page__.html#aede5c742a599739d66b63502b76e8404">menu_page_::pre_post</a></div><div class="ttdeci">void(* pre_post)(uint8_t reason)</div><div class="ttdef"><b>Definition:</b> ma_gui.h:63</div></div>
 </div><!-- fragment -->
 </div>
 </div>
@@ -530,19 +536,18 @@ char&#160;</td><td class="memItemRight" valign="bottom"><b>disp_str</b> [25]</td
 </div><div class="memdoc">
 <b>Initial value:</b><div class="fragment"><div class="line">= {</div>
 <div class="line">    .page_previous = NULL,</div>
-<div class="line">    .pre     = &amp;ma_gui_source_select_pre,</div>
-<div class="line">    .post    = NULL,</div>
+<div class="line">    .pre_post     = &amp;ma_gui_source_select_pre,</div>
 <div class="line">    .entries = MENU_SOURCE,</div>
 <div class="line">    .elements = <span class="keyword">sizeof</span>(MENU_SOURCE) / <span class="keyword">sizeof</span>(<a class="code" href="structmenu__entry__.html">t_menu_entry</a>)</div>
 <div class="line">}</div>
-<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:43</div></div>
+<div class="ttc" id="structmenu__entry___html"><div class="ttname"><a href="structmenu__entry__.html">menu_entry_</a></div><div class="ttdef"><b>Definition:</b> ma_gui.h:48</div></div>
 </div><!-- fragment -->
 </div>
 </div>
 </div><!-- contents -->
 <!-- start footer part -->
 <hr class="footer"/><address class="footer"><small>
-Generated on Mon Nov 16 2015 21:37:29 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
+Generated on Sun Feb 14 2016 11:34:34 for audio-monitor-avr by &#160;<a href="http://www.doxygen.org/index.html">
 <img class="footer" src="doxygen.png" alt="doxygen"/>
 </a> 1.8.9.1
 </small></address>

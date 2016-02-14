@@ -29,12 +29,19 @@
 #ifndef SRC_MA_AUDIO_H_
 #define SRC_MA_AUDIO_H_
 
+typedef struct _audio_voltage
+{
+    uint16_t left;
+    uint16_t right;
+} t_audio_voltage;
+
 void ma_audio_init(void);
 void ma_audio_process(void);
-uint16_t* ma_audio_spectrum(void);
+uint16_t* ma_audio_spectrum(uint8_t *buckets);
+t_audio_voltage* ma_audio_last_levels(void);
 
-extern uint16_t adc_maxS;
-extern uint16_t adc_minS;
-extern uint16_t last_capture;
+void ma_audio_last_capture(uint16_t *last_capture, uint16_t *adc_min, uint16_t *adc_max);
+
+void ma_audio_last_reset(void);
 
 #endif /* SRC_MA_AUDIO_H_ */
