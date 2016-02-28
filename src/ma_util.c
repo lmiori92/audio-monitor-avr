@@ -132,7 +132,7 @@ uint8_t source_select(uint8_t source)
     switch(source)
     {
         case 0:
-            outputs = 0;
+            outputs = 1 << 2;
             break;
         case 1:
             outputs = 1 << 0;

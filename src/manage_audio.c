@@ -84,8 +84,8 @@ void set_display_brightness(uint8_t level);
 /* Source menu entries */
 t_menu_entry  MENU_SOURCE[] = {
                             { .label = STRING_AUX,   .cb = &ma_gui_source_select },
-                            { .label = STRING_CD,    .cb = &ma_gui_source_select },
-                            { .label = STRING_RADIO, .cb = &ma_gui_source_select },
+                            { .label = STRING_RADIO,    .cb = &ma_gui_source_select },
+                            { .label = STRING_CD, .cb = &ma_gui_source_select },
                             { .label = STRING_TAPE,  .cb = &ma_gui_source_select },
 };
 
@@ -157,12 +157,12 @@ t_menu_page PAGE_SETTINGS_TOOLS = {
 };
 
 t_menu_entry MENU_DEBUG[] = {
-                {.label = NULL, .cb = NULL},
-                {.label = NULL, .cb = NULL},
-                {.label = NULL, .cb = NULL},
-                {.label = NULL, .cb = NULL},
-                {.label = NULL, .cb = NULL},
-                {.label = NULL, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
+                {.label = STRING_NUM_IDS, .cb = NULL},
                 { .label = STRING_BACK, .cb = &ma_gui_menu_goto_previous },
 };
 
@@ -606,7 +606,6 @@ int main(void)
         /* Start with the SOURCE menu */
         ma_gui_page_change(&menu, &PAGE_SOURCE);
     }
-    ma_gui_page_change(&menu, &PAGE_DEBUG);
 
     /* Set operational data */
     operational.adc_max = 85.0f;
