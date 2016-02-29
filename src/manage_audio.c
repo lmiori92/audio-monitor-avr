@@ -273,20 +273,22 @@ void ma_gui_refresh()
 {
     uint8_t i,j;
     uint16_t *spektrum;
+    t_audio_voltage* levels;
     uint8_t fft_n;
     char disp_str[12];
     float x_dB = 0;
     uint16_t last_capture = 0;
     uint16_t max_capture = 0;
     uint16_t min_capture = 0;
-    uint8_t t;
+    float t;
     uint16_t v = 0;
 
     spektrum = ma_audio_spectrum(&fft_n);
+    levels = ma_audio_last_levels();
 
     if (menu.page == &PAGE_DEBUG)
     {
-menu.index = 5;
+menu.index = 4;
         switch (menu.index)
         {
 
@@ -307,7 +309,9 @@ menu.index = 5;
 
             case 2:
 
-                snprintf_P(disp_str, 11, PSTR("CM: %lu ms"), operational.cycle_time_max / 1000);
+
+                snprintf_P(disp_str, 11, PSTR("%d"), levels->right);
+//                snprintf_P(disp_str, 11, PSTR("CM: %lu ms"), operational.cycle_time_max / 1000);
                 display_clear();
                 display_string(disp_str);
 
@@ -349,42 +353,14 @@ menu.index = 5;
                     }
 
                     display_show_vertical_bars(i, (t / operational.adc_min_ref) * 6.0f);
-//                    display_show_vertical_bars(i, lookupf(x_dB, table, sizeof(table) / sizeof(float)));//spektrum[i] / 10);
                 }
-                /*
-                float v = log10f(spektrum[2] / 1024.0f) * 20.0f;
-                display_clear();
-                uint16_t vp = v;
-                snprintf(disp_str, 11, "%d ; %d", vp, lookupf(v, table, sizeof(table) / sizeof(float)));
-                display_string(disp_str);
-                */
 
-//                float v = abs(log10f(spektrum[2] / 1024.0f) * 20.0f);
-//                uint16_t c = ceil(v);
-//                display_clear();
-//                uint16_t v = (uint16_t)round(abs(20.0f * log10(spektrum[2] / 1024.0f)));
-//                snprintf_P(disp_str, 11, PSTR("%u-%u"), spektrum[2], c);
-//                display_string(disp_str);
-
-                /*
-                display_show_vertical_bars(0, ((spektrum[1] >> 2) + (spektrum[2] >> 2))  );
-            	display_show_vertical_bars(1, ((spektrum[3] >> 2) + (spektrum[4] >> 2))  );
-            	display_show_vertical_bars(2, ((spektrum[5] >> 2) + (spektrum[6] >> 2))  );
-            	display_show_vertical_bars(3, ((spektrum[7] >> 2) + (spektrum[8] >> 2))  );
-            	display_show_vertical_bars(4, ((spektrum[9] >> 2) + (spektrum[10] >> 2)) );
-            	display_show_vertical_bars(5, ((spektrum[11] >> 2) + (spektrum[12] >> 2)));
-            	display_show_vertical_bars(6, ((spektrum[13] >> 2) + (spektrum[14] >> 2)));
-            	display_show_vertical_bars(7, ((spektrum[15] >> 2) + (spektrum[16] >> 2)));
-            	display_show_vertical_bars(8, ((spektrum[17] >> 2) + (spektrum[18] >> 2)));
-            	display_show_vertical_bars(9, ((spektrum[19] >> 2) + (spektrum[20] >> 2)));
-            	*/
             	break;
 
             case 5:
 
                 display_load_vumeter_harrows();
 
-                t_audio_voltage* levels = ma_audio_last_levels();
                 uint8_t disp_left = 0;
                 uint8_t disp_right = 0;
 
@@ -397,7 +373,7 @@ menu.index = 5;
                 {
                     t = 0;
                 }
-                disp_left = (t / operational.adc_min_ref) * 9.0f;
+                disp_left = (t / operational.adc_min_ref) * 10.0f;
 
                 if (levels->right > 0)
                 {
@@ -409,7 +385,7 @@ menu.index = 5;
                 {
                     t = 0;
                 }
-                disp_right = (t / operational.adc_min_ref) * 9.0f;
+                disp_right = (t / operational.adc_min_ref) * 10.0f;
 
                 display_show_vumeter_harrows(disp_left,disp_right,true);
 //                display_show_vumeter_harrows((t / minref) * 9.0f,levels->left, false);
@@ -608,8 +584,8 @@ int main(void)
     }
 
     /* Set operational data */
-    operational.adc_max = 85.0f;
-    operational.adc_min_ref  = 38.59f;
+    operational.adc_max = 150.0f;
+    operational.adc_min_ref  = 43.52f;
 
     /* Start the main loop (and never return) */
     while (1)

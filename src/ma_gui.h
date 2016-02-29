@@ -68,6 +68,7 @@ struct menu_page_
 
 typedef struct menu_page_ t_menu_page;
 
+/**< Structure for a menu page */
 typedef struct
 {
 
@@ -77,6 +78,7 @@ typedef struct
 
 } t_menu;
 
+/**< Enumeration of buttons */
 enum e_buttons_
 {
 
@@ -108,16 +110,6 @@ void keypad_periodic(t_keypad* keypad);
 /* Menu utils */
 void ma_gui_page_change(t_menu *menu, t_menu_page *page_next);
 t_menu_page* ma_gui_menu_goto_previous(uint8_t reason, uint8_t id, t_menu_page* page);
-
-/* Graphics functions */
-void display_string_len(char* string, uint8_t len);
-void display_string(char* string);
-void display_string_center(char* string);
-void display_clear(void);
-void display_load_bars_vert();
-void display_load_bars_horiz();
-void display_show_horizontal_bar(uint8_t level);
-void display_show_vertical_bars(uint8_t bar, uint8_t level);
 
 #endif
 

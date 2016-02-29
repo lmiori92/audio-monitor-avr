@@ -35,9 +35,9 @@
 #define VUMETER_HARROWS_R   00U
 #define VUMETER_HARROWS_L   20U
 
-void display_string_len(char* string, uint8_t len);
-void display_string(char* string);
-void display_string_center(char* string);
+void display_string_len(const char* string, uint8_t len);
+void display_string(const char* string);
+void display_string_center(const char* string);
 void display_clear(void);
 void display_load_bars_vert(void);
 void display_load_bars_horiz(void);

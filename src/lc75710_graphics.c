@@ -41,7 +41,7 @@
  * @param string    string to display
  * @param len       length of the string
  */
-void display_string_len(char* string, uint8_t len)
+void display_string_len(const char* string, uint8_t len)
 {
 
     uint8_t addr = 0;
@@ -63,7 +63,7 @@ void display_string_len(char* string, uint8_t len)
  *
  * @param string zero-terminated string to display
  */
-void display_string(char* string)
+void display_string(const char* string)
 {
     uint8_t len = 0;
 
@@ -82,7 +82,7 @@ void display_string(char* string)
  *
  * @param string zero-terminated string to display
  */
-void display_string_center(char* string)
+void display_string_center(const char* string)
 {
 
     uint8_t len = 0;
@@ -145,7 +145,7 @@ void display_load_bars_vert(void)
  * @brief Load horizontal bars in the CGRAM of the chip
  *
  */
-void display_load_bars_horiz()
+void display_load_bars_horiz(void)
 {
 
     uint8_t i = 0;

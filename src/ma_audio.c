@@ -28,6 +28,7 @@
 
 #include <avr/io.h>
 #include <avr/interrupt.h>
+#include "math.h"
 
 #include "ffft.h"
 #include "time.h"
@@ -37,7 +38,7 @@
 
 /*#define ADC_NOISE_DEBUG*/
 
-/* Quick and dirty noise debug - TODO remove me or clean the code afterwards */
+/* Quick noise debug */
 #ifdef ADC_NOISE_DEBUG
 uint16_t adc_maxS = 0;
 uint16_t adc_minS = 0xFFFF;
@@ -50,7 +51,7 @@ static int16_t capture[FFT_N];          /**< Wave capturing buffer */
 static complex_t bfly_buff[FFT_N];      /**< FFT buffer */
 static uint16_t spektrum[FFT_N/2];      /**< Spectrum output buffer */
 
-static t_audio_voltage input_level;
+static t_audio_voltage input_level;     /**< Store audio information */
 
 /**
  * ISR(ADC_vect)
@@ -135,7 +136,7 @@ void hann_window(uint16_t *stream, uint8_t len)
 {
     for (uint8_t i = 1; i < len; i++)
     {
-        stream[i] = 0.5f * (1.0f - cos(2.0f * 3.14f * i / (len - 1.0f))) * stream[i];
+        stream[i] = 0.5f * (1.0f - cos((double)(2.0f * 3.14f * i / (len - 1.0f)))) * stream[i];
     }
 }
 
@@ -151,9 +152,10 @@ void ma_audio_process(void)
 {
 
     uint8_t old_mux;
-    uint32_t rms = 0;
+    uint32_t rms = 0;   /* 32 bits because of the power calculations */
+    uint16_t old_rms = 0;
     uint16_t tmp = 0;
-    uint8_t c = 0;
+    uint8_t i = 0;
 
     if (((ADCSRA >> ADSC) & 0x1) == 0)
     {
@@ -174,25 +176,29 @@ void ma_audio_process(void)
         ADMUX |= (old_mux + 1U) % 2U;
 
         /* VU-METER testing */
-        for(uint8_t i = 0; i < FFT_N; i++)
+        for(i = 0; i < FFT_N; i++)
         {
             if (capture[i] >= 512)
             {
                 tmp = (capture[i] - 512);
-                rms += tmp * tmp;
-                c++;
             }
+            else
+            {
+                tmp = (512 - capture[i]);
+            }
+            rms += tmp * tmp;
         }
-        rms = sqrt(rms / c);
 
         if (old_mux == 0U)
         {
             /* Left Channel */
+            rms = input_level.left + ((sqrt((double)rms / FFT_N) - input_level.left) * 350 / 1000);
             input_level.left = rms;
         }
         else if(old_mux == 1U)
         {
             /* Left Right */
+            rms = input_level.right + ((sqrt((double)rms / FFT_N) - input_level.right) * 350 / 1000);
             input_level.right = rms;
         }
         else
