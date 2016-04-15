@@ -11,6 +11,7 @@ C_SRCS += \
 ../src/ma_strings.c \
 ../src/ma_util.c \
 ../src/manage_audio.c \
+../src/printf.c \
 ../src/system.c \
 ../src/time.c \
 ../src/uart.c 
@@ -27,6 +28,7 @@ OBJS += \
 ./src/ma_strings.o \
 ./src/ma_util.o \
 ./src/manage_audio.o \
+./src/printf.o \
 ./src/system.o \
 ./src/time.o \
 ./src/uart.o 
@@ -39,6 +41,7 @@ C_DEPS += \
 ./src/ma_strings.d \
 ./src/ma_util.d \
 ./src/manage_audio.d \
+./src/printf.d \
 ./src/system.d \
 ./src/time.d \
 ./src/uart.d 
@@ -51,14 +54,14 @@ S_UPPER_DEPS += \
 src/%.o: ../src/%.S
 	@echo 'Building file: $<'
 	@echo 'Invoking: AVR Assembler'
-	avr-gcc -x assembler-with-cpp -g2 -gstabs -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -c -o "$@" "$<"
+	avr-gcc -x assembler-with-cpp -g2 -gstabs -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 
 src/%.o: ../src/%.c
 	@echo 'Building file: $<'
 	@echo 'Invoking: AVR Compiler'
-	avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@:%.o=%.d)" -c -o "$@" "$<"
+	avr-gcc -Wall -g2 -gstabs -Os -ffunction-sections -fdata-sections -ffunction-sections -fdata-sections -std=gnu99 -mmcu=atmega8 -DF_CPU=12000000UL -MMD -MP -MF"$(@:%.o=%.d)" -MT"$(@)" -c -o "$@" "$<"
 	@echo 'Finished building: $<'
 	@echo ' '
 

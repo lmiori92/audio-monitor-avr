@@ -139,13 +139,19 @@ void ma_gui_page_change(t_menu *menu, t_menu_page *page_next)
     }
 }
 
+bool ma_gui_is_page_selected(t_menu *menu, t_menu_page *page)
+{
+    return (menu->page == page) ? true : false;
+}
+
 /*
 
  */
-void ma_gui_periodic(t_menu* menu, t_keypad* keypad)
+bool ma_gui_periodic(t_menu* menu, t_keypad* keypad)
 {
 
     t_menu_page* page_next = NULL;
+    bool refreshed = false;
 
     if ((menu->index > 0) && keypad->buttons[BUTTON_UP] == true)
     {
@@ -170,11 +176,14 @@ void ma_gui_periodic(t_menu* menu, t_keypad* keypad)
     
     if (menu->refresh == true)
     {
+        refreshed = true;
         menu->refresh = false;
         ma_gui_menu_display_entry(menu);
         if (menu->page->entries[menu->index].cb != NULL)
             menu->page->entries[menu->index].cb(REASON_HOOVER, menu->index, menu->page);
     }
+
+    return refreshed;
 
 }
 

@@ -32,10 +32,8 @@
 #include "lc75710_graphics.h"
 #include "system.h"
 
-#define STACK_MONITORING    /**< Enable stack monitoring */
-
 /* http://www.avrfreaks.net/forum/soft-c-avrgcc-monitoring-stack-usage */
-
+#ifdef STACK_MONITORING
 void StackPaint(void)
 {
 #if 0
@@ -75,6 +73,7 @@ uint16_t StackCount(void)
 
     return c;
 }
+#endif
 
 /**
  * ISR(BADISR_vect)

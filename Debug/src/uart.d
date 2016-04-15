@@ -1,1 +1,1 @@
-src/uart.d: ../src/uart.c
+src/uart.o: ../src/uart.c

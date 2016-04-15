@@ -104,7 +104,7 @@ typedef enum e_buttons_ t_button;
 
 /* Menu */
 void ma_gui_init(t_menu* menu, t_keypad* keypad, t_menu_page* start_page);
-void ma_gui_periodic(t_menu* menu, t_keypad* keypad);
+bool ma_gui_periodic(t_menu* menu, t_keypad* keypad);
 void keypad_periodic(t_keypad* keypad);
 
 /* Menu utils */

@@ -153,7 +153,6 @@ void ma_audio_process(void)
 
     uint8_t old_mux;
     uint32_t rms = 0;   /* 32 bits because of the power calculations */
-    uint16_t old_rms = 0;
     uint16_t tmp = 0;
     uint8_t i = 0;
 
@@ -163,7 +162,7 @@ void ma_audio_process(void)
         fft_input(capture, bfly_buff);
         fft_execute(bfly_buff);
         fft_output(bfly_buff, spektrum);
-        hann_window(spektrum, FFT_N/2);
+        //hann_window(spektrum, FFT_N/2);
 
         /* Toggle channel */
         /* iterate through the needed channels:

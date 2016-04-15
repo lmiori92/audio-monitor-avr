@@ -40,7 +40,7 @@ void display_string(const char* string);
 void display_string_center(const char* string);
 void display_clear(void);
 void display_load_bars_vert(void);
-void display_load_bars_horiz(void);
+void display_load_bars_horiz(bool upper_or_lower);
 
 void display_load_vumeter_harrows(void);
 void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left);

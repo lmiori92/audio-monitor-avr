@@ -30,7 +30,7 @@
 #include "ma_strings.h"
 
 
-/* STRING SIZE 100 BYTES */
+/* STRING SIZE 103 BYTES */
 const char* g_string_table[] = 
 {
     "AUX",
@@ -40,11 +40,12 @@ const char* g_string_table[] =
     "Sources",
     "Display",
     "FFT",
-    "VU-Meter",
+    "VU-Horiz",
+    "VU-Vert",
     "Tools",
     "BACK",
     "Brightness",
-    "Menu Style",
+    "Meter",
     "Reboot",
     "Debug",
     "TeSt!*",

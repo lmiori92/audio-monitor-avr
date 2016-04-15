@@ -1,1 +1,1 @@
-src/time.d: ../src/time.c
+src/time.o: ../src/time.c

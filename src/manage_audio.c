@@ -70,16 +70,18 @@ static t_persistent persistent;     /**< Persistent app state */
 
 /* Local function declaration */
 
-t_menu_page* ma_gui_source_select(uint8_t reason, uint8_t id, t_menu_page* page);
-t_menu_page* ma_gui_menu_goto_sett_display(uint8_t reason, uint8_t id, t_menu_page* page);
-t_menu_page* ma_gui_menu_goto_sett_brightness(uint8_t reason, uint8_t id, t_menu_page* page);
-t_menu_page* ma_gui_menu_set_brightness(uint8_t reason, uint8_t id, t_menu_page* page);
-t_menu_page* ma_gui_menu_goto_tools(uint8_t reason, uint8_t id, t_menu_page* page);
-t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_source_select(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_goto_sett_display(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_goto_sett_brightness(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_set_brightness(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_set_meter(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_goto_tools(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page* page);
+static t_menu_page* ma_gui_menu_goto_sett_meters(uint8_t reason, uint8_t id, t_menu_page* page);
 
-void ma_gui_settings_brightness_pre(uint8_t reason);
-void ma_gui_source_select_pre(uint8_t reason);
-void set_display_brightness(uint8_t level);
+static void ma_gui_settings_brightness_pre(uint8_t reason);
+static void ma_gui_source_select_pre(uint8_t reason);
+static void set_display_brightness(uint8_t level);
 
 /* Source menu entries */
 t_menu_entry  MENU_SOURCE[] = {
@@ -98,10 +100,8 @@ t_menu_page PAGE_SOURCE = {
 };
 
 t_menu_entry MENU_SETTINGS[] = {
-                            { .label = STRING_SOURCES,        .cb = NULL },
+/*                            { .label = STRING_SOURCES,        .cb = NULL },   */
                             { .label = STRING_DISPLAY,        .cb = &ma_gui_menu_goto_sett_display },
-                            { .label = STRING_FFT,            .cb = NULL    },
-                            { .label = STRING_VU_METER,       .cb = NULL     },
                             { .label = STRING_TOOLS,          .cb = &ma_gui_menu_goto_tools     },
                             { .label = STRING_BACK,           .cb = &ma_gui_menu_goto_previous },
 };
@@ -114,13 +114,13 @@ t_menu_page PAGE_SETTINGS = {
 };
 
 t_menu_entry  MENU_SETTINGS_DISPLAY[] = {
+                            { .label = STRING_METER,    .cb = &ma_gui_menu_goto_sett_meters  },
                             { .label = STRING_BRIGHTNESS,    .cb = &ma_gui_menu_goto_sett_brightness  },
-                            { .label = STRING_MENU_STYLE,    .cb = NULL  },
                             { .label = STRING_BACK,          .cb = &ma_gui_menu_goto_previous },
 };
 
 t_menu_page PAGE_SETTINGS_DISPLAY = {
-    .page_previous = &PAGE_SETTINGS,
+    .page_previous = &PAGE_SOURCE,
     .pre_post     = NULL,
     .entries = MENU_SETTINGS_DISPLAY,
     .elements = sizeof(MENU_SETTINGS_DISPLAY) / sizeof(t_menu_entry)
@@ -137,10 +137,25 @@ t_menu_entry  MENU_SETTINGS_BRIGHTNESS[] =
 };
 
 t_menu_page PAGE_SETTINGS_BRIGHTNESS = {
-        .page_previous = &PAGE_SETTINGS_DISPLAY,
+    .page_previous = &PAGE_SETTINGS_DISPLAY,
     .pre_post     = &ma_gui_settings_brightness_pre,
     .entries = MENU_SETTINGS_BRIGHTNESS,
     .elements = sizeof(MENU_SETTINGS_BRIGHTNESS) / sizeof(t_menu_entry)
+};
+
+t_menu_entry  MENU_SETTINGS_METER[] =
+{
+        { .label = STRING_FFT,      .cb = &ma_gui_menu_set_meter  },
+        { .label = STRING_VU_HORIZ, .cb = &ma_gui_menu_set_meter  },
+        { .label = STRING_VU_VERT,  .cb = &ma_gui_menu_set_meter  },
+        { .label = STRING_BACK,     .cb = &ma_gui_menu_goto_previous },
+};
+
+t_menu_page PAGE_SETTINGS_METER = {
+    .page_previous = &PAGE_SETTINGS_DISPLAY,
+    .pre_post     = NULL,
+    .entries = MENU_SETTINGS_METER,
+    .elements = sizeof(MENU_SETTINGS_METER) / sizeof(t_menu_entry)
 };
 
 t_menu_entry  MENU_SETTINGS_TOOLS[] = {
@@ -229,6 +244,14 @@ t_menu_page* ma_gui_menu_goto_sett_brightness(uint8_t reason, uint8_t id, t_menu
         return NULL;
 }
 
+t_menu_page* ma_gui_menu_goto_sett_meters(uint8_t reason, uint8_t id, t_menu_page* page)
+{
+    if (reason == REASON_SELECT)
+        return &PAGE_SETTINGS_METER;
+    else
+        return NULL;
+}
+
 t_menu_page* ma_gui_menu_set_brightness(uint8_t reason, uint8_t id, t_menu_page* page)
 {
     if (reason == REASON_HOOVER)
@@ -236,6 +259,16 @@ t_menu_page* ma_gui_menu_set_brightness(uint8_t reason, uint8_t id, t_menu_page*
     else
         return ma_gui_menu_goto_previous(reason, id, page);
     return NULL;
+}
+
+t_menu_page* ma_gui_menu_set_meter(uint8_t reason, uint8_t id, t_menu_page* page)
+{
+    if (reason == REASON_SELECT)
+    {
+        persistent.meter_type = id;
+        write_to_persistent(&persistent);
+    }
+    return ma_gui_menu_goto_previous(reason, id, page);
 }
 
 t_menu_page* ma_gui_menu_goto_tools(uint8_t reason, uint8_t id, t_menu_page* page)
@@ -269,39 +302,160 @@ t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page
 
 }
 
-void ma_gui_refresh()
+void ma_gui_visu_fft()
+{
+
+    uint16_t *spektrum;
+    uint8_t fft_n;
+    uint8_t i;
+    uint16_t v = 0;
+    float tf = 0;
+
+    lc75710_set_ac_address(0, 0);
+
+    spektrum = ma_audio_spectrum(&fft_n);
+
+    /* remove the DC component */
+    spektrum[0] = 0;
+    for (i = 0; i < (FFT_N/2/3); i++)
+    {
+
+        v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
+
+        if (v > 0)
+        {
+            tf = 20.0f * log10(v / operational.adc_max);
+            tf = operational.adc_min_ref - fabs(tf);
+
+        }
+        else
+        {
+            tf = 0;
+        }
+
+        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
+    }
+}
+
+void ma_gui_visu_vumeter(bool *init)
+{
+
+    uint8_t disp = 0;
+    t_audio_voltage* levels;
+    float tf = 0.0f;
+    static bool left_or_right;
+
+    if (*init == false)
+    {
+        *init = true;
+    }
+
+    left_or_right ^= true;
+    display_load_bars_horiz(left_or_right);
+    levels = ma_audio_last_levels();
+
+    if (levels->left > 0 && (left_or_right == true))
+    {
+        tf = 20.0f * log10(levels->left / operational.adc_max);
+        tf = operational.adc_min_ref - fabs(tf);
+        disp = (tf / operational.adc_min_ref) * 50.0f;
+    }
+
+    if (levels->right > 0 && (left_or_right == false))
+    {
+        tf = 20.0f * log10(levels->right / operational.adc_max);
+        tf = operational.adc_min_ref - fabs(tf);
+        disp = (tf / operational.adc_min_ref) * 50.0f;
+    }
+
+    display_show_horizontal_bar(disp);
+
+}
+
+void ma_gui_visu_vumeter_harrow(bool *init)
+{
+
+    uint8_t disp_left = 0;
+    uint8_t disp_right = 0;
+    t_audio_voltage* levels;
+    float tf = 0.0f;
+
+    if (*init == false)
+    {
+        display_load_vumeter_harrows();
+        *init = true;
+    }
+
+    levels = ma_audio_last_levels();
+
+    if (levels->left > 0)
+    {
+        tf = 20.0f * log10(levels->left / operational.adc_max);
+        tf = operational.adc_min_ref - fabs(tf);
+        disp_left = (tf / operational.adc_min_ref) * 10.0f;
+    }
+
+    if (levels->right > 0)
+    {
+        tf = 20.0f * log10(levels->right / operational.adc_max);
+        tf = operational.adc_min_ref - fabs(tf);
+        disp_right = (tf / operational.adc_min_ref) * 10.0f;
+    }
+
+    display_show_vumeter_harrows(disp_left,disp_right,true);
+}
+#include "string.h"
+void ma_gui_refresh(bool refreshed)
 {
     uint8_t i,j;
-    uint16_t *spektrum;
-    t_audio_voltage* levels;
-    uint8_t fft_n;
+
     char disp_str[12];
-    float x_dB = 0;
+
     uint16_t last_capture = 0;
     uint16_t max_capture = 0;
     uint16_t min_capture = 0;
-    float t;
-    uint16_t v = 0;
 
-    spektrum = ma_audio_spectrum(&fft_n);
-    levels = ma_audio_last_levels();
+    static bool init;
+    static uint32_t end;
 
+    if (menu.page == &PAGE_SOURCE)
+    {
+        if (refreshed == true)
+        {
+            init = false;
+            end = g_timestamp + 1000000;
+        }
+        else if (g_timestamp <= end)
+        {
+            /* wait */
+        }
+        else
+        {
+            if (persistent.meter_type == 1)
+                ma_gui_visu_vumeter(&init);
+            if (persistent.meter_type == 2)
+                ma_gui_visu_vumeter_harrow(&init);
+        }
+    }
+/*
     if (menu.page == &PAGE_DEBUG)
     {
-menu.index = 4;
+
         switch (menu.index)
         {
 
             case 0:
-                snprintf_P(disp_str, 11, PSTR("%lu ms"), g_timestamp / 1000);
+//                tfp_sprintf(disp_str, "%lu ms", g_timestamp / 1000);
+//                snprintf_P(disp_str, 11, PSTR("%lu ms"), g_timestamp / 1000);
+                disp_str = "asdas";
                 display_clear();
                 display_string(disp_str);
 
                 break;
 
             case 1:
-
-                snprintf_P(disp_str, 11, PSTR("CT: %lu ms"), operational.cycle_time / 1000);
+//                tfp_sprintf(disp_str,
+//                snprintf_P(disp_str, 11, PSTR("CT: %lu ms"), operational.cycle_time / 1000);
                 display_clear();
                 display_string(disp_str);
 
@@ -310,7 +464,7 @@ menu.index = 4;
             case 2:
 
 
-                snprintf_P(disp_str, 11, PSTR("%d"), levels->right);
+              //  snprintf_P(disp_str, 11, PSTR("%d"), levels->right);
 //                snprintf_P(disp_str, 11, PSTR("CM: %lu ms"), operational.cycle_time_max / 1000);
                 display_clear();
                 display_string(disp_str);
@@ -318,10 +472,10 @@ menu.index = 4;
                 break;
 
             case 3:
-                snprintf_P(disp_str, 11, PSTR("RELAY: %d%d%d"),
-                                  ((operational.output.relays >> 0) & 1),
-                                  ((operational.output.relays >> 1) & 1),
-                                  ((operational.output.relays >> 2) & 1));
+              //  snprintf_P(disp_str, 11, PSTR("RELAY: %d%d%d"),
+              //                    ((operational.output.relays >> 0) & 1),
+              //                    ((operational.output.relays >> 1) & 1),
+              //                    ((operational.output.relays >> 2) & 1));
                 display_clear();
                 display_string(disp_str);
 
@@ -329,85 +483,18 @@ menu.index = 4;
 
             case 4:
 
-                lc75710_set_ac_address(0, 0);
 
-                /* remove the DC component */
-                spektrum[0] = 0;
-                for (i = 0; i < (FFT_N/2/3); i++)
-                {
-
-                    //float v = log10f(spektrum[i] / 60.0f) * 20.0f;
-                    //display_show_vertical_bars(i, lookupf(v, table, sizeof(table) / sizeof(float)));
-
-                    v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
-
-                    if (v > 0)
-                    {
-                        x_dB = 20.0f * log10(v / operational.adc_max);
-                        t = operational.adc_min_ref - fabs(x_dB);
-
-                    }
-                    else
-                    {
-                        t = 0;
-                    }
-
-                    display_show_vertical_bars(i, (t / operational.adc_min_ref) * 6.0f);
-                }
 
             	break;
 
             case 5:
-
-                display_load_vumeter_harrows();
-
-                uint8_t disp_left = 0;
-                uint8_t disp_right = 0;
-
-                if (levels->left > 0)
-                {
-                    x_dB = 20.0f * log10(levels->left / operational.adc_max);
-                    t = operational.adc_min_ref - fabs(x_dB);
-                }
-                else
-                {
-                    t = 0;
-                }
-                disp_left = (t / operational.adc_min_ref) * 10.0f;
-
-                if (levels->right > 0)
-                {
-                    x_dB = 20.0f * log10(levels->right / operational.adc_max);
-                    t = operational.adc_min_ref - fabs(x_dB);
-
-                }
-                else
-                {
-                    t = 0;
-                }
-                disp_right = (t / operational.adc_min_ref) * 10.0f;
-
-                display_show_vumeter_harrows(disp_left,disp_right,true);
-//                display_show_vumeter_harrows((t / minref) * 9.0f,levels->left, false);
-                /*
-                #define filter_strength 4
-
-
-                sum = sum - filtered_value + ma_audio_last_capture();
-                filtered_value = (sum + (1<<(filter_strength - 1))) >> (filter_strength);
-
-                display_clear();
-                snprintf_P(disp_str, 11, PSTR("ADC: %d"), filtered_value);
-                display_string(disp_str);
-
-                */
 
                 break;
 
             case 6:
                 display_clear();
 //                snprintf(disp_str, 11, "ADC: %d", ma_audio_last_capture());
-                snprintf_P(disp_str, 11, PSTR("RST: %d"), operational.reset_reason);
+                //snprintf_P(disp_str, 11, PSTR("RST: %d"), operational.reset_reason);
                 display_string(disp_str);
 
                 break;
@@ -416,7 +503,7 @@ menu.index = 4;
 
                 display_clear();
                 ma_audio_last_capture(&last_capture, &min_capture, &max_capture);
-                snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, min_capture, max_capture);
+                //snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, min_capture, max_capture);
                 display_string(disp_str);
 
                 break;
@@ -425,7 +512,7 @@ menu.index = 4;
                 break;
         }
     }
-
+*/
 }
 
 /**
@@ -435,8 +522,9 @@ menu.index = 4;
 */
 void set_display_brightness(uint8_t level)
 {
-    uint8_t brightness_levels[5] = { 48, 96, 144, 192, 240 };
-    
+
+    static uint8_t brightness_levels[5] = { 48, 96, 144, 192, 240 };
+
     if (level < 5)
     {
         lc75710_intensity(brightness_levels[level]);
@@ -479,6 +567,11 @@ void io_init()
 
 }
 
+void uart_putf(void *unused, char c)
+{
+    uart_putchar(c, NULL);
+}
+
 void setup()
 {
 
@@ -499,8 +592,9 @@ void setup()
 
     /* Initialize the serial port */
     uart_init();
-    stdout = &uart_output;
-    stdin  = &uart_input;
+    //init_printf(NULL, uart_putf);
+//    stdout = &uart_output;
+//    stdin  = &uart_input;
 
     /* Load persistent data */
     read_from_persistent(&persistent);
@@ -538,6 +632,7 @@ int main(void)
 
     uint32_t start = 0;
     bool init_done = false;
+    bool refreshed;
 
     /* Disable interrupts for the whole init period */
     cli();
@@ -604,10 +699,10 @@ int main(void)
         ma_audio_process();
 
         /* Run the periodic GUI logic */
-        ma_gui_periodic(&menu, &keypad);
+        refreshed = ma_gui_periodic(&menu, &keypad);
 
         /* Run the periodic menu refresh handler */
-        ma_gui_refresh();
+        ma_gui_refresh(refreshed);
 
         /* Set outputs */
         output();
@@ -622,13 +717,14 @@ int main(void)
         }
 
         /* Check stack sanity */
+#ifdef STACK_MONITORING
         if (StackCount() == 0U)
         {
             display_clear();
             display_string("StackOver!");
             for(;;);
         }
-
+#endif
         if ((init_done == false) && (g_timestamp > (1000U * 500)))
         {
             /* do after - init operations once */

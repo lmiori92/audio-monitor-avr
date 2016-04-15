@@ -32,7 +32,7 @@
 #ifndef __LC75710_H__
 #define __LC75710_H__
 
-#define ADDRESS             230U   /**< Chip address (B11100110) */
+#define ADDRESS             103U   /**< Chip address (B11100110) */
 #define LC75710_DIGITS      10U    /**< Number of digits for a given implementation */
 #define LC75710_DRAM_SIZE   64U    /**< Size of the internal DCRAM */
 

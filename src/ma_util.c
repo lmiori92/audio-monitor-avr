@@ -40,9 +40,10 @@
 */
 void read_from_persistent(t_persistent* persistent)
 {
-    //eeprom_read_block(persistent, (void*)5, sizeof(t_persistent));
-    persistent->brightness = eeprom_read_byte((const uint8_t*)5);
-    persistent->audio_source = eeprom_read_byte((const uint8_t*)6);
+    uint8_t i = 0;
+    persistent->brightness = eeprom_read_byte((const uint8_t*)i++);
+    persistent->audio_source = eeprom_read_byte((const uint8_t*)i++);
+    persistent->meter_type = eeprom_read_byte((const uint8_t*)i++);
 }
 
 /**
@@ -54,8 +55,10 @@ void read_from_persistent(t_persistent* persistent)
 void write_to_persistent(t_persistent* persistent)
 {
     //eeprom_write_block((void*)5, persistent, sizeof(t_persistent));
-    eeprom_write_byte((uint8_t*)5, persistent->brightness);
-    eeprom_write_byte((uint8_t*)6, persistent->audio_source);
+    uint8_t i = 0;
+    eeprom_write_byte((uint8_t*)i++, persistent->brightness);
+    eeprom_write_byte((uint8_t*)i++, persistent->audio_source);
+    eeprom_write_byte((uint8_t*)i++, persistent->meter_type);
 }
 
 bool debounce(t_debounce *debounce, bool input, uint32_t timestamp)

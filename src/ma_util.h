@@ -36,6 +36,7 @@ typedef struct
 {
     uint8_t brightness;     /**< Display brightness */
     uint8_t audio_source;   /**< Last used audio source */
+    uint8_t meter_type;     /**< Preferred meter type */
 } t_persistent;
 
 typedef struct

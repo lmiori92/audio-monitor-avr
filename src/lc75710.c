@@ -73,63 +73,48 @@
 #define LC75710_CL_LOW      LC75710_PORT &= ~(1 << LC75710_CL);asm("nop")  /**< CL LOW */
 #define LC75710_CL_HIGH     LC75710_PORT |=  (1 << LC75710_CL);asm("nop")  /**< CL HIGH */
 
-/**
- * @brief
- *   This function writes the serial data (low-level) to the chip.
- *   The datasheet specifies about 0.5us delay between the edges of inputs.
- *   In any case, it has been tested that delays are not needed between calls,
- *   and this due to the particularly "slow" access to pins that the Arduino library operates.
- *   This note is left for a future bare-metal implementation.
- * 
- * @param data the 24-bit data to be sent over the serial line
- */
-void lc75710_write(uint32_t data)
+static void lc75710_write_low(uint8_t *data, uint8_t bits)
 {
 
-    uint8_t i = 0;
+    uint8_t i;
+
+    for (i = 0; i < bits; i++)
+    {
+        if ((data[i/8] >> (i % 8)) & 0x1)
+        {
+            LC75710_DI_HIGH;
+        }
+        else
+        {
+            LC75710_DI_LOW;
+        }
+
+        _delay_us(1);
+        LC75710_CL_HIGH;  /* HIGH */
+        _delay_us(1);
+        LC75710_CL_LOW;  /* LOW */
+        _delay_us(1);
+    }
+}
+
+static void lc75710_select(void)
+{
+    uint8_t buf;
 
     /* Address goes out first... */
     LC75710_CE_LOW;
     _delay_us(1);
 
-    for (i = 0; i < 8; i++)
-    {
-        if (ADDRESS >> (7 - i) & 0x1)
-        {
-            LC75710_DI_HIGH;
-        }
-        else
-        {
-            LC75710_DI_LOW;
-        }
-
-        _delay_us(1);
-        LC75710_CL_HIGH;  /* HIGH */
-        _delay_us(1);
-        LC75710_CL_LOW;  /* LOW */
-        _delay_us(1);
-    }
+    buf = ADDRESS;
+    lc75710_write_low(&buf, 8);
 
     /* Then data follows after, CE goes high */
     LC75710_CE_HIGH;  /* HIGH */
     _delay_us(1);
+}
 
-    for (i = 0; i < 24; i++)
-    {
-        if (data >> i & 0x1)
-        {
-            LC75710_DI_HIGH;
-        }
-        else
-        {
-            LC75710_DI_LOW;
-        }
-        _delay_us(1);
-        LC75710_CL_HIGH;  /* HIGH */
-        _delay_us(1);
-        LC75710_CL_LOW;  /* LOW */
-        _delay_us(1);
-    }
+static void lc75710_deselect(void)
+{
 
     LC75710_CE_LOW;  /* LOW */
     _delay_us(1);
@@ -141,67 +126,23 @@ void lc75710_write(uint32_t data)
 
 /**
  * @brief
- *   This function writes the serial data (low-level) to the chip. This is the 56-bit
- *   version that is specific to the CGRAM write command.
+ *   This function writes the serial data (low-level) to the chip.
  *   The datasheet specifies about 0.5us delay between the edges of inputs.
  *   In any case, it has been tested that delays are not needed between calls,
  *   and this due to the particularly "slow" access to pins that the Arduino library operates.
  *   This note is left for a future bare-metal implementation.
  * 
- * @param data the 56-bit data to be sent over the serial line
+ * @param data the 24-bit data to be sent over the serial line
  */
-void lc75710_write_56bits(uint64_t data)
+
+void lc75710_write(uint32_t data)
 {
 
-    uint8_t i = 0;
+    lc75710_select();
 
-    /* Address goes out first... */
-    LC75710_CE_LOW;  /* LOW */
-    _delay_us(1);
+    lc75710_write_low((uint8_t*)&data, 24);
 
-    for (i = 0; i < 8; i++)
-    {
-        if (ADDRESS >> (7 - i) & 0x1)
-        {
-            LC75710_DI_HIGH;
-        }
-        else
-        {
-            LC75710_DI_LOW;
-        }
-        _delay_us(1);
-        LC75710_CL_HIGH;  /* HIGH */
-        _delay_us(1);
-        LC75710_CL_LOW;  /* LOW */
-        _delay_us(1);
-    }
-
-    /* Then data follows after, CE goes high */
-    LC75710_CE_HIGH;  /* HIGH */
-    _delay_us(1);
-
-    for (i = 0; i < 56; i++)
-    {
-        if (data >> i & 0x1)
-        {
-            LC75710_DI_HIGH;
-        }
-        else
-        {
-            LC75710_DI_LOW;
-        }
-        _delay_us(1);
-        LC75710_CL_HIGH;  /* HIGH */
-        _delay_us(1);
-        LC75710_CL_LOW;  /* LOW */
-        _delay_us(1);
-    }
-
-    LC75710_CE_LOW;  /* LOW */
-    _delay_us(1);
-
-    /* wait long enough for the command to complete (at least 18us for most commands) */
-    _delay_us(25);
+    lc75710_deselect();
 
 }
 
@@ -215,7 +156,7 @@ void lc75710_write_56bits(uint64_t data)
  */
 void lc75710_blink(uint8_t operation, uint8_t period, uint16_t digits)
 {
-    
+
     uint32_t temp = 0;
 
     /* Instruction */
@@ -299,7 +240,7 @@ void lc75710_shift(uint8_t operation, bool direction)
  */
 void lc75710_grid_register_load(uint8_t grids)
 {
-    
+
     uint32_t temp = 0;
 
     /* Instruction */
@@ -435,7 +376,11 @@ void lc75710_cgram_write(uint8_t addr, uint64_t data)
     temp |= data;
 
     /* Write to IC */
-    lc75710_write_56bits(temp);
+    lc75710_select();
+
+    lc75710_write_low(&temp, 56);
+
+    lc75710_deselect();
 
 }
 

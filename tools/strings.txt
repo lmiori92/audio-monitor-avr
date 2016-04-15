@@ -5,11 +5,12 @@ TAPE
 Sources
 Display
 FFT
-VU-Meter
+VU-Horiz
+VU-Vert
 Tools
 BACK
 Brightness
-Menu Style
+Meter
 Reboot
 Debug
 TeSt!*

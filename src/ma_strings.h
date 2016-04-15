@@ -44,11 +44,12 @@ enum _string_table_ids
     STRING_SOURCES,  /**< SOURCES */
     STRING_DISPLAY,  /**< DISPLAY */
     STRING_FFT,  /**< FFT */
-    STRING_VU_METER,  /**< VU-METER */
+    STRING_VU_HORIZ,  /**< VU-HORIZ */
+    STRING_VU_VERT,  /**< VU-VERT */
     STRING_TOOLS,  /**< TOOLS */
     STRING_BACK,  /**< BACK */
     STRING_BRIGHTNESS,  /**< BRIGHTNESS */
-    STRING_MENU_STYLE,  /**< MENU STYLE */
+    STRING_METER,  /**< METER */
     STRING_REBOOT,  /**< REBOOT */
     STRING_DEBUG,  /**< DEBUG */
     STRING_TEST,  /**< TEST!* */

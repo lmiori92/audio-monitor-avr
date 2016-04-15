@@ -29,6 +29,8 @@
 #ifndef SRC_SYSTEM_H_
 #define SRC_SYSTEM_H_
 
+/*#define STACK_MONITORING*/    /**< Enable stack monitoring */
+
 /** Output values */
 typedef struct
 {
