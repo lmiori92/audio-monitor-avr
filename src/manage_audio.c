@@ -160,6 +160,7 @@ static t_menu_page PAGE_SETTINGS_METER = {
 
 static t_menu_entry  MENU_SETTINGS_TOOLS[] = {
 /*        { .label = STRING_DEBUG,  .cb = &ma_gui_menu_tools_selection  },  */
+        { .label = STRING_SW_VERSION },
         { .label = STRING_REBOOT, .cb = &system_reset  },
         { .label = STRING_BACK,   .cb = &ma_gui_menu_goto_previous },
 };

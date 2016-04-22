@@ -28,6 +28,7 @@
  */
 
 #include "ma_strings.h"
+#include "system.h"
 
 
 /* STRING SIZE 103 BYTES */
@@ -49,6 +50,7 @@ const char* g_string_table[] =
     "Reboot",
     "Debug",
     "TeSt!*",
+    "0.1.0"
 
 };
 

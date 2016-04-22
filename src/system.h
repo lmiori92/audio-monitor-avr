@@ -31,6 +31,8 @@
 
 /*#define STACK_MONITORING*/    /**< Enable stack monitoring */
 
+#include "stdint.h"
+
 /** Output values */
 typedef struct
 {

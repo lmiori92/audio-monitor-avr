@@ -53,6 +53,7 @@ enum _string_table_ids
     STRING_REBOOT,  /**< REBOOT */
     STRING_DEBUG,  /**< DEBUG */
     STRING_TEST,  /**< TEST!* */
+    STRING_SW_VERSION,
 
     STRING_NUM_IDS
 };
