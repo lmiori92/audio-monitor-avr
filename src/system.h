@@ -53,13 +53,14 @@ typedef struct
 } t_operational;
 
 /* Globals */
-extern t_operational operational;   /**< Global operational variable */
+//extern t_operational operational;   /**< Global operational variable */
 extern uint8_t _end;
 extern uint8_t __stack;
 
 /* Functions */
-void system_init(void);
+uint8_t system_init(void);
 void system_fatal(char *str);
+void system_reset(void);
 
 void StackPaint(void) __attribute__ ((naked)) __attribute__ ((section (".init1")));
 

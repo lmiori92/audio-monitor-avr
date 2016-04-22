@@ -53,6 +53,8 @@ static uint16_t spektrum[FFT_N/2];      /**< Spectrum output buffer */
 
 static t_audio_voltage input_level;     /**< Store audio information */
 
+static bool fft_enabled = false;
+
 /**
  * ISR(ADC_vect)
  *
@@ -132,7 +134,7 @@ void ma_audio_init(void)
  * - optimize
  * - clean
  * - ? ;=)*/
-void hann_window(uint16_t *stream, uint8_t len)
+static void hann_window(uint16_t *stream, uint8_t len)
 {
     for (uint8_t i = 1; i < len; i++)
     {
@@ -159,10 +161,13 @@ void ma_audio_process(void)
     if (((ADCSRA >> ADSC) & 0x1) == 0)
     {
         /* Sampling complete */
-        fft_input(capture, bfly_buff);
-        fft_execute(bfly_buff);
-        fft_output(bfly_buff, spektrum);
-        //hann_window(spektrum, FFT_N/2);
+        if (fft_enabled == true)
+        {
+            fft_input(capture, bfly_buff);
+            fft_execute(bfly_buff);
+            fft_output(bfly_buff, spektrum);
+            hann_window(spektrum, FFT_N/2);
+        }
 
         /* Toggle channel */
         /* iterate through the needed channels:
@@ -264,4 +269,9 @@ void ma_audio_last_reset(void)
 t_audio_voltage* ma_audio_last_levels(void)
 {
     return &input_level;
+}
+
+void ma_audio_fft_process(bool flag)
+{
+    fft_enabled = flag;
 }

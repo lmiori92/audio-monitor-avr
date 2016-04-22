@@ -38,7 +38,7 @@
 
 #include "ma_strings.h"     /* String table */
 
-void ma_gui_menu_display_entry(t_menu* menu)
+static void ma_gui_menu_display_entry(t_menu* menu)
 {
 
     display_clear();
@@ -137,11 +137,6 @@ void ma_gui_page_change(t_menu *menu, t_menu_page *page_next)
             menu->page->pre_post(REASON_PRE);
 
     }
-}
-
-bool ma_gui_is_page_selected(t_menu *menu, t_menu_page *page)
-{
-    return (menu->page == page) ? true : false;
 }
 
 /*

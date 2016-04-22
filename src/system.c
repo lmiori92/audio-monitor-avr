@@ -94,6 +94,13 @@ void system_fatal(char *str)
     for(;;);
 }
 
+void system_reset(void)
+{
+    /* start at zero! */
+    void (*start)(void) = 0;
+    start();
+}
+
 /**
  *
  * system_init
@@ -101,14 +108,16 @@ void system_fatal(char *str)
  * @brief System init
  *
  */
-void system_init(void)
+uint8_t system_init(void)
 {
 //    if(MCUCSR & (1<<PORF )) (PSTR("Power-on reset.\n"));
 //    if(MCUCSR & (1<<EXTRF)) (PSTR("External reset!\n"));
 //    if(MCUCSR & (1<<BORF )) (PSTR("Brownout reset!\n"));
 //    if(MCUCSR & (1<<WDRF )) (PSTR("Watchdog reset!\n"));
-    operational.reset_reason = MCUCSR;
+    uint8_t t = MCUCSR;
 
     /* Reset state for the next proper detection */
     MCUCSR = 0;
+
+    return t;
 }

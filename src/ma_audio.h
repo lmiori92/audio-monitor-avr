@@ -39,6 +39,7 @@ void ma_audio_init(void);
 void ma_audio_process(void);
 uint16_t* ma_audio_spectrum(uint8_t *buckets);
 t_audio_voltage* ma_audio_last_levels(void);
+void ma_audio_fft_process(bool flag);
 
 void ma_audio_last_capture(uint16_t *last_capture, uint16_t *adc_min, uint16_t *adc_max);
 
