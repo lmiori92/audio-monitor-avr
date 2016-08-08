@@ -26,7 +26,8 @@
  * @brief The main routines calling the logic functions
  */
 
-#include "lc75710.h"
+#include "deasplay/deasplay.h"
+#include "deasplay/driver/LC75710/lc75710.h"    /* LC75710 low-level */
 #include "lc75710_graphics.h"
 #include "time.h"
 #include "ma_gui.h"
@@ -35,6 +36,7 @@
 #include "stdio.h"
 #include "string.h"
 #include "ffft.h"
+#include "keypad.h"
 
 /* AVR libs */
 #include <avr/io.h>
@@ -50,9 +52,7 @@
 
 /* Globals */
 static t_operational operational;          /**< Global operational state */
-
 static t_menu   menu;               /**< Menu state */
-static t_keypad keypad;             /**< Keypad state */
 static t_persistent persistent;     /**< Persistent app state */
 
 
@@ -159,9 +159,8 @@ static t_menu_page PAGE_SETTINGS_METER = {
 };
 
 static t_menu_entry  MENU_SETTINGS_TOOLS[] = {
-/*        { .label = STRING_DEBUG,  .cb = &ma_gui_menu_tools_selection  },  */
-        { .label = STRING_SW_VERSION },
-        { .label = STRING_REBOOT, .cb = &system_reset  },
+        { .label = STRING_SW_VERSION, .cb = &ma_gui_menu_tools_selection },
+        { .label = STRING_REBOOT, .cb = &ma_gui_menu_tools_selection },
         { .label = STRING_BACK,   .cb = &ma_gui_menu_goto_previous },
 };
 
@@ -283,7 +282,6 @@ static t_menu_page* ma_gui_menu_goto_tools(uint8_t reason, uint8_t id, t_menu_pa
 static t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_menu_page* page)
 {
 
-/*
     if (reason == REASON_SELECT)
     {
         switch(id)
@@ -291,13 +289,12 @@ static t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_me
             case 0:
                 return &PAGE_DEBUG;
             case 1:
-                start();
+                system_reset();
                 break;
             default:
                 break;
         }
     }
-*/
 
     return NULL;
 
@@ -341,7 +338,7 @@ static void ma_gui_visu_fft(bool *init)
             tf = 0;
         }
 
-        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
+//        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
     }
 }
 
@@ -579,19 +576,14 @@ static void io_init()
 
 }
 
-static void uart_putf(void *unused, char c)
-{
-    uart_putchar(c, NULL);
-}
-
 void setup()
 {
 
     /* Initialize the I/O */
     io_init();
 
-    /* Initialze the display */
-    lc75710_init();
+    /* Display init */
+    display_init();
 
     /* Timer: start ticking */
     timer_init();
@@ -602,30 +594,24 @@ void setup()
     /* Wait Aref stabilization (0.47uF capacitance) */
     _delay_ms(750);
 
-    /* Initialize the serial port */
-    uart_init();
-    //init_printf(NULL, uart_putf);
-//    stdout = &uart_output;
-//    stdin  = &uart_input;
-
     /* Load persistent data */
     read_from_persistent(&persistent);
 
     /* Initialize the GUI */
-    ma_gui_init(&menu, &keypad, &PAGE_SOURCE);
+    ma_gui_init(&menu, &PAGE_SOURCE);
 
     /* Apply persistent data */
     set_display_brightness(persistent.brightness);
 
 }
 
-static void input(t_keypad *keypad)
+static void input(void)
 {
 
     /* Keypad */
-    keypad->input[BUTTON_SELECT]    = !((PINB >> KEY_1) & 0x1);
-    keypad->input[BUTTON_UP]        = !((PINB >> KEY_2) & 0x1);
-    keypad->input[BUTTON_DOWN]      = !((PINB >> KEY_3) & 0x1);
+    keypad_set_input(BUTTON_SELECT, !((PINB >> KEY_1) & 0x1));
+    keypad_set_input(BUTTON_UP, !((PINB >> KEY_2) & 0x1));
+    keypad_set_input(BUTTON_DOWN, !((PINB >> KEY_3) & 0x1));
 
 }
 
@@ -639,11 +625,39 @@ static void output(t_output *out)
 
 }
 
+static void timer_processing(void)
+{
+    /* check 10ms flag */
+    operational.flag_10ms.flag = false;
+    if ((g_timestamp - operational.flag_10ms.timestamp) > FLAG_10MS_US)
+    {
+        /* 10ms elapsed, set the flag */
+        operational.flag_10ms.flag = true;
+        operational.flag_10ms.timestamp = g_timestamp;
+    }
+    else
+    {
+        /* waiting for the 10ms flag */
+    }
+
+    /* check 10ms flag */
+    operational.flag_50ms.flag = false;
+    if (operational.flag_10ms.flag == true)
+    {
+        operational.flag_50ms.timestamp++;
+        if (operational.flag_50ms.timestamp >= FLAG_50MS_10MS_UNITS)
+        {
+            operational.flag_50ms.flag = true;
+            operational.flag_50ms.timestamp = 0U;
+        }
+    }
+}
+
 int main(void)
 {
 
-    uint32_t start = 0;
-    bool init_done = false;
+    uint32_t start;
+    uint8_t init_done = 0U;
     bool refreshed;
 
     /* Disable interrupts for the whole init period */
@@ -683,23 +697,29 @@ int main(void)
         /* Cycle start */
         start = g_timestamp;
 
+        /* Timers */
+        timer_processing();
+
         /* Read inputs */
-        input(&keypad);
+        input();
 
         /* Keypad logic */
-        keypad_periodic(&keypad);
+        keypad_periodic(operational.flag_10ms.flag);
 
         /* Process audio (FFT / VU-METER) */
         ma_audio_process();
 
         /* Run the periodic GUI logic */
-        refreshed = ma_gui_periodic(&menu, &keypad);
+        refreshed = ma_gui_periodic(&menu);
 
         /* Run the periodic menu refresh handler */
         ma_gui_refresh(refreshed);
 
         /* Set outputs */
         output(&operational.output);
+
+        /* Display Refresh */
+        display_periodic();
 
         /* Cycle end */
         operational.cycle_time = g_timestamp - start;
@@ -710,27 +730,21 @@ int main(void)
             operational.cycle_time_max = operational.cycle_time;
         }
 
-        /* Check stack sanity */
-#ifdef STACK_MONITORING
-        if (StackCount() == 0U)
-        {
-            display_clear();
-            display_string("StackOver!");
-            for(;;);
-        }
-#endif
-        if ((init_done == false) && (g_timestamp > (1000U * 500)))
+        if (init_done > 50U)
         {
             /* do after - init operations once */
 
             /* turn on the display */
-            lc75710_on_off(MDATA_AND_ADATA, true, 0xFFFF);
+
+            display_power(DEASPLAY_POWER_ON);
 
             /* ADC stats reset */
             ma_audio_last_reset();
 
-            /* set the flag */
-            init_done = true;
+        }
+        else
+        {
+            init_done++;
         }
 
     }

@@ -144,7 +144,7 @@ uint8_t source_select(uint8_t source)
             outputs = 1 << 1;
             break;
         case 3:
-            outputs = (1 << 1) | (1 << 2);
+            outputs = (1 << 2) | (1 << 1) | (1 << 0);
             break;
         default:
             outputs = 0;

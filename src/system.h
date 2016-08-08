@@ -32,6 +32,7 @@
 /*#define STACK_MONITORING*/    /**< Enable stack monitoring */
 
 #include "stdint.h"
+#include "stdbool.h"
 
 /** Output values */
 typedef struct
@@ -41,21 +42,42 @@ typedef struct
 
 } t_output;
 
+/** Timer structure */
+typedef struct
+{
+    bool     flag;
+    uint32_t timestamp;
+} t_timer32;
+
+/** Timer structure */
+typedef struct
+{
+    bool     flag;
+    uint8_t  timestamp;
+} t_timer8;
+
 /** Operational variables */
 typedef struct
 {
 
-    uint32_t cycle_time;        /**< Time it takes the logic to execute */
-    uint32_t cycle_time_max;    /**< Maximum time it took the logic to execute */
-    t_output output;            /**< State of the outputs */
-    uint8_t  reset_reason;      /**< Reset reason (see datasheet) */
-    float    adc_min_ref;       /**< Minimum ADC attenuation (dB) */
-    float    adc_max;           /**< Maximum ADC value (0dB) */
-
+    uint32_t   cycle_time;        /**< Time it takes the logic to execute */
+    uint32_t   cycle_time_max;    /**< Maximum time it took the logic to execute */
+    t_output   output;            /**< State of the outputs */
+    uint8_t    reset_reason;      /**< Reset reason (see datasheet) */
+    uint16_t   adc_min_ref;       /**< Minimum ADC attenuation (dB) */
+    uint16_t   adc_max;           /**< Maximum ADC value (0dB) */
+    t_timer32  flag_10ms;         /**< Set to true for one cycle every 10 ms */
+    t_timer8   flag_50ms;         /**< Set to true for one cycle every 50 ms */
 } t_operational;
 
+/* Definitions */
+#define FLAG_10MS_US        10000U      /** 10ms = 10000us */
+#define FLAG_50MS_US        50000U      /** 50ms = 50000us */
+
+#define FLAG_1000MS_50MS_UNITS      20U     /** 1000ms = 20 50ms-units */
+#define FLAG_50MS_10MS_UNITS        5U
+
 /* Globals */
-//extern t_operational operational;   /**< Global operational variable */
 extern uint8_t _end;
 extern uint8_t __stack;
 

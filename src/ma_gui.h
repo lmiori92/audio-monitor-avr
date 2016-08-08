@@ -35,8 +35,6 @@
 #include "stdint.h"
 #include "stdbool.h"
 
-#define DEBOUNCE_BUTTONS   50000   /**< keypad debounce in us */
-
 enum cb_reason
 {
     REASON_HOOVER,
@@ -78,34 +76,9 @@ typedef struct
 
 } t_menu;
 
-/**< Enumeration of buttons */
-enum e_buttons_
-{
-
-    BUTTON_DOWN,
-    BUTTON_SELECT,
-    BUTTON_UP,
-
-    NUM_BUTTONS
-
-};
-
-typedef struct
-{
-
-    bool       input[NUM_BUTTONS];
-    uint32_t   debounce[NUM_BUTTONS];
-    bool       latches[NUM_BUTTONS];
-    bool       buttons[NUM_BUTTONS];
-
-} t_keypad;
-
-typedef enum e_buttons_ t_button;
-
 /* Menu */
-void ma_gui_init(t_menu* menu, t_keypad* keypad, t_menu_page* start_page);
-bool ma_gui_periodic(t_menu* menu, t_keypad* keypad);
-void keypad_periodic(t_keypad* keypad);
+void ma_gui_init(t_menu* menu, t_menu_page* start_page);
+bool ma_gui_periodic(t_menu* menu);
 
 /* Menu utils */
 void ma_gui_page_change(t_menu *menu, t_menu_page *page_next);

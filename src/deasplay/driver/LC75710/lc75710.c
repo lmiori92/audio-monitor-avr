@@ -26,7 +26,7 @@
  * @brief Implementation of LC75710 driver functions
  */
 
-#include "lc75710.h"
+#include "../../../deasplay/driver/LC75710/lc75710.h"
 
 #include "avr/io.h"
 #include <util/delay.h>
@@ -64,23 +64,29 @@
 
 /* PIN toggle macros */
 
-#define LC75710_CE_LOW      LC75710_PORT &= ~(1 << LC75710_CE);asm("nop")  /**< CE LOW */
-#define LC75710_CE_HIGH     LC75710_PORT |=  (1 << LC75710_CE);asm("nop")  /**< CE HIGH */
+#define LC75710_CE_LOW      LC75710_PORT &= ~(1 << LC75710_CE);  /**< CE LOW */
+#define LC75710_CE_HIGH     LC75710_PORT |=  (1 << LC75710_CE);  /**< CE HIGH */
 
-#define LC75710_DI_LOW      LC75710_PORT &= ~(1 << LC75710_DI);asm("nop")  /**< DI LOW */
-#define LC75710_DI_HIGH     LC75710_PORT |=  (1 << LC75710_DI);asm("nop")  /**< DI HIGH */
+#define LC75710_DI_LOW      LC75710_PORT &= ~(1 << LC75710_DI);  /**< DI LOW */
+#define LC75710_DI_HIGH     LC75710_PORT |=  (1 << LC75710_DI);  /**< DI HIGH */
 
-#define LC75710_CL_LOW      LC75710_PORT &= ~(1 << LC75710_CL);asm("nop")  /**< CL LOW */
-#define LC75710_CL_HIGH     LC75710_PORT |=  (1 << LC75710_CL);asm("nop")  /**< CL HIGH */
+#define LC75710_CL_LOW      LC75710_PORT &= ~(1 << LC75710_CL);  /**< CL LOW */
+#define LC75710_CL_HIGH     LC75710_PORT |=  (1 << LC75710_CL);  /**< CL HIGH */
 
 static void lc75710_write_low(uint8_t *data, uint8_t bits)
 {
 
     uint8_t i;
+    uint8_t j = 0;
 
     for (i = 0; i < bits; i++)
     {
-        if ((data[i/8] >> (i % 8)) & 0x1)
+        if (j >= 8U)
+        {
+            j = 0;
+            data++;
+        }
+        if ((*data >> j) & 0x1)
         {
             LC75710_DI_HIGH;
         }
@@ -89,11 +95,13 @@ static void lc75710_write_low(uint8_t *data, uint8_t bits)
             LC75710_DI_LOW;
         }
 
-        _delay_us(1);
+        j++;
+
+        //_delay_us(1);
         LC75710_CL_HIGH;  /* HIGH */
-        _delay_us(1);
+        //_delay_us(1);
         LC75710_CL_LOW;  /* LOW */
-        _delay_us(1);
+        //_delay_us(1);
     }
 }
 
@@ -103,21 +111,20 @@ static void lc75710_select(void)
 
     /* Address goes out first... */
     LC75710_CE_LOW;
-    _delay_us(1);
+//    _delay_us(1);
 
     buf = ADDRESS;
     lc75710_write_low(&buf, 8);
 
     /* Then data follows after, CE goes high */
     LC75710_CE_HIGH;  /* HIGH */
-    _delay_us(1);
+//    _delay_us(1);
 }
 
 static void lc75710_deselect(void)
 {
 
     LC75710_CE_LOW;  /* LOW */
-    _delay_us(1);
 
     /* wait long enough for the command to complete (at least 18us for most commands) */
     _delay_us(25);
@@ -378,7 +385,7 @@ void lc75710_cgram_write(uint8_t addr, uint64_t data)
     /* Write to IC */
     lc75710_select();
 
-    lc75710_write_low(&temp, 56);
+    lc75710_write_low((uint8_t*)&temp, 56);
 
     lc75710_deselect();
 

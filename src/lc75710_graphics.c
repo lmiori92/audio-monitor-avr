@@ -14,9 +14,6 @@
 
     Lorenzo Miori (C) 2015 [ 3M4|L: memoryS60<at>gmail.com ]
 
-    Version History
-        * 1.0 initial
-
 */
 
 /**
@@ -30,49 +27,8 @@
 #include "stdbool.h"
 #include "string.h"
 
-#include "lc75710.h"
-
-/**
- *
- * display_string_len
- *
- * @brief Display a string having a specified length
- *
- * @param string    string to display
- * @param len       length of the string
- */
-void display_string_len(const char* string, uint8_t len)
-{
-
-    uint8_t addr = 0;
-
-    do
-    {
-        lc75710_dcram_write(len - 1 - addr++, *string);
-        string++;
-    }
-    while (addr < len);
-
-}
-
-/**
- *
- * display_string
- *
- * @brief Display a string
- *
- * @param string zero-terminated string to display
- */
-void display_string(const char* string)
-{
-    uint8_t len = 0;
-
-    len = strlen(string);
-
-    lc75710_set_ac_address(0, 0);
-
-    display_string_len(string, len);
-}
+#include "deasplay/driver/LC75710/lc75710.h"
+#include "deasplay/deasplay.h"    /* display API */
 
 /**
  *
@@ -82,38 +38,16 @@ void display_string(const char* string)
  *
  * @param string zero-terminated string to display
  */
-void display_string_center(const char* string)
+void display_string_center(char* string)
 {
 
     uint8_t len = 0;
 
     len = strlen(string);
 
-    lc75710_set_ac_address(LC75710_DRAM_SIZE - ((LC75710_DIGITS - len) / 2), 0);
+    display_set_cursor(0, ((LC75710_DIGITS - len) / 2));
 
-    display_string_len(string, len);
-
-}
-
-/**
- *
- * display_clear
- *
- * @brief Clear display (i.e. sets RAM to 0x20) AND reset RAM pointer
- *
- */
-void display_clear(void)
-{
-
-    uint8_t i = 0;
-
-    lc75710_set_ac_address(0, 0);
-
-    for (i = 0; i < LC75710_DIGITS; i++)
-    {
-        /* Fill with spaces */
-        lc75710_dcram_write(i, 0x20);
-    }
+    display_write_string(string);
 
 }
 
@@ -229,7 +163,8 @@ void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left)
             /* Space - Clear */
             c = 0x20;
         }
-        lc75710_dcram_write(right_left ? (LC75710_DIGITS - i) : i, c);
+        display_set_cursor(0, right_left ? (LC75710_DIGITS - i) : i);
+        display_write_char(c);
     }
 
 }
@@ -247,36 +182,19 @@ void display_show_horizontal_bar(uint8_t level)
 {
 
     uint8_t i = 0;
+    uint8_t lvl;
 
-    lc75710_set_ac_address(0, 0);
+    display_set_cursor(0, 0);
 
     for (i = 0; i < LC75710_DIGITS; i++)
     {
-        if (i <= (level / 5))
-            lc75710_dcram_write(i, 4);
-        else if ((level / 5)+1 == i)
-            lc75710_dcram_write(i, level%5-1);
+        lvl = (level / 5);
+        if (i <= lvl)
+            display_write_char(4);
+        else if ((lvl + 1) == i)
+            display_write_char(level - lvl - 1);
         else
-            lc75710_dcram_write(i, 0x20);
+            display_write_char(0x20);
     }
 
-
-
-}
-
-/**
- *
- * display_show_vertical_bars
- *
- * @brief Show a vertical bar specifying its height and its position
- *
- * @param   bar     character position in the screen
- * @param   level   bar level (intensity)
- *
- */
-void display_show_vertical_bars(uint8_t bar, uint8_t level)
-{
-    if (bar > 9) bar = 9;   /* Saturate */
-    if (level > 6) level = 6;
-    lc75710_dcram_write(9 - bar, level);
 }

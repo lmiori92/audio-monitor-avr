@@ -28,6 +28,8 @@
 
 #include "ma_gui.h"
 
+#include "keypad.h"
+
 #include "stdint.h"
 #include "stdbool.h"
 #include "string.h"
@@ -57,19 +59,8 @@ t_menu_page* ma_gui_menu_goto_previous(uint8_t reason, uint8_t id, t_menu_page* 
     return NULL;
 }
 
-void ma_gui_init(t_menu* menu, t_keypad* keypad, t_menu_page* start_page)
+void ma_gui_init(t_menu* menu, t_menu_page* start_page)
 {
-
-    uint8_t i = 0;
-
-    /* Init keypad */
-    for (i = 0; i < NUM_BUTTONS; i++)
-    {
-        keypad->input[i] = false;
-        keypad->buttons[i]  = false;
-        keypad->latches[i]  = false;
-        keypad->debounce[i] = 0;
-    }
 
     /* First selected page: audio sources */
     menu->page            = start_page;
@@ -77,49 +68,6 @@ void ma_gui_init(t_menu* menu, t_keypad* keypad, t_menu_page* start_page)
     menu->index           = 0;
   
     ma_gui_menu_display_entry(menu);
-
-}
-
-/* Read the keypad, apply debounce to inputs and detect the rising edge */
-void keypad_periodic(t_keypad* keypad)
-{
-
-  uint8_t i = 0;
-  bool t = false;
-
-  for (i = 0; i < NUM_BUTTONS; i++)
-  {
-      t = keypad->input[i];
-      
-      if (t == true)
-      {
-        t = false;
-
-        /* debounce the raw input */
-        if (keypad->debounce[i] == 0)
-          keypad->debounce[i] = g_timestamp;
-        else
-          if ((g_timestamp - keypad->debounce[i]) > DEBOUNCE_BUTTONS)
-            t = true;
-      }
-      else
-      {
-          keypad->debounce[i] = 0;
-          t = false;
-      }
-      
-      if (t == true && keypad->latches[i] == false)
-      {
-          /* Falling edge */
-          keypad->buttons[i] = true;
-      }
-      else
-      {
-          keypad->buttons[i] = false;
-      }
-
-      keypad->latches[i] = t;
-  }
 
 }
 
@@ -142,23 +90,23 @@ void ma_gui_page_change(t_menu *menu, t_menu_page *page_next)
 /*
 
  */
-bool ma_gui_periodic(t_menu* menu, t_keypad* keypad)
+bool ma_gui_periodic(t_menu* menu)
 {
 
     t_menu_page* page_next = NULL;
     bool refreshed = false;
 
-    if ((menu->index > 0) && keypad->buttons[BUTTON_UP] == true)
+    if ((menu->index > 0) && (keypad_clicked(BUTTON_UP) == KEY_CLICK))
     {
         menu->index--;
         menu->refresh = true;
     }
-    else if (((menu->index + 1) < menu->page->elements) && keypad->buttons[BUTTON_DOWN] == true)
+    else if (((menu->index + 1) < menu->page->elements) && (keypad_clicked(BUTTON_DOWN) == KEY_CLICK))
     {
         menu->index++;
         menu->refresh = true;
     }
-    else if (keypad->buttons[BUTTON_SELECT] == true)
+    else if ((keypad_clicked(BUTTON_SELECT) == KEY_CLICK))
     {
         if (menu->page->entries[menu->index].cb != NULL)
         {
