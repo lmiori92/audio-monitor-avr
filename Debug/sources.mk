@@ -31,6 +31,7 @@ CPP_DEPS :=
 # Every subdirectory with source files must be described here
 SUBDIRS := \
 src/deasplay \
+src/deasplay/driver/HD44780 \
 src/deasplay/driver/LC75710 \
 src \
 

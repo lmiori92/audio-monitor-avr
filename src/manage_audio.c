@@ -52,7 +52,6 @@
 
 /* Globals */
 static t_operational operational;          /**< Global operational state */
-static t_menu   menu;               /**< Menu state */
 static t_persistent persistent;     /**< Persistent app state */
 
 
@@ -192,8 +191,8 @@ static void ma_gui_settings_brightness_pre(uint8_t reason)
 {
     if (reason == REASON_PRE)
     {
-        if (persistent.brightness < PAGE_SETTINGS_BRIGHTNESS.elements)
-            menu.index = persistent.brightness;
+//        if (persistent.brightness < PAGE_SETTINGS_BRIGHTNESS.elements)
+            //menu.index = persistent.brightness;
     }
 }
 
@@ -203,7 +202,7 @@ static void ma_gui_source_select_pre(uint8_t reason)
     {
         if (persistent.audio_source < PAGE_SOURCE.elements)
         {
-            menu.index = persistent.audio_source;
+            //menu.index = persistent.audio_source;
         }
     }
 }
@@ -425,7 +424,7 @@ static void ma_gui_refresh(bool refreshed)
     static bool init;
     static uint32_t end;
 
-    if (menu.page == &PAGE_SOURCE)
+    if (ma_gui_get_page_active() == &PAGE_SOURCE)
     {
         if (refreshed == true)
         {
@@ -598,7 +597,7 @@ void setup()
     read_from_persistent(&persistent);
 
     /* Initialize the GUI */
-    ma_gui_init(&menu, &PAGE_SOURCE);
+    ma_gui_init(&PAGE_SOURCE);
 
     /* Apply persistent data */
     set_display_brightness(persistent.brightness);
@@ -678,12 +677,12 @@ int main(void)
     if (!((PINB >> KEY_1) & 0x1))
     {
         /* Directly go to the debug menu */
-        ma_gui_page_change(&menu, &PAGE_DEBUG);
+        ma_gui_page_change(&PAGE_DEBUG);
     }
     else
     {
         /* Start with the SOURCE menu */
-        ma_gui_page_change(&menu, &PAGE_SOURCE);
+        ma_gui_page_change(&PAGE_SOURCE);
     }
 
     /* Set operational data */
@@ -710,7 +709,7 @@ int main(void)
         ma_audio_process();
 
         /* Run the periodic GUI logic */
-        refreshed = ma_gui_periodic(&menu);
+        refreshed = ma_gui_periodic();
 
         /* Run the periodic menu refresh handler */
         ma_gui_refresh(refreshed);

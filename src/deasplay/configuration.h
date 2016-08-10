@@ -49,6 +49,7 @@
  * project uses. Please see source or documentation for
  * hints about the available devices */
 #define DEASPLAY_LC75710
+/*#define DEASPLAY_HD44780*/
 
 #include "deasplay_hal.h"
 

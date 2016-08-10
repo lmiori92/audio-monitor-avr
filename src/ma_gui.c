@@ -40,16 +40,12 @@
 
 #include "ma_strings.h"     /* String table */
 
-static void ma_gui_menu_display_entry(t_menu* menu)
+static t_menu menu;
+
+static void ma_gui_menu_display_entry(void)
 {
-
-    display_clear();
-
-    if (menu != NULL && menu->page->entries[menu->index].label < STRING_NUM_IDS)
-    {
-        display_string_center(g_string_table[menu->page->entries[menu->index].label]);
-    }
-
+    display_clean();
+    display_string_center(g_string_table[menu.page->entries[menu.index].label]);
 }
 
 t_menu_page* ma_gui_menu_goto_previous(uint8_t reason, uint8_t id, t_menu_page* page)
@@ -59,71 +55,73 @@ t_menu_page* ma_gui_menu_goto_previous(uint8_t reason, uint8_t id, t_menu_page* 
     return NULL;
 }
 
-void ma_gui_init(t_menu* menu, t_menu_page* start_page)
+void ma_gui_init(t_menu_page* start_page)
 {
 
     /* First selected page: audio sources */
-    menu->page            = start_page;
-    menu->page->page_previous = NULL;
-    menu->index           = 0;
+    menu.page            = start_page;
+    menu.page->page_previous = NULL;
+    menu.index           = 0;
   
-    ma_gui_menu_display_entry(menu);
+    ma_gui_menu_display_entry();
 
 }
 
-void ma_gui_page_change(t_menu *menu, t_menu_page *page_next)
+void ma_gui_page_change(t_menu_page *page_next)
 {
     if (page_next != NULL)
     {
 
-        menu->page = page_next;
-        menu->index = 0;
-        menu->refresh = true;
+        menu.page = page_next;
+        menu.index = 0;
+        menu.refresh = true;
 
         /* call the pre function */
-        if (menu->page->pre_post != NULL)
-            menu->page->pre_post(REASON_PRE);
+        if (menu.page->pre_post != NULL)
+            menu.page->pre_post(REASON_PRE);
 
     }
 }
 
-/*
+t_menu_page* ma_gui_get_page_active(void)
+{
+    return menu.page;
+}
 
- */
-bool ma_gui_periodic(t_menu* menu)
+bool ma_gui_periodic(void)
 {
 
     t_menu_page* page_next = NULL;
     bool refreshed = false;
 
-    if ((menu->index > 0) && (keypad_clicked(BUTTON_UP) == KEY_CLICK))
+    if ((menu.index > 0) && (keypad_clicked(BUTTON_UP) == KEY_CLICK))
     {
-        menu->index--;
-        menu->refresh = true;
+        menu.index--;
+        menu.refresh = true;
     }
-    else if (((menu->index + 1) < menu->page->elements) && (keypad_clicked(BUTTON_DOWN) == KEY_CLICK))
+    else if (((menu.index + 1) < menu.page->elements) && (keypad_clicked(BUTTON_DOWN) == KEY_CLICK))
     {
-        menu->index++;
-        menu->refresh = true;
+        menu.index++;
+        menu.refresh = true;
     }
     else if ((keypad_clicked(BUTTON_SELECT) == KEY_CLICK))
     {
-        if (menu->page->entries[menu->index].cb != NULL)
+        if (menu.page->entries[menu.index].cb != NULL)
         {
-            page_next = menu->page->entries[menu->index].cb(REASON_SELECT, menu->index, menu->page);
+            page_next = menu.page->entries[menu.index].cb(REASON_SELECT, menu.index, menu.page);
 
-            ma_gui_page_change(menu, page_next);
+            ma_gui_page_change(page_next);
         }
 
     }
     
-    if (menu->refresh == true)
+    if (menu.refresh == true)
     {
         refreshed = true;
-        menu->refresh = false;
-        ma_gui_menu_display_entry(menu);
-        if (menu->page->entries[menu->index].cb != NULL)
-            menu->page->entries[menu->index].cb(REASON_HOOVER, menu->index, menu->page);
+        menu.refresh = false;
+        ma_gui_menu_display_entry();
+        if (menu.page->entries[menu.index].cb != NULL)
+            menu.page->entries[menu.index].cb(REASON_HOOVER, menu.index, menu.page);
     }
 
     return refreshed;

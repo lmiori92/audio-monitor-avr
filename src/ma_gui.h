@@ -77,12 +77,13 @@ typedef struct
 } t_menu;
 
 /* Menu */
-void ma_gui_init(t_menu* menu, t_menu_page* start_page);
-bool ma_gui_periodic(t_menu* menu);
+void ma_gui_init(t_menu_page* start_page);
+bool ma_gui_periodic(void);
 
 /* Menu utils */
-void ma_gui_page_change(t_menu *menu, t_menu_page *page_next);
+void ma_gui_page_change(t_menu_page *page_next);
 t_menu_page* ma_gui_menu_goto_previous(uint8_t reason, uint8_t id, t_menu_page* page);
+t_menu_page* ma_gui_get_page_active(void);
 
 #endif
 
