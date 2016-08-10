@@ -189,12 +189,30 @@ void display_show_horizontal_bar(uint8_t level)
     for (i = 0; i < LC75710_DIGITS; i++)
     {
         lvl = (level / 5);
-        if (i <= lvl)
+        if (i < lvl)
             display_write_char(4);
-        else if ((lvl + 1) == i)
+        else if ((lvl) == i)
             display_write_char(level - lvl - 1);
         else
             display_write_char(0x20);
     }
 
+}
+
+/**
+ *
+ * display_show_vertical_bars
+ *
+ * @brief Show a vertical bar specifying its height and its position
+ *
+ * @param   bar     character position in the screen
+ * @param   level   bar level (intensity)
+ *
+ */
+void display_show_vertical_bars(uint8_t bar, uint8_t level)
+{
+    if (bar > 9) bar = 9;   /* Saturate */
+    if (level > 6) level = 6;
+    display_set_cursor(0, 9 - bar);
+    display_write_char(level);
 }

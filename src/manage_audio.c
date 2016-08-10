@@ -299,7 +299,7 @@ static t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_me
 
 }
 
-static void ma_gui_visu_fft(bool *init)
+static void ma_gui_visu_fft(bool init)
 {
 
     uint16_t *spektrum;
@@ -308,11 +308,10 @@ static void ma_gui_visu_fft(bool *init)
     uint16_t v = 0;
     float tf = 0;
 
-    if (*init == false)
+    if (init == false)
     {
         ma_audio_fft_process(true);
         display_load_bars_vert();
-        *init = true;
     }
 
     lc75710_set_ac_address(0, 0);
@@ -337,47 +336,74 @@ static void ma_gui_visu_fft(bool *init)
             tf = 0;
         }
 
-//        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
+        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
     }
 }
 
-static void ma_gui_visu_vumeter(bool *init)
+static void ma_gui_visu_vumeter(bool init)
 {
 
     uint8_t disp = 0;
     t_audio_voltage* levels;
     float tf = 0.0f;
-    static bool left_or_right;
+    static uint8_t left_or_right = 0U;
 
-    if (*init == false)
+    levels = ma_audio_last_levels();
+    /*
+    display_set_cursor(0,0);
+    display_write_number(levels->left, false);
+    display_write_char('-');
+    display_write_number(levels->right, false);
+    return;
+    */
+    if (init == false)
     {
         ma_audio_fft_process(false);
-        *init = true;
     }
 
-    left_or_right ^= true;
-    display_load_bars_horiz(left_or_right);
-    levels = ma_audio_last_levels();
-
-    if (levels->left > 0 && (left_or_right == true))
+    if (left_or_right == 0U)
     {
-        tf = 20.0f * log10(levels->left / operational.adc_max);
-        tf = operational.adc_min_ref - fabs(tf);
-        disp = (tf / operational.adc_min_ref) * 50.0f;
+        /* blanking */
+        display_clear();
+        left_or_right++;
     }
-
-    if (levels->right > 0 && (left_or_right == false))
+    else if (left_or_right == 1U)
     {
-        tf = 20.0f * log10(levels->right / operational.adc_max);
-        tf = operational.adc_min_ref - fabs(tf);
-        disp = (tf / operational.adc_min_ref) * 50.0f;
+        display_load_bars_horiz(true);
+        if (levels->left > 0)
+        {
+            tf = 20.0f * log10(levels->left / operational.adc_max);
+            tf = operational.adc_min_ref - fabs(tf);
+            disp = (tf / operational.adc_min_ref) * 50.0f;
+        }
+        left_or_right++;
+    }
+    else if (left_or_right == 2U)
+    {
+        /* blanking */
+        display_clear();
+        left_or_right++;
+    }
+    else
+    {
+        display_load_bars_horiz(false);
+        if (levels->right > 0)
+        {
+            tf = 20.0f * log10(levels->right / operational.adc_max);
+            tf = operational.adc_min_ref - fabs(tf);
+            disp = (tf / operational.adc_min_ref) * 50.0f;
+        }
+        left_or_right = 0U;
     }
 
-    display_show_horizontal_bar(disp);
+    if (disp > 0U)
+    {
+        display_show_horizontal_bar(disp);
+    }
 
 }
 
-static void ma_gui_visu_vumeter_harrow(bool *init)
+static void ma_gui_visu_vumeter_harrow(bool init)
 {
 
     uint8_t disp_left = 0;
@@ -385,11 +411,10 @@ static void ma_gui_visu_vumeter_harrow(bool *init)
     t_audio_voltage* levels;
     float tf = 0.0f;
 
-    if (*init == false)
+    if (init == false)
     {
         ma_audio_fft_process(false);
         display_load_vumeter_harrows();
-        *init = true;
     }
 
     levels = ma_audio_last_levels();
@@ -411,116 +436,36 @@ static void ma_gui_visu_vumeter_harrow(bool *init)
     display_show_vumeter_harrows(disp_left,disp_right,true);
 }
 
-static void ma_gui_refresh(bool refreshed)
+static void ma_gui_refresh(bool refreshed, bool flag50ms)
 {
-    uint8_t i,j;
-
-    char disp_str[12];
-
-    uint16_t last_capture = 0;
-    uint16_t max_capture = 0;
-    uint16_t min_capture = 0;
 
     static bool init;
-    static uint32_t end;
+    static uint8_t end;
 
     if (ma_gui_get_page_active() == &PAGE_SOURCE)
     {
         if (refreshed == true)
         {
             init = false;
-            end = g_timestamp + 1000000;
+            end = 0U;
         }
-        else if (g_timestamp <= end)
+        else if (end < FLAG_1000MS_50MS_UNITS)
         {
-            /* wait */
+            /* wait: increment only when 50ms flag is active */
+            end += flag50ms ? 1U : 0U;
         }
         else
         {
             if (persistent.meter_type == 1)
-                ma_gui_visu_vumeter(&init);
+                ma_gui_visu_vumeter(init);
             else if (persistent.meter_type == 2)
-                ma_gui_visu_vumeter_harrow(&init);
+                ma_gui_visu_vumeter_harrow(init);
             else if (persistent.meter_type == 0)
-                ma_gui_visu_fft(&init);
+                ma_gui_visu_fft(init);
+
+            init = true;
         }
     }
-/*
-    if (menu.page == &PAGE_DEBUG)
-    {
-
-        switch (menu.index)
-        {
-
-            case 0:
-//                tfp_sprintf(disp_str, "%lu ms", g_timestamp / 1000);
-//                snprintf_P(disp_str, 11, PSTR("%lu ms"), g_timestamp / 1000);
-                disp_str = "asdas";
-                display_clear();
-                display_string(disp_str);
-
-                break;
-
-            case 1:
-//                tfp_sprintf(disp_str,
-//                snprintf_P(disp_str, 11, PSTR("CT: %lu ms"), operational.cycle_time / 1000);
-                display_clear();
-                display_string(disp_str);
-
-                break;
-
-            case 2:
-
-
-              //  snprintf_P(disp_str, 11, PSTR("%d"), levels->right);
-//                snprintf_P(disp_str, 11, PSTR("CM: %lu ms"), operational.cycle_time_max / 1000);
-                display_clear();
-                display_string(disp_str);
-
-                break;
-
-            case 3:
-              //  snprintf_P(disp_str, 11, PSTR("RELAY: %d%d%d"),
-              //                    ((operational.output.relays >> 0) & 1),
-              //                    ((operational.output.relays >> 1) & 1),
-              //                    ((operational.output.relays >> 2) & 1));
-                display_clear();
-                display_string(disp_str);
-
-                break;
-
-            case 4:
-
-
-
-            	break;
-
-            case 5:
-
-                break;
-
-            case 6:
-                display_clear();
-//                snprintf(disp_str, 11, "ADC: %d", ma_audio_last_capture());
-                //snprintf_P(disp_str, 11, PSTR("RST: %d"), operational.reset_reason);
-                display_string(disp_str);
-
-                break;
-
-            case 7:
-
-                display_clear();
-                ma_audio_last_capture(&last_capture, &min_capture, &max_capture);
-                //snprintf_P(disp_str, 11, PSTR("%d%d%d"), last_capture, min_capture, max_capture);
-                display_string(disp_str);
-
-                break;
-
-            default:
-                break;
-        }
-    }
-*/
 }
 
 /**
@@ -602,6 +547,9 @@ void setup()
     /* Apply persistent data */
     set_display_brightness(persistent.brightness);
 
+    /* Turn the display ON */
+    display_power(DEASPLAY_POWER_ON);
+
 }
 
 static void input(void)
@@ -656,7 +604,6 @@ int main(void)
 {
 
     uint32_t start;
-    uint8_t init_done = 0U;
     bool refreshed;
 
     /* Disable interrupts for the whole init period */
@@ -708,11 +655,11 @@ int main(void)
         /* Process audio (FFT / VU-METER) */
         ma_audio_process();
 
+        /* Run the periodic menu refresh handler */
+        ma_gui_refresh(refreshed, operational.flag_50ms.flag);
+
         /* Run the periodic GUI logic */
         refreshed = ma_gui_periodic();
-
-        /* Run the periodic menu refresh handler */
-        ma_gui_refresh(refreshed);
 
         /* Set outputs */
         output(&operational.output);
@@ -722,29 +669,6 @@ int main(void)
 
         /* Cycle end */
         operational.cycle_time = g_timestamp - start;
-
-        /* Save peak cycle time */
-        if (operational.cycle_time > operational.cycle_time_max)
-        {
-            operational.cycle_time_max = operational.cycle_time;
-        }
-
-        if (init_done > 50U)
-        {
-            /* do after - init operations once */
-
-            /* turn on the display */
-
-            display_power(DEASPLAY_POWER_ON);
-
-            /* ADC stats reset */
-            ma_audio_last_reset();
-
-        }
-        else
-        {
-            init_done++;
-        }
 
     }
 

@@ -61,7 +61,6 @@ typedef struct
 {
 
     uint32_t   cycle_time;        /**< Time it takes the logic to execute */
-    uint32_t   cycle_time_max;    /**< Maximum time it took the logic to execute */
     t_output   output;            /**< State of the outputs */
     uint8_t    reset_reason;      /**< Reset reason (see datasheet) */
     uint16_t   adc_min_ref;       /**< Minimum ADC attenuation (dB) */
