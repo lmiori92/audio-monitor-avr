@@ -187,6 +187,107 @@ static t_menu_page PAGE_DEBUG = {
         .elements = sizeof(MENU_DEBUG) / sizeof(t_menu_entry)
 };
 
+static const uint8_t voltage_to_display_dB_scale_table[] = {
+        150,
+        136,
+        122,
+        110,
+        100,
+        90,
+        81,
+        73,
+        66,
+        60,
+        54,
+        48,
+        44,
+        40,
+        36,
+        32,
+        29,
+        26,
+        24,
+        21,
+        19,
+        18,
+        16,
+        14,
+        13,
+        12,
+        11,
+        10,
+        9,
+        8,
+        7,
+        7,
+        6,
+        5,
+        5,
+        4,
+        4,
+        4,
+        3,
+        3,
+        3,
+        3,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        2,
+        1,
+        1
+};
+
+#define V2DB_LOOKUP_SIZE    (sizeof(voltage_to_display_dB_scale_table) / sizeof(voltage_to_display_dB_scale_table[0]))
+
+static uint8_t voltage_to_display_dB(uint8_t value, uint8_t display)
+{
+    uint8_t retval;
+    uint8_t i;
+    uint8_t display_counts;
+    uint8_t steps;
+
+    display_counts = display;
+
+    if (display == 50U)
+    {
+        steps = 1U;
+    }
+    else if (display == 10U)
+    {
+        steps = 5U;
+    }
+    else if (display == 7U)
+    {
+            steps = 8U;
+    }
+    else
+    {
+        /* safe "undefined" behavior */
+        steps = 0U;
+        display_counts = 0U;
+    }
+
+    /* linear search through the values */
+    for (i = 0U; i < V2DB_LOOKUP_SIZE; i += steps)
+    {
+        if (value >= voltage_to_display_dB_scale_table[i])
+        {
+            break;
+        }
+        else
+        {
+            display_counts--;
+        }
+    }
+
+    return display_counts;
+
+}
+
 static void ma_gui_settings_brightness_pre(uint8_t reason)
 {
     if (reason == REASON_PRE)
@@ -305,16 +406,18 @@ static void ma_gui_visu_fft(bool init)
     uint16_t *spektrum;
     uint8_t fft_n;
     uint8_t i;
-    uint16_t v = 0;
-    float tf = 0;
+    uint8_t v = 0;
+    uint8_t display;
 
     if (init == false)
     {
         ma_audio_fft_process(true);
+        /* load the characters */
         display_load_bars_vert();
     }
 
-    lc75710_set_ac_address(0, 0);
+    display_clean();
+    display_set_cursor(0,0);
 
     spektrum = ma_audio_spectrum(&fft_n);
 
@@ -322,21 +425,12 @@ static void ma_gui_visu_fft(bool init)
     spektrum[0] = 0;
     for (i = 0; i < (FFT_N/2/3); i++)
     {
-
-        v = (spektrum[i*3] + spektrum[i*3+1] + spektrum[i*3+2]);
-
-        if (v > 0)
-        {
-            tf = 20.0f * log10(v / operational.adc_max);
-            tf = operational.adc_min_ref - fabs(tf);
-
-        }
-        else
-        {
-            tf = 0;
-        }
-
-        display_show_vertical_bars(i, (tf / operational.adc_min_ref) * 6.0f);
+        /* sum up the frequencies in group by 3 */
+        v = ((uint8_t)spektrum[i*3] + (uint8_t)spektrum[i*3+1] + (uint8_t)spektrum[i*3+2]);
+        /* convert to the display scale */
+        display = voltage_to_display_dB(v, 7U);
+        /* draw the bar */
+        display_show_vertical_bar(display);
     }
 }
 
@@ -345,8 +439,7 @@ static void ma_gui_visu_vumeter(bool init)
 
     uint8_t disp = 0;
     t_audio_voltage* levels;
-    float tf = 0.0f;
-    static uint8_t left_or_right = 0U;
+    static uint8_t left_or_right;
 
     levels = ma_audio_last_levels();
     /*
@@ -358,41 +451,32 @@ static void ma_gui_visu_vumeter(bool init)
     */
     if (init == false)
     {
+        left_or_right = 0U;
         ma_audio_fft_process(false);
     }
 
     if (left_or_right == 0U)
     {
         /* blanking */
-        display_clear();
+        display_clean();
         left_or_right++;
     }
     else if (left_or_right == 1U)
     {
         display_load_bars_horiz(true);
-        if (levels->left > 0)
-        {
-            tf = 20.0f * log10(levels->left / operational.adc_max);
-            tf = operational.adc_min_ref - fabs(tf);
-            disp = (tf / operational.adc_min_ref) * 50.0f;
-        }
+        disp = voltage_to_display_dB((uint8_t)levels->left, 50U);
         left_or_right++;
     }
     else if (left_or_right == 2U)
     {
         /* blanking */
-        display_clear();
+        display_clean();
         left_or_right++;
     }
     else
     {
         display_load_bars_horiz(false);
-        if (levels->right > 0)
-        {
-            tf = 20.0f * log10(levels->right / operational.adc_max);
-            tf = operational.adc_min_ref - fabs(tf);
-            disp = (tf / operational.adc_min_ref) * 50.0f;
-        }
+        disp = voltage_to_display_dB((uint8_t)levels->right, 50U);
         left_or_right = 0U;
     }
 
@@ -409,7 +493,6 @@ static void ma_gui_visu_vumeter_harrow(bool init)
     uint8_t disp_left = 0;
     uint8_t disp_right = 0;
     t_audio_voltage* levels;
-    float tf = 0.0f;
 
     if (init == false)
     {
@@ -419,19 +502,8 @@ static void ma_gui_visu_vumeter_harrow(bool init)
 
     levels = ma_audio_last_levels();
 
-    if (levels->left > 0)
-    {
-        tf = 20.0f * log10(levels->left / operational.adc_max);
-        tf = operational.adc_min_ref - fabs(tf);
-        disp_left = (tf / operational.adc_min_ref) * 10.0f;
-    }
-
-    if (levels->right > 0)
-    {
-        tf = 20.0f * log10(levels->right / operational.adc_max);
-        tf = operational.adc_min_ref - fabs(tf);
-        disp_right = (tf / operational.adc_min_ref) * 10.0f;
-    }
+    disp_right = voltage_to_display_dB((uint8_t)levels->right, 10U);
+    disp_left = voltage_to_display_dB((uint8_t)levels->left, 10U);
 
     display_show_vumeter_harrows(disp_left,disp_right,true);
 }

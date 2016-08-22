@@ -201,18 +201,16 @@ void display_show_horizontal_bar(uint8_t level)
 
 /**
  *
- * display_show_vertical_bars
+ * display_show_vertical_bar
  *
- * @brief Show a vertical bar specifying its height and its position
+ * @brief Show a vertical bar specifying its height. Position has to be
+ *        set beforehand using the appropriate screen directives/driver.
  *
- * @param   bar     character position in the screen
  * @param   level   bar level (intensity)
  *
  */
-void display_show_vertical_bars(uint8_t bar, uint8_t level)
+void display_show_vertical_bar(uint8_t level)
 {
-    if (bar > 9) bar = 9;   /* Saturate */
     if (level > 6) level = 6;
-    display_set_cursor(0, 9 - bar);
     display_write_char(level);
 }

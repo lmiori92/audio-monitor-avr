@@ -44,6 +44,6 @@ void display_load_vumeter_harrows(void);
 void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left);
 
 void display_show_horizontal_bar(uint8_t level);
-void display_show_vertical_bars(uint8_t bar, uint8_t level);
+void display_show_vertical_bar(uint8_t level);
 
 #endif /* SRC_LC75710_GRAPHICS_H_ */
