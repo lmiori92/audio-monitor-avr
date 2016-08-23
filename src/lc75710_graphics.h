@@ -41,7 +41,7 @@ void display_load_bars_vert(void);
 void display_load_bars_horiz(bool upper_or_lower);
 
 void display_load_vumeter_harrows(void);
-void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left);
+void display_show_vumeter_harrows(uint8_t left, uint8_t right);
 
 void display_show_horizontal_bar(uint8_t level);
 void display_show_vertical_bar(uint8_t level);

@@ -38,6 +38,8 @@
 								<option id="de.innot.avreclipse.compiler.option.language.uchar.454007792" name="char is unsigned (-funsigned-char)" superClass="de.innot.avreclipse.compiler.option.language.uchar" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.compiler.option.language.ubitfields.1277056110" name="bitfields are unsigned (-funsigned-bitfields)" superClass="de.innot.avreclipse.compiler.option.language.ubitfields" value="false" valueType="boolean"/>
 								<option id="de.innot.avreclipse.compiler.option.std.286381089" name="Language Standard" superClass="de.innot.avreclipse.compiler.option.std" value="de.innot.avreclipse.compiler.option.std.gnu99" valueType="enumerated"/>
+								<option id="de.innot.avreclipse.compiler.option.optimize.datasections.1794122287" superClass="de.innot.avreclipse.compiler.option.optimize.datasections" value="false" valueType="boolean"/>
+								<option id="de.innot.avreclipse.compiler.option.optimize.functionsections.928312758" superClass="de.innot.avreclipse.compiler.option.optimize.functionsections" value="false" valueType="boolean"/>
 								<inputType id="de.innot.avreclipse.compiler.winavr.input.1716666720" name="C Source Files" superClass="de.innot.avreclipse.compiler.winavr.input"/>
 							</tool>
 							<tool id="de.innot.avreclipse.tool.cppcompiler.app.debug.1079049860" name="AVR C++ Compiler" superClass="de.innot.avreclipse.tool.cppcompiler.app.debug">

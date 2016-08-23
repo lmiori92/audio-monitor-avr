@@ -250,7 +250,7 @@ static uint8_t voltage_to_display_dB(uint8_t value, uint8_t display)
     uint8_t display_counts;
     uint8_t steps;
 
-    display_counts = display;
+    display_counts = display + 1U;
 
     if (display == 50U)
     {
@@ -262,7 +262,7 @@ static uint8_t voltage_to_display_dB(uint8_t value, uint8_t display)
     }
     else if (display == 7U)
     {
-            steps = 8U;
+        steps = 7U;
     }
     else
     {
@@ -437,18 +437,19 @@ static void ma_gui_visu_fft(bool init)
 static void ma_gui_visu_vumeter(bool init)
 {
 
-    uint8_t disp = 0;
+    uint8_t disp = 0xFF;
     t_audio_voltage* levels;
-    static uint8_t left_or_right;
+    static uint8_t left_or_right = 0U;
 
     levels = ma_audio_last_levels();
-    /*
+/*
     display_set_cursor(0,0);
-    display_write_number(levels->left, false);
+    display_clean();
+    display_write_number(voltage_to_display_dB((uint8_t)levels->left, 50U), false);
     display_write_char('-');
-    display_write_number(levels->right, false);
+    display_write_number(voltage_to_display_dB((uint8_t)levels->right, 50U), false);
     return;
-    */
+*/
     if (init == false)
     {
         left_or_right = 0U;
@@ -458,7 +459,7 @@ static void ma_gui_visu_vumeter(bool init)
     if (left_or_right == 0U)
     {
         /* blanking */
-        display_clean();
+        display_clear();
         left_or_right++;
     }
     else if (left_or_right == 1U)
@@ -470,7 +471,7 @@ static void ma_gui_visu_vumeter(bool init)
     else if (left_or_right == 2U)
     {
         /* blanking */
-        display_clean();
+        display_clear();
         left_or_right++;
     }
     else
@@ -480,11 +481,11 @@ static void ma_gui_visu_vumeter(bool init)
         left_or_right = 0U;
     }
 
-    if (disp > 0U)
+    if (disp != 0xFF)
     {
+        display_set_cursor(0,0);
         display_show_horizontal_bar(disp);
     }
-
 }
 
 static void ma_gui_visu_vumeter_harrow(bool init)
@@ -500,12 +501,14 @@ static void ma_gui_visu_vumeter_harrow(bool init)
         display_load_vumeter_harrows();
     }
 
+    display_clean();
+    display_set_cursor(0,0);
     levels = ma_audio_last_levels();
 
     disp_right = voltage_to_display_dB((uint8_t)levels->right, 10U);
     disp_left = voltage_to_display_dB((uint8_t)levels->left, 10U);
 
-    display_show_vumeter_harrows(disp_left,disp_right,true);
+    display_show_vumeter_harrows(disp_left,disp_right);
 }
 
 static void ma_gui_refresh(bool refreshed, bool flag50ms)

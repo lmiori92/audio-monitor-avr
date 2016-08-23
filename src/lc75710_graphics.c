@@ -89,16 +89,16 @@ void display_load_bars_horiz(bool upper_or_lower)
     {
         if (upper_or_lower == true)
         {
-            c |= (uint64_t)((uint64_t)0x1 << (4 - i));
-            c |= (uint64_t)((uint64_t)0x1 << (9 - i));
-            c |= (uint64_t)((uint64_t)0x1 << (14 - i));
+            c |= (uint64_t)((uint64_t)0x1 << (i));
+            c |= (uint64_t)((uint64_t)0x1 << (i + 5));
+            c |= (uint64_t)((uint64_t)0x1 << (i + 10));
         }
         else
 /*        c |= (uint64_t)((uint64_t)0x1 << (19 - i));   */ /* Split line */
         {
-            c |= (uint64_t)((uint64_t)0x1 << (24 - i));
-            c |= (uint64_t)((uint64_t)0x1 << (29 - i));
-            c |= (uint64_t)((uint64_t)0x1 << (34 - i));
+            c |= (uint64_t)((uint64_t)0x1 << (i + 20));
+            c |= (uint64_t)((uint64_t)0x1 << (i + 25));
+            c |= (uint64_t)((uint64_t)0x1 << (i + 30));
         }
 
         lc75710_cgram_write(i, c);
@@ -128,14 +128,13 @@ void display_load_vumeter_harrows(void)
  *
  * display_show_vumeter_harrows
  *
- * @brief Show VU-meter bars on the display
+ * @brief Show VU-meter bars on the display, from the position that has been set beforehand
  *
  * \param   left       Left Level 0-10
  * \param   right      Right Level 0-10
- * \param   right_left true: left to right; false: right to left
  *
  */
-void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left)
+void display_show_vumeter_harrows(uint8_t left, uint8_t right)
 {
 
     uint8_t i = 0;
@@ -163,7 +162,7 @@ void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left)
             /* Space - Clear */
             c = 0x20;
         }
-        display_set_cursor(0, right_left ? (LC75710_DIGITS - i) : i);
+
         display_write_char(c);
     }
 
@@ -173,29 +172,83 @@ void display_show_vumeter_harrows(uint8_t left, uint8_t right, bool right_left)
  *
  * display_show_horizontal_bar
  *
- * @brief Show a horizontal bar accross the whole display
+ * @brief Show a horizontal bar accross the display,
+ *        from the position that isset beforehand (usually 0,0)
  *
- * @param   level   bar length
+ * @param   level   bar length, spanning from 0 to 50 units
  *
  */
 void display_show_horizontal_bar(uint8_t level)
 {
 
     uint8_t i = 0;
-    uint8_t lvl;
+    uint8_t j = 0;
+    uint8_t chr = 0x20U;
 
-    display_set_cursor(0, 0);
-
-    for (i = 0; i < LC75710_DIGITS; i++)
+    while (level > 0U)
     {
-        lvl = (level / 5);
-        if (i < lvl)
+        if (level >= 5U)
+        {
             display_write_char(4);
-        else if ((lvl) == i)
-            display_write_char(level - lvl - 1);
+            level -= 5U;
+        }
         else
-            display_write_char(0x20);
+        {
+            display_write_char(4U - level);
+            level = 0U;
+        }
     }
+
+
+
+/*
+    for (i = 0; i < LC75710_DIGITS * 5U; i++)
+    {
+
+        if (j == 0)
+        {
+            chr = 0x20;
+        }
+        else if ((level < i) && (level > 0U))
+        {
+            ///* reached the top, always a space from now on
+        }
+        else
+        {
+            chr = 4U - j;
+        }
+        */
+/*
+        j++;
+
+        if (j >= 5U)
+        {
+            display_write_char(chr);
+            // write char and then go to next
+            j = 0U;
+            chr = 0x20;
+        }
+        */
+
+        /*
+        if (level > 0U)
+        {
+            for (j = 0U; j < 5U; j++)
+            {
+                if (level < j)
+                {
+                    break;
+                }
+            }
+            display_write_char(j);
+            level -= j;
+        }
+        else
+        {
+            display_write_char(0x20U);
+        }
+        */
+
 
 }
 
