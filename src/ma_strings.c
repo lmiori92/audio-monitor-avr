@@ -21,17 +21,16 @@
 */
 
 /**
- * @file ma_strings.c
+ * @file string_table.c
  * @author Lorenzo Miori
  * @date Jan 2016
  * @brief Source file for the string table
  */
 
 #include "ma_strings.h"
-#include "system.h"
 
 
-/* STRING SIZE 103 BYTES */
+/* STRING SIZE 104 BYTES */
 const char* g_string_table[] = 
 {
     "AUX",
@@ -41,8 +40,8 @@ const char* g_string_table[] =
     "Sources",
     "Display",
     "FFT",
-    "VU-Horiz",
-    "VU-Vert",
+    "VU-Line",
+    "VU-Harrow",
     "Tools",
     "BACK",
     "Brightness",
@@ -50,7 +49,7 @@ const char* g_string_table[] =
     "Reboot",
     "Debug",
     "TeSt!*",
-    "0.1.1"
+    "0.2.0"
 
 };
 

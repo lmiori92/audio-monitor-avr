@@ -181,10 +181,6 @@ void display_show_vumeter_harrows(uint8_t left, uint8_t right)
 void display_show_horizontal_bar(uint8_t level)
 {
 
-    uint8_t i = 0;
-    uint8_t j = 0;
-    uint8_t chr = 0x20U;
-
     while (level > 0U)
     {
         if (level >= 5U)
@@ -198,57 +194,6 @@ void display_show_horizontal_bar(uint8_t level)
             level = 0U;
         }
     }
-
-
-
-/*
-    for (i = 0; i < LC75710_DIGITS * 5U; i++)
-    {
-
-        if (j == 0)
-        {
-            chr = 0x20;
-        }
-        else if ((level < i) && (level > 0U))
-        {
-            ///* reached the top, always a space from now on
-        }
-        else
-        {
-            chr = 4U - j;
-        }
-        */
-/*
-        j++;
-
-        if (j >= 5U)
-        {
-            display_write_char(chr);
-            // write char and then go to next
-            j = 0U;
-            chr = 0x20;
-        }
-        */
-
-        /*
-        if (level > 0U)
-        {
-            for (j = 0U; j < 5U; j++)
-            {
-                if (level < j)
-                {
-                    break;
-                }
-            }
-            display_write_char(j);
-            level -= j;
-        }
-        else
-        {
-            display_write_char(0x20U);
-        }
-        */
-
 
 }
 

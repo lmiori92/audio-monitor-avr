@@ -48,6 +48,14 @@ typedef struct
 
 } t_debounce;
 
+typedef struct
+{
+    uint16_t output;
+    uint16_t alpha;
+
+    uint32_t output_last;
+} t_low_pass_filter;
+
 #define SOURCE_MAX    4         /**< Number of audio sources */
 
 /* EEPROM */
@@ -61,7 +69,8 @@ bool debounce(t_debounce *debounce, bool input, uint32_t timestamp);
 uint8_t source_select(uint8_t source);
 
 /* Algorithms */
-uint8_t lookupf(float val, float* table, uint8_t size);
+uint32_t usqrt(uint32_t x);
+void low_pass_filter(uint16_t input, t_low_pass_filter *filter);
 
 #endif
 

@@ -145,8 +145,8 @@ static t_menu_page PAGE_SETTINGS_BRIGHTNESS = {
 static t_menu_entry  MENU_SETTINGS_METER[] =
 {
         { .label = STRING_FFT,      .cb = &ma_gui_menu_set_meter  },
-        { .label = STRING_VU_HORIZ, .cb = &ma_gui_menu_set_meter  },
-        { .label = STRING_VU_VERT,  .cb = &ma_gui_menu_set_meter  },
+        { .label = STRING_VU_LINE, .cb = &ma_gui_menu_set_meter  },
+        { .label = STRING_VU_HARROW,  .cb = &ma_gui_menu_set_meter  },
         { .label = STRING_BACK,     .cb = &ma_gui_menu_goto_previous },
 };
 
@@ -242,6 +242,11 @@ static const uint8_t voltage_to_display_dB_scale_table[] = {
 };
 
 #define V2DB_LOOKUP_SIZE    (sizeof(voltage_to_display_dB_scale_table) / sizeof(voltage_to_display_dB_scale_table[0]))
+
+
+/* Visualizations static data */
+static t_low_pass_filter lrms_filter;
+static t_low_pass_filter rrms_filter;
 
 static uint8_t voltage_to_display_dB(uint8_t value, uint8_t display)
 {
@@ -403,45 +408,9 @@ static t_menu_page* ma_gui_menu_tools_selection(uint8_t reason, uint8_t id, t_me
 static void ma_gui_visu_fft(bool init)
 {
 
-    uint16_t *spektrum;
-    uint8_t fft_n;
-    uint8_t i;
-    uint8_t v = 0;
-    uint8_t display;
 
-    if (init == false)
-    {
-        ma_audio_fft_process(true);
-        /* load the characters */
-        display_load_bars_vert();
-    }
-
-    display_clean();
-    display_set_cursor(0,0);
-
-    spektrum = ma_audio_spectrum(&fft_n);
-
-    /* remove the DC component */
-    spektrum[0] = 0;
-    for (i = 0; i < (FFT_N/2/3); i++)
-    {
-        /* sum up the frequencies in group by 3 */
-        v = ((uint8_t)spektrum[i*3] + (uint8_t)spektrum[i*3+1] + (uint8_t)spektrum[i*3+2]);
-        /* convert to the display scale */
-        display = voltage_to_display_dB(v, 7U);
-        /* draw the bar */
-        display_show_vertical_bar(display);
-    }
 }
 
-static void ma_gui_visu_vumeter(bool init)
-{
-
-    uint8_t disp = 0xFF;
-    t_audio_voltage* levels;
-    static uint8_t left_or_right = 0U;
-
-    levels = ma_audio_last_levels();
 /*
     display_set_cursor(0,0);
     display_clean();
@@ -450,71 +419,151 @@ static void ma_gui_visu_vumeter(bool init)
     display_write_number(voltage_to_display_dB((uint8_t)levels->right, 50U), false);
     return;
 */
+
+typedef enum
+{
+    METER_VU_LINES_HORIZ,
+    METER_VU_HARROW_HORIZ,
+    METER_FFT_VERTICAL,
+
+    METER_TOTAL_METERS
+} e_meter_type;
+
+static void ma_gui_visu_vumeter(bool init, uint8_t type)
+{
+
+    uint16_t *spektrum;
+    uint8_t fft_n;
+    uint8_t i;
+    uint8_t v = 0;
+
+    uint8_t disp_left = 0xFF;
+    uint8_t disp_right = 0xFF;
+    t_audio_voltage* levels;
+
+    static uint8_t left_or_right = 0U;
+    static uint8_t pause = 0U;
+
     if (init == false)
     {
-        left_or_right = 0U;
-        ma_audio_fft_process(false);
-    }
 
-    if (left_or_right == 0U)
-    {
-        /* blanking */
-        display_clear();
-        left_or_right++;
-    }
-    else if (left_or_right == 1U)
-    {
-        display_load_bars_horiz(true);
-        disp = voltage_to_display_dB((uint8_t)levels->left, 50U);
-        left_or_right++;
-    }
-    else if (left_or_right == 2U)
-    {
-        /* blanking */
-        display_clear();
-        left_or_right++;
+        /* configure the filters */
+        rrms_filter.alpha       = 100U;
+        rrms_filter.output_last = 0U;
+        lrms_filter.alpha       = 100U;
+        lrms_filter.output_last = 0U;
+
+        /* reset internal state */
+        left_or_right = 0U;
+
+        if (type == METER_FFT_VERTICAL)
+        {
+            /* process FFT */
+            ma_audio_fft_process(true);
+            /* load the characters */
+            display_load_bars_vert();
+        }
+        else
+        {
+            /* do not process FFT */
+            ma_audio_fft_process(false);
+            /* load one-time init resources */
+            display_load_vumeter_harrows();
+        }
+
     }
     else
     {
-        display_load_bars_horiz(false);
-        disp = voltage_to_display_dB((uint8_t)levels->right, 50U);
-        left_or_right = 0U;
+        /* no init phase */
     }
 
-    if (disp != 0xFF)
-    {
-        display_set_cursor(0,0);
-        display_show_horizontal_bar(disp);
-    }
-}
-
-static void ma_gui_visu_vumeter_harrow(bool init)
-{
-
-    uint8_t disp_left = 0;
-    uint8_t disp_right = 0;
-    t_audio_voltage* levels;
-
-    if (init == false)
-    {
-        ma_audio_fft_process(false);
-        display_load_vumeter_harrows();
-    }
-
-    display_clean();
-    display_set_cursor(0,0);
+    /* get RMS levels */
     levels = ma_audio_last_levels();
 
-    disp_right = voltage_to_display_dB((uint8_t)levels->right, 10U);
-    disp_left = voltage_to_display_dB((uint8_t)levels->left, 10U);
+    /* run filters */
+    low_pass_filter((uint8_t)levels->left, &lrms_filter);
+    low_pass_filter((uint8_t)levels->right, &rrms_filter);
 
-    display_show_vumeter_harrows(disp_left,disp_right);
+    pause++;
+    if ((type == (uint8_t)METER_VU_LINES_HORIZ) )
+    {
+
+        if (left_or_right == 0U && (pause >= 20))
+        {
+            /* blanking */
+            display_clear();
+            left_or_right++;
+            pause=0;
+        }
+        else if (left_or_right == 1U && (pause >= 10))
+        {
+            display_load_bars_horiz(true);
+            disp_left = voltage_to_display_dB((uint8_t)lrms_filter.output, 50U);
+            left_or_right++;
+            pause=0;
+        }
+        else if (left_or_right == 2U && (pause >= 20))
+        {
+            /* blanking */
+            display_clear();
+            left_or_right++;
+            pause=0;
+        }
+        else if (left_or_right == 3U && (pause >= 10))
+        {
+            display_load_bars_horiz(false);
+            disp_left = voltage_to_display_dB((uint8_t)rrms_filter.output, 50U);
+            left_or_right = 0U;
+            pause=0;
+        }
+
+        if (disp_left != 0xFF)
+        {
+            display_set_cursor(0,0);
+            display_show_horizontal_bar(disp_left);
+        }
+
+    }
+    else if (type == (uint8_t)METER_VU_HARROW_HORIZ)
+    {
+        display_clean();
+        display_set_cursor(0,0);
+
+        disp_right = voltage_to_display_dB((uint8_t)rrms_filter.output, 10U);
+        disp_left = voltage_to_display_dB((uint8_t)lrms_filter.output, 10U);
+
+        display_show_vumeter_harrows(disp_left,disp_right);
+    }
+    else if (type == METER_FFT_VERTICAL)
+    {
+
+        display_clean();
+        display_set_cursor(0,0);
+
+        spektrum = ma_audio_spectrum(&fft_n);
+
+        /* remove the DC component */
+        spektrum[0] = 0;
+        for (i = 0; i < (FFT_N/2/3); i++)
+        {
+            /* sum up the frequencies in group by 3 */
+            v = ((uint8_t)spektrum[i*3] + (uint8_t)spektrum[i*3+1] + (uint8_t)spektrum[i*3+2]);
+            /* convert to the display scale */
+            disp_left = voltage_to_display_dB(v, 7U);
+            /* draw the bar */
+            display_show_vertical_bar(disp_left);
+        }
+    }
+    else
+    {
+        /* no meter defined */
+    }
 }
 
 static void ma_gui_refresh(bool refreshed, bool flag50ms)
 {
 
-    static bool init;
+    static bool init = false;
     static uint8_t end;
 
     if (ma_gui_get_page_active() == &PAGE_SOURCE)
@@ -524,19 +573,14 @@ static void ma_gui_refresh(bool refreshed, bool flag50ms)
             init = false;
             end = 0U;
         }
-        else if (end < FLAG_1000MS_50MS_UNITS)
-        {
-            /* wait: increment only when 50ms flag is active */
-            end += flag50ms ? 1U : 0U;
-        }
+//        else if (end < FLAG_1000MS_50MS_UNITS)
+//        {
+///            /* wait: increment only when 50ms flag is active */
+//            end += flag50ms ? 1U : 0U;
+//        }
         else
         {
-            if (persistent.meter_type == 1)
-                ma_gui_visu_vumeter(init);
-            else if (persistent.meter_type == 2)
-                ma_gui_visu_vumeter_harrow(init);
-            else if (persistent.meter_type == 0)
-                ma_gui_visu_fft(init);
+            ma_gui_visu_vumeter(init, persistent.meter_type);
 
             init = true;
         }
@@ -615,6 +659,12 @@ void setup()
 
     /* Load persistent data */
     read_from_persistent(&persistent);
+
+    /* Validate settings */
+    if (persistent.meter_type > METER_TOTAL_METERS)
+    {
+        persistent.meter_type = METER_VU_LINES_HORIZ;
+    }
 
     /* Initialize the GUI */
     ma_gui_init(&PAGE_SOURCE);

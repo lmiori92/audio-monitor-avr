@@ -21,7 +21,7 @@
 */
 
 /**
- * @file ma_strings.h
+ * @file string_table.h
  * @author Lorenzo Miori
  * @date Jan 2016
  * @brief Header file for the string table
@@ -44,8 +44,8 @@ enum _string_table_ids
     STRING_SOURCES,  /**< SOURCES */
     STRING_DISPLAY,  /**< DISPLAY */
     STRING_FFT,  /**< FFT */
-    STRING_VU_HORIZ,  /**< VU-HORIZ */
-    STRING_VU_VERT,  /**< VU-VERT */
+    STRING_VU_LINE,  /**< VU-LINE */
+    STRING_VU_HARROW,  /**< VU-HARROW */
     STRING_TOOLS,  /**< TOOLS */
     STRING_BACK,  /**< BACK */
     STRING_BRIGHTNESS,  /**< BRIGHTNESS */

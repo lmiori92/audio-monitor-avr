@@ -154,15 +154,82 @@ uint8_t source_select(uint8_t source)
     return outputs;
 
 }
+// additional change: types are "ported" to stdint portable types
+#define BITSPERLONG 32  // originally was 32: with 16, we get the approximate
+
+#define TOP2BITS(x) ((x & (3L << (BITSPERLONG-2))) >> (BITSPERLONG-2))
 
 
-uint8_t lookupf(float val, float* table, uint8_t size)
+/* usqrt:
+    ENTRY x: unsigned long
+    EXIT  returns floor(sqrt(x) * pow(2, BITSPERLONG/2))
+
+    Since the square root never uses more than half the bits
+    of the input, we use the other half of the bits to contain
+    extra bits of precision after the binary point.
+
+    EXAMPLE
+        suppose BITSPERLONG = 32
+        then    usqrt(144) = 786432 = 12 * 65536
+                usqrt(32) = 370727 = 5.66 * 65536
+
+    NOTES
+        (1) change BITSPERLONG to BITSPERLONG/2 if you do not want
+            the answer scaled.  Indeed, if you want n bits of
+            precision after the binary point, use BITSPERLONG/2+n.
+            The code assumes that BITSPERLONG is even.
+        (2) This is really better off being written in assembly.
+            The line marked below is really a "arithmetic shift left"
+            on the double-long value with r in the upper half
+            and x in the lower half.  This operation is typically
+            expressible in only one or two assembly instructions.
+        (3) Unrolling this loop is probably not a bad idea.
+
+    ALGORITHM
+        The calculations are the base-two analogue of the square
+        root algorithm we all learned in grammar school.  Since we're
+        in base 2, there is only one nontrivial trial multiplier.
+
+        Notice that absolutely no multiplications or divisions are performed.
+        This means it'll be fast on a wide range of processors.
+*/
+
+uint32_t usqrt(uint32_t x)
 {
-    uint8_t i = 0;
-    for (i = 0; i < size; i++)
-    {
-        if ((table[i] >= val)) break;
-    }
-    return i;
+    uint32_t a = 0L;                   /* accumulator      */
+    uint32_t r = 0L;                   /* remainder        */
+    uint32_t e = 0L;                   /* trial product    */
 
+      uint8_t i;
+
+      for (i = 0; i < BITSPERLONG/2; i++)   /* NOTE 1 */
+      {
+            r = (r << 2) + TOP2BITS(x); x <<= 2; /* NOTE 2 */
+            a <<= 1;
+            e = (a << 1) + 1;
+            if (r >= e)
+            {
+                  r -= e;
+                  a++;
+            }
+      }
+
+      return a;
+}
+
+void low_pass_filter(uint16_t input, t_low_pass_filter *filter)
+{
+    uint32_t tmp;
+
+    /* weigh the previous output */
+    tmp = filter->alpha;
+    tmp *= filter->output_last;
+    /* scale the input value and add to it */
+    tmp += 1000U * (uint32_t)input;
+    tmp /= (filter->alpha + 1U);
+    /* save last input value */
+    filter->output_last = tmp;
+
+    /* compute the scaled result */
+    filter->output = (uint16_t)(filter->output_last / 1000U);
 }

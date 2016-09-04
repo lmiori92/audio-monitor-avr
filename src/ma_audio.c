@@ -166,7 +166,7 @@ void ma_audio_process(void)
             fft_input(capture, bfly_buff);
             fft_execute(bfly_buff);
             fft_output(bfly_buff, spektrum);
-            hann_window(spektrum, FFT_N/2);
+            //hann_window(spektrum, FFT_N/2);
         }
 
         /* Toggle channel */
@@ -196,14 +196,20 @@ void ma_audio_process(void)
         if (old_mux == 0U)
         {
             /* Left Channel */
-            rms = input_level.left + ((sqrt((double)rms / FFT_N) - input_level.left) * 350 / 1000);
-            input_level.left = rms;
+
+            /* should be: rms / FFT_N. Therefore,
+             * we only compute sqrt(rms) and optimize out the internal division */
+            /* MAGIC NUMBER: sqrt(FFT_N) == 8U ! */
+            input_level.left = ((uint16_t)usqrt(rms) / 8U);
         }
         else if(old_mux == 1U)
         {
             /* Left Right */
-            rms = input_level.right + ((sqrt((double)rms / FFT_N) - input_level.right) * 350 / 1000);
-            input_level.right = rms;
+
+            /* should be: rms / FFT_N. Therefore,
+             * we only compute sqrt(rms) and optimize out the internal division */
+            /* MAGIC NUMBER: sqrt(FFT_N) == 8U ! */
+            input_level.right = ((uint16_t)usqrt(rms) / 8U);
         }
         else
         {

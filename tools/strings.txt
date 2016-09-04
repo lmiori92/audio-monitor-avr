@@ -5,8 +5,8 @@ TAPE
 Sources
 Display
 FFT
-VU-Horiz
-VU-Vert
+VU-Line
+VU-Harrow
 Tools
 BACK
 Brightness
